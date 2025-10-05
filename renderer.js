@@ -14,4 +14,3 @@ window.api.onUpdateTheme((event, theme) => {
     root.style.setProperty('--scheme', theme)
   }
 )
-
