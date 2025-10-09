@@ -13,6 +13,7 @@ const createWindow = () => {
     }
   })
   setMainMenu(mainWindow)
+  mainWindow.maximize()
   mainWindow.loadFile('index.html')
 }
 
