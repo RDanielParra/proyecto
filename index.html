@@ -11,13 +11,31 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <script defer src="renderer.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <script defer src="js/renderer.js"></script>
+    <link rel="stylesheet" href="css/style.css">
     <title>Proyecto</title>
   </head>
   <body>
-    <h1>Holaaa</h1>
-    <button>Clicka aqui</button>
-    <span id="count">0</span>
+    <div class="container titulo">
+      <p tabindex="-1">Super Campestre Sistema</p>
+    </div>
+    <div class="container botones">
+      <a href="./html/catalogo.html">
+        <button tabindex="1" class="btn" id="catalogoBtn">
+          Catalogo de Productos
+      </button>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      </a>
+      <a href="./html/caja.html">
+        <button tabindex="2" class="btn" id="cajaBtn">
+          Caja
+      </button>
+      </a>
+    </div>  
   </body>
 </html>

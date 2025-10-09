@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const { setMainMenu } = require('./Menu.js')
+const { setMainMenu } = require('./src/Menu.js')
 const path = require('path')
 
 const createWindow = () => {
@@ -9,7 +9,7 @@ const createWindow = () => {
     minHeight: 400,
     minWidth: 400,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'src/preload.js')
     }
   })
   setMainMenu(mainWindow)
