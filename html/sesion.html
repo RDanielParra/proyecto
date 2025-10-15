@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+  <title>Super Campestre</title>
+<script defer src="../js/sesion.js" type="module"></script>
+</head>
+<body>
+
+    <form>
+        <label for="usuario">Usuario:</label>
+        <input type="text" name="usuario" id="usuarioInput">
+        <label for="contrasena">Contraseña:</label>
+        <input type="text" name="contrasena" id="contrasenaInput">
+        <input type="button" value="Iniciar Sesion" id="btnSesion">
+    </form>
+    <a href="../index.html" id="goTo"></a>
+</body>
+</html>

@@ -11,31 +11,35 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <script defer src="js/renderer.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <title>Proyecto</title>
+    <title>Super Campestre</title>
   </head>
   <body>
     <div class="container titulo">
-      <p tabindex="-1">Super Campestre Sistema</p>
+      <p tabindex="-1">Super Campestre</p>
     </div>
     <div class="container botones">
       <a href="./html/catalogo.html">
-        <button tabindex="1" class="btn" id="catalogoBtn">
+        <button tabindex="1" class="btn role-button" id="catalogoBtn">
           Catalogo de Productos
       </button>
-      <br>
-      <br>
-      <br>
-      <br>
+      </a>
       <br>
       <br>
       </a>
       <a href="./html/caja.html">
-        <button tabindex="2" class="btn" id="cajaBtn">
+        <button tabindex="2" class="btn role-button" id="cajaBtn">
           Caja
       </button>
       </a>
+      <br>
+      <br>
+      <a href="./html/register.html">
+        <button tabindex="2" class="btn role-button" id="registerBtn">
+          Registrar Usuario
+      </button>
+      </a>
+      <script defer src="js/permisos.js"></script> 
     </div>  
   </body>
 </html>
