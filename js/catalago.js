@@ -95,6 +95,7 @@ async function obtenerProductos(orden) {
 
     }
     async function renderizarProductos (orden) {
+        verificarToken()
         try {
             const productos = await obtenerProductos(orden);
             renderizarTabla(productos);

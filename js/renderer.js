@@ -28,14 +28,20 @@ export const cargarEmpleados = async () => {
 
 export const verificarToken = () => {
   const token = localStorage.getItem('authToken')
-
     if (!token) {
-        alert("Debe iniciar sesión para ver los productos.")
-        return;
+        window.api.sendNotification("Debe iniciar sesión para ver los productos.")
+        $volver.click()
     }
-
+    
     try {
-        window.api.verificarToken(token);
+      window.api.verificarToken(token)
+      .then(response => {
+      if(response){
+      } else {
+          window.api.sendNotification('Sesion expirada vuelve a iniciar sesion')
+          $volver.click()
+      }
+    })
     } catch (error) {
         alert(error.message)
         $volver.click()

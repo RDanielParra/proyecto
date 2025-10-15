@@ -22,7 +22,7 @@ const createWindow = () => {
   mainWindow.maximize()
   mainWindow.loadFile('./html/sesion.html')
   mainWindow.once('ready-to-show', () => {
-        mainWindow.show(); // 🔑 Mostrar la ventana SÓLO cuando el contenido esté listo
+        mainWindow.show()
     });
 }
 
@@ -113,10 +113,10 @@ ipcMain.handle('verificar-token', async (event, token) => {
     const userPayload = verificarToken(token);
 
     if (!userPayload) {
-        throw new Error('Acceso no autorizado. Token inválido o expirado.');
+      return false
     }
 
-    console.log(`Acceso concedido para: ${userPayload.usuario}`);
+    return true
 
 });
 
@@ -167,7 +167,6 @@ ipcMain.handle('get-productos', async (event, orden) => {
   const query = `SELECT * FROM Producto ORDER BY ${orden}`
   try {
     const [rows] = await pool.query(query)
-    console.log(rows)
     return rows
   } catch (error) {
     console.log(error)
