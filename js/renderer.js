@@ -27,17 +27,22 @@ export const cargarEmpleados = async () => {
 
 
 export const verificarToken = () => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('authToken')
 
     if (!token) {
-        alert("Debe iniciar sesión para ver los productos.");
+        alert("Debe iniciar sesión para ver los productos.")
         return;
     }
 
     try {
         window.api.verificarToken(token);
     } catch (error) {
-        alert(error.message);
+        alert(error.message)
         $volver.click()
     }
+}
+
+export const cargarProductos = async (orden) => {
+  const productos = await window.api.getProductos(orden)
+  return productos
 }

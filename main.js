@@ -160,5 +160,16 @@ function createNotificationWindow(message) {
 }
 
 ipcMain.on('show-notification-request', (event, message) => {
-  createNotificationWindow(message);
+  createNotificationWindow(message)
 });
+
+ipcMain.handle('get-productos', async (event, orden) => {
+  const query = `SELECT * FROM Producto ORDER BY ${orden}`
+  try {
+    const [rows] = await pool.query(query)
+    console.log(rows)
+    return rows
+  } catch (error) {
+    console.log(error)
+  }
+})

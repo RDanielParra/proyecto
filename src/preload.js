@@ -9,7 +9,11 @@ contextBridge.exposeInMainWorld('api', {
 
     getEmpleados: () => ipcRenderer.invoke('get-empleados'),
 
+    getProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
+
     verificarLogin: (usuario, contrasena) => ipcRenderer.invoke('verificar-login', usuario, contrasena),
+
+    verificarToken: (token) => ipcRenderer.invoke('verificar-token', token),
 
     onNotificationMessage: (callback) => ipcRenderer.on('show-notification-message', (event, ...args) => callback(event, ...args)),
 

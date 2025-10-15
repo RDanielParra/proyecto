@@ -26,8 +26,8 @@ DROP TABLE IF EXISTS `departamento`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `departamento` (
   `IdDepartamento` int NOT NULL,
-  `Nombre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `Descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `Descripcion` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`IdDepartamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -51,13 +51,13 @@ DROP TABLE IF EXISTS `empleado`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `empleado` (
   `IdEmpleado` int NOT NULL,
-  `Puesto` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Puesto` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
   `Sueldo` decimal(10,2) NOT NULL,
-  `RFC` varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `Nombre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `Telefono` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Usuario` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `Contrasena` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `RFC` varchar(13) COLLATE utf8mb4_general_ci NOT NULL,
+  `Nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `Telefono` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Usuario` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `Contrasena` varchar(80) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`IdEmpleado`),
   UNIQUE KEY `RFC` (`RFC`),
   UNIQUE KEY `Contrasena` (`Contrasena`)
@@ -83,10 +83,10 @@ DROP TABLE IF EXISTS `factura`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `factura` (
   `IdFactura` int NOT NULL,
-  `Cliente` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `TipoCFDI` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ModoPago` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Telefono` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Cliente` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `TipoCFDI` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ModoPago` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Telefono` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`IdFactura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -108,14 +108,14 @@ DROP TABLE IF EXISTS `producto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `producto` (
-  `CodigoProducto` bigint NOT NULL,
+  `CodigoProducto` bigint(50) COLLATE utf8mb4_general_ci NOT NULL,
   `Precio` decimal(10,2) NOT NULL,
   `IdDepartamento` int NOT NULL,
-  `Descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ClaveSAT` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ClaveUnidadMedida` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Descripcion` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ClaveSAT` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ClaveUnidadMedida` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `Stock` int NOT NULL DEFAULT '0',
-  `RutaFoto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `RutaFoto` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`CodigoProducto`),
   KEY `IdDepartamento` (`IdDepartamento`),
   CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`IdDepartamento`) REFERENCES `departamento` (`IdDepartamento`) ON UPDATE CASCADE
@@ -128,7 +128,7 @@ CREATE TABLE `producto` (
 
 LOCK TABLES `producto` WRITE;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-INSERT INTO `producto` VALUES (1,50.00,1,'Garrafon Bonafont','50202301','pz',15,'null'),(25,31.00,1,'Bolsa de hielo','50202302 ','pz',70,NULL),(26,30.00,1,'Tortillas 1Kg','50221300','pz',100,'null'),(27,45.00,1,'Garrafon Liv','50202301','pz',15,'null'),(852,15.00,2,'Jugo Kool Aid','50161814','pz',30,NULL),(1035,35.00,1,'Salsa Macha','50171831','pz',10,NULL),(1048,20.00,1,'Bolsa de hielo para enfriar chica','50202302','pz',30,NULL),(1049,28.00,1,'Bolsa de hielo para enfriar grande','50202302','pz',15,NULL),(1077,200.00,1,'Envase de Garrafon','24112601','pz',0,NULL),(7500525374486,15.00,1,'Agua Purificada','50202301','pz',60,NULL),(7501013105520,15.00,2,'Jumex Manzana 413ml','50202304','pz',50,'null');
+INSERT INTO `producto` VALUES (1,50.00,1,'Garrafon Bonafont','50202301','pz',15,'null'),(1077,200.00,1,'Envase de Garrafon','24112601','pz',0,NULL),(26,30.00,1,'Tortillas 1Kg','50221300','pz',100,'null'),(27,45.00,1,'Garrafon Liv','50202301','pz',15,'null'),(7501013105520,15.00,2,'Jumex Manzana 413ml','50202304','pz',50,'null');
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,7 +166,7 @@ DROP TABLE IF EXISTS `venta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `venta` (
-  `CodigoProducto` bigint NOT NULL,
+  `CodigoProducto` bigint(50) COLLATE utf8mb4_general_ci NOT NULL,
   `NumeroTicket` int NOT NULL,
   `Cantidad` int NOT NULL,
   `Subtotal` decimal(10,2) NOT NULL,
@@ -195,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-15 10:20:02
+-- Dump completed on 2025-10-15  8:35:11

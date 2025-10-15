@@ -12,9 +12,52 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
+    <link rel="stylesheet" href="../css/catalogo.css">
   <title>Catalogo de Productos</title>
+  <script defer type="module" src="../js/catalago.js"></script>
 </head>
 <body>
-  <a href="../html/sesion.html" id="volver">Volver</a>
+  <a href="../html/sesion.html" id="volver"></a>
+  <div class="container">
+        <h1 class="titulo">Catálogo de Productos</h1>
+
+        <div class="controles-superiores">
+            <div class="barra-busqueda">
+                <input type="text" placeholder="Barra de búsqueda" id="barraBusqueda">
+            </div>
+
+            <div class="acciones-producto">
+                <button class="btn-accion btn-agregar" id="btnAgregar"><span class="triangulo"></span>Agregar Producto</button>
+                <button class="btn-accion btn-modificar" id="btnModificar"><span class="triangulo"></span>Modificar Producto</button>
+                <button class="btn-accion btn-eliminar" id="btnEliminar"><span class="triangulo-rojo"></span>Eliminar Producto</button>
+            </div>
+        </div>
+
+        <div class="controles-filtro">
+            <span class="label-campo">Campo:</span>
+            <div class="dropdown" id="dropdownFiltro">
+                <div class="dropdown-header" id="filtroSeleccionado">
+                    <span id="campoActual">Código</span>
+                    <span class="triangulo-dropdown"></span>
+                </div>
+                
+                <div class="dropdown-menu" id="menuFiltro">
+                    <a href="#" data-campo="CodigoProducto">Código</a>
+                    <a href="#" data-campo="Descripcion">Descripción</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabla-productos">
+            <div class="tabla-header">
+                <div class="col-codigo">Código</div>
+                <div class="col-descripcion">Descripción</div>
+                <div class="col-precio">Precio</div>
+                <div class="col-inventario">Inventario</div>
+            </div>
+            <div class="tabla-cuerpo" id="tabla-cuerpo-productos">
+            </div>
+        </div>
+    </div>
 </body>
 </html>
