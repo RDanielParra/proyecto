@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8"/>
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
@@ -12,9 +11,81 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-  <title>Super Campestre</title>
+    <title>Super Campestre</title>
+    <link rel="stylesheet" href="../css/caja.css">
 </head>
 <body>
-  <a href="../html/sesion.html" id="volver">Volver</a>
+
+    <a href="../html/sesion.html" id="volver">Volver</a>
+
+    <div class="container">
+        <div class="left-panel">
+            <div class="header-info">
+                <p>Super Campestre</p>
+                <p>Lunes, Enero 1 2025 00:00:00 a.m</p>
+                <p>TEL. 867 777 777 77</p>
+                <p>REYNOSA #4101, COL. CAMPESTRE</p>
+            </div>
+            <div class="table-header">
+                <span class="descripcion">DESCRIPCION</span>
+                <span class="cant">CANT</span>
+                <span class="importe">IMPORTE</span>
+            </div>
+            <div class="items-list">
+                </div>
+            <div class="footer-info">
+                <div class="footer-box">
+                    <span>Cajero</span>
+                    <span>Nombre Cajero</span>
+                </div>
+                <div class="footer-box">
+                    <span>Hora</span>
+                    <span>00:00</span>
+                </div>
+                <div class="footer-box">
+                    <span>Fecha</span>
+                    <span>00/00/00</span>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="product-photo">
+                <p>FOTO DEL PRODUCTO</p>
+            </div>
+            <div class="insert-code">
+                <p>Insertar Código</p>
+            </div>
+            <div class="summary">
+                <div class="summary-row total">
+                    <span>$ TOTAL</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Moneda extranjera</span>
+                    <span>Usd $0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Cantidad</span>
+                    <span>1</span>
+                </div>
+                <div class="summary-row">
+                    <span>Total de artículos</span>
+                    <span>1</span>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-blue">CONSULTAR PRECIO (F4)</button>
+                <button class="btn btn-orange">CANCELAR PRODUCTO (F5)</button>
+                <button class="btn btn-green">LISTA DE PRODUCTOS (F6)</button>
+                <button class="btn-pay">PAGAR (+)</button>
+                <button class="btn-cancel-account">CANCELAR CUENTA(-)</button>
+            </div>
+            <div class="bottom-buttons">
+                <button class="btn-bottom green-gradient">CORTE PARCIAL-F10</button>
+                <button class="btn-bottom green-gradient">CORTE FINAL-F11</button>
+                <button class="btn-bottom red-gradient">CERRAR SESIÓN</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
