@@ -3,13 +3,12 @@ body {
     color: rgb(0, 0, 0);
     margin: 0;
     padding: 20px;
-    background-color: #333;
+    background-color: #e0ffce;
     display: flex;
     justify-content: center;  
     align-items: center;      
     height: 100vh;            
     box-sizing: border-box;
-    
 }
 
 #btnSesion {
@@ -17,18 +16,75 @@ body {
     border: none;
     border-radius: 8px;
     font-weight: bold;
-    color: #000000;
+    color: #ffffff;
+    background-color: rgb(2, 187, 2);
     cursor: pointer;
     font-size: 13px;
-    transition: background-color 0.3s ease;
     display: block;
-    margin: 10px auto;
+    margin: 30px auto;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+}
+
+#btnSesion:hover {
+    background-color: rgb(0, 155, 0);
 }
 
 .summary {
-    background-color: #5c9b5f;
+    background-color: #42b948;
+    height: 70vh;
+    width: 40vw;
     border-radius: 6px;
     margin: 20px;
     padding: 10px 0;
     color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.summary h1 {
+    color: rgb(0, 0, 0);
+}
+
+.summary form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+form label {
+    font-size: 25px;
+}
+
+form input {
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    height: 30px;
+    padding-left: 5px;
+    border: 1px solid #42b948;
+    padding-right: 5px;
+}
+
+form input:hover {
+    border: 1px solid rgb(0, 0, 0);
+}
+
+form input:focus {
+    border: 1px solid rgb(79, 79, 255);
+}
+
+.container {
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    justify-content: center;
+    align-items: center;
+    gap: .8rem;
 }
