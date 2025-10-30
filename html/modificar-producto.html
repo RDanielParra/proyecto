@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Producto</title>
+    <link rel="stylesheet" href="../css/agregar-producto.css">
+    <script defer type="module" src="../js/modificar-producto.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="titulo">Modificar Producto</h1>
+        <form id="formProducto">
+            <div class="form-group">
+                <label for="codigoProducto">Código del producto:</label>
+                <input type="text" id="codigoProducto" name="CodigoProducto" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcionProducto">Descripción:</label>
+                <input type="text" id="descripcionProducto" name="Descripcion">
+            </div>
+            <div class="form-group">
+                <label for="precioProducto">Precio:</label>
+                <div class="input-con-simbolo">
+                    <span>$</span>
+                    <input type="number" id="precioProducto" name="Precio" step="0.01" min="0" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="claveSat">Clave SAT:</label>
+                <input type="text" id="claveSat" name="ClaveSAT">
+            </div>
+            <div class="form-group">
+                <label for="claveUnidadMedida">Clave de Unidad de medida:</label>
+                <input type="text" id="claveUnidadMedida" name="ClaveUnidadMedida">
+            </div>
+            <div class="form-group select-group">
+                <label for="departamento">Departamento:</label>
+                <select id="departamento" name="IdDepartamento">
+                    <option value="1">Mercancia en general</option>
+                    <option value="2">Jugos y refrescos</option>
+                    <option value="11">Frutas y verduras</option>
+                    <option value="14">Carniceria</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="unidadesExistencia">Unidades en existencia:</label>
+                <input type="number" id="unidadesExistencia" name="Stock" min="0" required>
+            </div>
+            <div class="form-group file-upload-group">
+                <label for="rutaFoto">Foto del producto:</label>
+                <input type="text" id="rutaFoto" name="RutaFoto" readonly>
+                <button type="button" id="btnSeleccionarFoto">...</button>
+            </div>
+
+            <div class="acciones-form">
+                <div class="contenedor-foto-preview">
+                    <div class="placeholder-foto" id="previewFoto">
+                        FOTO DEL PRODUCTO
+                    </div>
+                </div>
+                <button type="submit" class="btn-accion btn-modificar" id="btnGuardarProducto">Modificar Producto</button>
+            </div>
+            <button type="button" class="btn-accion btn-cancelar" id="btnCancelar">Cancelar</button>
+        </form>
+    </div>
+</body>
+</html>

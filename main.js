@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { setMainMenu } = require('./src/Menu.js')
 const path = require('path')
 const { connectionInfo, sql } = require('./connection.js')
@@ -6,7 +6,9 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 //const saltRounds = 10
-let mainWindow
+let mainWindow;
+let idProductoParaModificar;
+
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -172,3 +174,210 @@ ipcMain.handle('get-productos', async (event, orden) => {
     console.log(error)
   }
 })
+
+ipcMain.handle('eliminar-producto', async (event, idProducto) => {
+    const query = 'DELETE FROM Producto WHERE CodigoProducto = ?';
+    try {
+        const [result] = await pool.query(query, [idProducto]);
+        
+        if (result.affectedRows > 0) {
+            console.log(`Producto ${idProducto} eliminado con éxito.`);
+            return true; 
+        } else {
+            console.log(`No se encontró el producto ${idProducto} para eliminar.`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error al eliminar el producto:', error);
+        return { error: error.message }; 
+    }
+})
+ //Para el botón de agregar producto ---------------------------------
+ipcMain.on('abrir-ventana-agregar', () => {
+    const agregarWindow = new BrowserWindow({
+        width: 500,
+        height: 600,
+        parent: mainWindow, 
+        modal: true, 
+        show: false,
+        maximizable: false,
+        frame: false,
+        minimizable: false,
+        resizable: false,
+        skipTaskbar: true,
+
+        webPreferences: {
+            preload: path.join(__dirname, 'src/preload.js') 
+        }
+    });
+
+    agregarWindow.loadFile('./html/agregar-producto.html'); 
+    agregarWindow.setMenu(null); // Opcional: quitar menú
+    agregarWindow.once('ready-to-show', () => {
+        agregarWindow.show();
+    });
+})
+
+ipcMain.handle('guardar-producto', async (event, producto) => {
+
+    const query = `
+        INSERT INTO Producto 
+        (CodigoProducto, Precio, IdDepartamento, Descripcion, ClaveSAT, ClaveUnidadMedida, Stock, RutaFoto) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    
+    // Los valores deben estar en el mismo orden que las columnas
+    const valores = [
+        producto.CodigoProducto,
+        producto.Precio,
+        producto.IdDepartamento,
+        producto.Descripcion,
+        producto.ClaveSAT,
+        producto.ClaveUnidadMedida,
+        producto.Stock,
+        producto.RutaFoto
+    ];
+
+    try {
+        const [result] = await pool.query(query, valores);
+        if (result.affectedRows > 0) {
+            console.log(`Producto ${producto.CodigoProducto} guardado con éxito.`);
+            
+            // ¡Importante! Avisa a la ventana principal que debe refrescarse
+            mainWindow.webContents.send('refrescar-productos'); 
+            
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error al guardar el producto:', error);
+        return { error: error.message }; // Envía el mensaje de error al frontend
+    }
+});
+
+ipcMain.handle('get-departamentos', async () => {
+
+    const query = 'SELECT IdDepartamento, Descripcion FROM departamento'; 
+    try {
+        const [rows] = await pool.query(query);
+        return rows;
+    } catch (error) {
+        console.error('Error al obtener departamentos:', error);
+        return { error: error.message };
+    }
+});
+
+ipcMain.handle('open-file-dialog', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+        title: 'Seleccionar foto del producto',
+        buttonLabel: 'Seleccionar',
+        properties: ['openFile'],
+        filters: [
+            { name: 'Imágenes', extensions: ['jpg', 'png', 'gif', 'jpeg'] }
+        ]
+    });
+
+    if (canceled || filePaths.length === 0) {
+        return null; // El usuario canceló
+    } else {
+        return filePaths[0]; // Devuelve la ruta del archivo seleccionado
+    }
+});
+//-------------------------------------------------------------------^^^^^
+//Para el botón de modificar producto------------------------------------
+ipcMain.on('abrir-ventana-modificar', (event, idProducto) => {
+    idProductoParaModificar = idProducto; 
+
+    const modificarWindow = new BrowserWindow({
+        width: 500,
+        height: 600,
+        parent: mainWindow, 
+        modal: true, 
+        show: false,
+        maximizable: false,
+        frame: false,
+        minimizable: false,
+        resizable: false,
+        skipTaskbar: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'src/preload.js') 
+        }
+    });
+
+    // Cargas el HTML del formulario (que debes crear)
+    modificarWindow.loadFile('./html/modificar-producto.html'); // <-- Nuevo HTML
+    modificarWindow.setMenu(null); 
+    
+    modificarWindow.once('ready-to-show', () => {
+        modificarWindow.show();
+    });
+});
+
+ipcMain.handle('get-datos-producto-modificar', async () => {
+    if (!idProductoParaModificar) {
+        return { error: 'No se especificó ningún ID de producto.' };
+    }
+    
+    const query = 'SELECT * FROM Producto WHERE CodigoProducto = ?';
+    try {
+        const [rows] = await pool.query(query, [idProductoParaModificar]);
+        if (rows.length > 0) {
+            return rows[0]; // Devuelve el objeto del producto
+        } else {
+            return { error: 'Producto no encontrado.' };
+        }
+    } catch (error) {
+        console.error('Error al obtener datos del producto:', error);
+        return { error: error.message };
+    }
+});
+
+ipcMain.handle('actualizar-producto', async (event, producto) => {
+    // La variable 'producto' es el objeto que enviaste desde modificar-producto.js
+    const query = `
+        UPDATE Producto SET
+            Precio = ?,
+            IdDepartamento = ?,
+            Descripcion = ?,
+            ClaveSAT = ?,
+            ClaveUnidadMedida = ?,
+            Stock = ?,
+            RutaFoto = ?
+        WHERE CodigoProducto = ? 
+    `;
+    
+    // ¡OJO AL ORDEN! El CodigoProducto va al final para el WHERE
+    const valores = [
+        producto.Precio,
+        producto.IdDepartamento,
+        producto.Descripcion,
+        producto.ClaveSAT,
+        producto.ClaveUnidadMedida,
+        producto.Stock,
+        producto.RutaFoto,
+        producto.CodigoProducto // <-- Este es para el WHERE
+    ];
+
+    try {
+        const [result] = await pool.query(query, valores);
+        if (result.affectedRows > 0) {
+            console.log(`Producto ${producto.CodigoProducto} actualizado con éxito.`);
+            
+            // Avisa a la ventana principal que debe refrescarse
+            mainWindow.webContents.send('refrescar-productos'); 
+            
+            return true;
+        }
+        return false; // No se actualizó (quizás el ID no existía)
+    } catch (error) {
+        console.error('Error al actualizar el producto:', error);
+        return { error: error.message }; // Envía el mensaje de error
+    }
+});
+
+ipcMain.on('cerrar-ventana-modal', (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window) {
+        window.close();
+    }
+});

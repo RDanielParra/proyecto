@@ -7,6 +7,71 @@ const barraBusquedaInput = document.getElementById('barraBusqueda')
 
 document.addEventListener('DOMContentLoaded', verificarToken)
 
+btnEliminar.addEventListener('click', async () => { 
+    console.log('Botón Eliminar presionado');
+
+    const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
+
+    if (filaSeleccionada) {
+        const idProducto = filaSeleccionada.dataset.codigoProducto;
+        
+        const confirmado = confirm(`¿Estás seguro de que quieres eliminar el producto ${idProducto}?`);
+
+        if (confirmado) {
+            try {
+                const resultado = await window.api.eliminarProducto(idProducto);
+                
+                if (resultado === true) {
+                    console.log(`Producto ${idProducto} eliminado.`);
+                    window.api.sendNotification(`Producto ${idProducto} eliminado con éxito`);
+                    renderizarProductos(orden);
+                } else if (resultado.error) {
+                    console.error('Error de BD:', resultado.error);
+                    window.api.sendNotification(`Error: No se pudo eliminar. ${resultado.error}`);
+                } else {
+                    window.api.sendNotification('Error: El producto no fue encontrado.');
+                }
+            } catch (error) {
+                console.error('Error fatal al llamar a eliminarProducto:', error);
+                window.api.sendNotification('Error: No se pudo eliminar el producto');
+            }
+        } else {
+            console.log('Eliminación cancelada por el usuario.');
+        }
+    } else {
+        console.warn('No se ha seleccionado ningún producto para eliminar.');
+        window.api.sendNotification('Error: Debes seleccionar un producto para eliminar');
+    }
+})
+
+btnAgregar.addEventListener('click', () => {
+    console.log('Botón Agregar presionado');
+    window.api.abrirVentanaAgregar(); 
+})
+
+btnModificar.addEventListener('click', () => {
+        console.log('Botón Modificar presionado');
+        
+        // 1. Encontrar la fila que está seleccionada
+        const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
+
+        if (filaSeleccionada) {
+            // 2. Obtener el ID del producto desde el dataset
+            const idProducto = filaSeleccionada.dataset.codigoProducto;
+            console.log(`Modificando producto: ${idProducto}`);
+            
+            // 3. ¡Aquí está la magia! Llama a la nueva función de la API
+            //    que crearemos en preload.js.
+            window.api.abrirVentanaModificar(idProducto);
+
+        } else {
+            // 4. Si no hay nada seleccionado, avisar al usuario
+            console.warn('No se ha seleccionado ningún producto para modificar.');
+            window.api.sendNotification('Error: Debes seleccionar un producto para modificar');
+        }
+    });
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const dropdown = document.getElementById('dropdownFiltro')
     const header = document.getElementById('filtroSeleccionado')
@@ -41,6 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (barraBusquedaInput) {
         barraBusquedaInput.addEventListener('input', filtrarTabla)
     }
+
+    window.api.onRefrescarProductos(() => {
+        console.log('Evento de refrescar recibido. Recargando productos...');
+        renderizarProductos(orden);
+    });
 
     renderizarProductos(orden)
     
@@ -130,5 +200,5 @@ async function obtenerProductos(orden) {
         } else {
             fila.style.display = 'none';
         }
-    });
+    })
 }
