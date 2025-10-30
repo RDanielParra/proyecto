@@ -4,8 +4,8 @@ const path = require('path')
 const { connectionInfo, sql } = require('./connection.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { generateHash } = require('./encriptar.js')
 
-//const saltRounds = 10
 let mainWindow;
 let idProductoParaModificar;
 
@@ -50,6 +50,11 @@ ipcMain.handle('get-empleados', async () => {
 })
 
 const JWT_SECRET = 'jD/g7I0h4sD8Xg4sD8Xg7I0h4sD8Xg4sD8Xg7I0h4sD8Xg4sD8Xg=='
+
+ipcMain.handle('encriptar-contra', async (event, password) => {
+    const hash = await generateHash(password)
+    return hash
+})
 
 ipcMain.handle('verificar-login', async (event, usuario, contrasena) => {
   const query = 'SELECT IdEmpleado, Usuario, Contrasena, Puesto FROM Empleado WHERE Usuario = ?'
@@ -379,5 +384,36 @@ ipcMain.on('cerrar-ventana-modal', (event) => {
     const window = BrowserWindow.fromWebContents(event.sender);
     if (window) {
         window.close();
+    }
+});
+
+ipcMain.handle('guardar-registro', async (event, empleado) => {
+
+    const query = `
+        INSERT INTO empleado 
+        (Puesto, Sueldo, RFC, Nombre, Telefono, Usuario, Contrasena) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+    
+    // Los valores deben estar en el mismo orden que las columnas
+    const valores = [
+        empleado.Puesto,
+        empleado.Sueldo,
+        empleado.RFC,
+        empleado.Nombre,
+        empleado.Telefono,
+        empleado.Usuario,
+        empleado.Contrasena,
+    ];
+
+    try {
+        const [result] = await pool.query(query, valores);
+        if (result.affectedRows > 0) {            
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error al guardar el empleado:', error);
+        return { error: error.message }; // Envía el mensaje de error al frontend
     }
 });

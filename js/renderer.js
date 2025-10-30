@@ -52,3 +52,8 @@ export const cargarProductos = async (orden) => {
   const productos = await window.api.getProductos(orden)
   return productos
 }
+
+export const encriptarContra = async (password) => {
+  const hash = await window.api.encriptarContra(password)
+  return hash
+}

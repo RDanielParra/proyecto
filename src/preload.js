@@ -38,5 +38,9 @@ contextBridge.exposeInMainWorld('api', {
     getDatosProductoModificar: () => ipcRenderer.invoke('get-datos-producto-modificar'),
 
     actualizarProducto: (datos) => ipcRenderer.invoke('actualizar-producto', datos),
+
+    guardarRegistro: (datos) => ipcRenderer.invoke('guardar-registro', datos),
+
+    encriptarContra: (password) => ipcRenderer.invoke('encriptar-contra', password)
     
 })
