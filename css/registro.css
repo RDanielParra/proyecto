@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0ffce;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.summary {
+    background-color: #9fd3a1;
+    width: 600px; 
+    padding: 30px 40px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.summary h1 {
+    margin-bottom: 25px;
+    color: #000;
+}
+
+.contenedor {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px; 
+    width: 100%;
+}
+
+.columna {
+    flex: 1;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px; 
+}
+
+.container label {
+    flex: 1;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
+}
+
+.container input,
+.container select {
+    flex: 2;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #42b948;
+    padding: 5px 8px;
+    font-size: 15px;
+}
+
+
+#btnresgistro {
+    padding: 10px 25px;
+    background-color: #00b300;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#btnresgistro:hover {
+    background-color: #008c00;
+}
+#volver {
+    position: fixed;         
+    top: 15px;              
+    left: 15px;             
+    z-index: 1000;           
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+    background-color: #388e3c;
+    padding: 8px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}

@@ -16,8 +16,12 @@
     <title>Registro de usuario</title>
 </head>
 <body>
+  <a href="../index.html" id="volver">Volver</a>
+  <div class="summary">
     <h1>Registro de usuario</h1>
     <form>
+      <div class="contenedor">
+      <div class="columna">
         <div class="container">
           <label for="nombre">Nombre: </label>
           <input type="text" class="input" id="inputNombre" name="nombre">
@@ -26,14 +30,7 @@
           <label for="rfc">RFC: </label>
           <input type="text" class="input" id="inputRFC" name="rfc">
         </div>
-        <div class="container">
-          <label for="puesto">Puesto: </label>
-          <select class="input" id="inputPuesto" name="puesto">
-            <option value="admin">Admin</option>
-            <option value="cajero">Cajero</option>
-            <option value="almacenista">Almacenista</option>
-          </select>
-        </div>
+        
         <div class="container">
           <label for="sueldo">Sueldo: </label>
           <input type="text" class="input" id="inputSueldo" name="sueldo">
@@ -48,9 +45,29 @@
         </div>
         <div class="container">
           <label for="contra">Contraseña: </label>
-          <input type="text" class="input" id="inputContra" name="contra">
+          <input type="password" class="input" id="inputContra" name="contra">
         </div>
-        
+        <div class="container">
+          <label for="repcontra">Repetir contraseña: </label>
+          <input type="password" class="input" id="inputRepContra" name="repcontra">
+        </div>
+      </div>
+      <div class="columna">
+        <div class="container" id="divpuesto">
+          <label for="puesto">Puesto: </label>
+          <select class="input" id="inputPuesto" name="puesto">
+            <option value="admin">Admin</option>
+            <option value="cajero">Cajero</option>
+            <option value="almacenista">Almacenista</option>
+          </select>
+        </div>
+      </div>
+      </div>
+        <div>
+          <button id="btnresgistro">Registrar</button>
+        </div>
+      
     </form>
+  </div>
 </body>
 </html>
