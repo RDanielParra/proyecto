@@ -92,7 +92,6 @@ ipcMain.handle('verificar-login', async (event, usuario, contrasena) => {
       const token = jwt.sign(payload, JWT_SECRET, {
         expiresIn: '9h'
       })
-
       return token
     } else {
       console.log(`Intento de login fallido: Contraseña incorrecta para ${usuario}, contrasena: ${contrasena}, ${empleado.Contrasena}`)

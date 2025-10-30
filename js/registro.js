@@ -38,6 +38,7 @@ formRegister.addEventListener('submit', async (event) => {
 
         if (resultado === true) {
             window.api.sendNotification('Empleado registrado con éxito.');
+            document.getElementById("formRegister").reset();
         } else {
             // Muestra el error específico de la base de datos (ej. Llave duplicada)
             window.api.sendNotification(`Error: ${resultado.error || 'Desconocido'}`);

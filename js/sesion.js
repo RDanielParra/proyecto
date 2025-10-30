@@ -19,7 +19,6 @@ const handleLogin = async (e) => {
         const jwtToken = await window.api.verificarLogin($usuarioInput, $contrasenaInput)
 
         if(jwtToken) {
-            console.log('olax2')
             localStorage.setItem('authToken', jwtToken)
             
             ThrowNotification('!Bienvenido¡ Inicio de Sesion Exitoso')
