@@ -13,13 +13,13 @@
       content="default-src 'self'; script-src 'self'"
     />
     <link rel="stylesheet" href="../css/registro.css">
-    <script type="module" src="../js/registro.js"></script>
-    <title>Registro de usuario</title>
+    <script type="module" src="../js/modificar-empleado.js"></script>
+    <title>Modificar usuario</title>
 </head>
 <body>
   <!-- <a href="../index.html" id="volver">Volver</a> -->
   <div class="summary">
-    <h1>Registro de usuario</h1>
+    <h1>Modificar de usuario</h1>
     <form id="formRegister">
       <div class="contenedor">
       <div class="columna">
@@ -27,6 +27,9 @@
           <label for="nombre">Nombre: </label>
           <input type="text" class="input" id="inputNombre" name="nombre">
         </div>
+
+        <input type="hidden" id="inputIdEmpleado">
+        
         <div class="container">
           <label for="rfc">RFC: </label>
           <input type="text" class="input" id="inputRFC" name="rfc">
@@ -44,14 +47,6 @@
           <label for="usuario">Usuario: </label>
           <input type="text" class="input" id="inputUsuario" name="usuario">
         </div>
-        <div class="container">
-          <label for="contra">Contraseña: </label>
-          <input type="password" class="input" id="inputContra" name="contra">
-        </div>
-        <div class="container">
-          <label for="repcontra">Repetir contraseña: </label>
-          <input type="password" class="input" id="inputRepContra" name="repcontra">
-        </div>
       </div>
       <div class="columna">
         <div class="container" id="divpuesto">
@@ -65,7 +60,7 @@
       </div>
       </div>
         <div>
-          <button id="btnresgistro">Registrar</button>
+          <button id="btnresgistro">Modificar</button>
         </div>
         <button type="button" class="btn-accion btn-cancelar" id="btnCancelar">Cancelar</button>
     </form>

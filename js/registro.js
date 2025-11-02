@@ -4,6 +4,11 @@ import { encriptarContra, verificarToken } from "./renderer.js";
 document.addEventListener('DOMContentLoaded', async () => {
     // --- Obtener elementos del DOM ---
     verificarToken()
+    const btnCancelar = document.getElementById('btnCancelar');
+
+     btnCancelar.addEventListener('click', () => {
+        window.api.cerrarVentanaModal();
+    });
 });
 
 const formRegister = document.getElementById('formRegister');
@@ -39,6 +44,7 @@ formRegister.addEventListener('submit', async (event) => {
         if (resultado === true) {
             window.api.sendNotification('Empleado registrado con éxito.');
             document.getElementById("formRegister").reset();
+            window.api.cerrarVentanaModal();
         } else {
             // Muestra el error específico de la base de datos (ej. Llave duplicada)
             window.api.sendNotification(`Error: ${resultado.error || 'Desconocido'}`);

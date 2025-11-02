@@ -179,6 +179,16 @@ ipcMain.handle('get-productos', async (event, orden) => {
   }
 })
 
+ipcMain.handle('get-empleados-tabla', async (event, orden) => {
+  const query = `SELECT * FROM empleado ORDER BY ${orden}`
+  try {
+    const [rows] = await pool.query(query)
+    return rows
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 ipcMain.handle('eliminar-producto', async (event, idProducto) => {
     const query = 'DELETE FROM Producto WHERE CodigoProducto = ?';
     try {
@@ -216,6 +226,31 @@ ipcMain.on('abrir-ventana-agregar', () => {
     });
 
     agregarWindow.loadFile('./html/agregar-producto.html'); 
+    agregarWindow.setMenu(null); // Opcional: quitar menú
+    agregarWindow.once('ready-to-show', () => {
+        agregarWindow.show();
+    });
+})
+
+ipcMain.on('abrir-ventana-agregar-empleado', () => {
+    const agregarWindow = new BrowserWindow({
+        width: 700,
+        height: 600,
+        parent: mainWindow, 
+        modal: true, 
+        show: false,
+        maximizable: false,
+        frame: false,
+        minimizable: false,
+        resizable: false,
+        skipTaskbar: true,
+
+        webPreferences: {
+            preload: path.join(__dirname, 'src/preload.js') 
+        }
+    });
+
+    agregarWindow.loadFile('./html/register.html'); 
     agregarWindow.setMenu(null); // Opcional: quitar menú
     agregarWindow.once('ready-to-show', () => {
         agregarWindow.show();
@@ -407,7 +442,9 @@ ipcMain.handle('guardar-registro', async (event, empleado) => {
 
     try {
         const [result] = await pool.query(query, valores);
-        if (result.affectedRows > 0) {            
+        if (result.affectedRows > 0) {     
+            
+            mainWindow.webContents.send('refrescar-empleados'); 
             return true;
         }
         return false;
@@ -416,3 +453,109 @@ ipcMain.handle('guardar-registro', async (event, empleado) => {
         return { error: error.message }; // Envía el mensaje de error al frontend
     }
 });
+
+ipcMain.on('abrir-ventana-modificar-empleado', (event, IdEmpleado) => {
+    IdEmpleadoModificar = IdEmpleado; 
+
+    const modificarWindow = new BrowserWindow({
+        width: 700,
+        height: 600,
+        parent: mainWindow, 
+        modal: true, 
+        show: false,
+        maximizable: false,
+        frame: false,
+        minimizable: false,
+        resizable: false,
+        skipTaskbar: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'src/preload.js') 
+        }
+    });
+
+    // Cargas el HTML del formulario (que debes crear)
+    modificarWindow.loadFile('./html/modificar-empleado.html'); // <-- Nuevo HTML
+    modificarWindow.setMenu(null); 
+    
+    modificarWindow.once('ready-to-show', () => {
+        modificarWindow.show();
+    });
+});
+
+ipcMain.handle('get-datos-empleado-modificar', async () => {
+    if (!IdEmpleadoModificar) {
+        return { error: 'No se especificó ningún ID de empleado.' };
+    }
+    
+    const query = 'SELECT * FROM empleado WHERE IdEmpleado = ?';
+    try {
+        const [rows] = await pool.query(query, [IdEmpleadoModificar]);
+        if (rows.length > 0) {
+            return rows[0]; // Devuelve el objeto del producto
+        } else {
+            return { error: 'Empleado no encontrado.' };
+        }
+    } catch (error) {
+        console.error('Error al obtener datos del empleado:', error);
+        return { error: error.message };
+    }
+});
+
+ipcMain.handle('actualizar-empleado', async (event, empleado) => {
+    // La variable 'empleado' es el objeto que enviaste desde modificar-empleado.js
+    const query = `
+        UPDATE empleado SET
+            Puesto = ?,
+            Sueldo = ?,
+            RFC = ?,
+            Nombre = ?,
+            Telefono = ?,
+            Usuario = ?
+        WHERE IdEmpleado = ?
+    `;
+    
+    // ¡OJO AL ORDEN! El CodigoProducto va al final para el WHERE
+    const valores = [
+        empleado.Puesto,
+        empleado.Sueldo,
+        empleado.RFC,
+        empleado.Nombre,
+        empleado.Telefono,
+        empleado.Usuario,
+        empleado.IdEmpleado // <-- Este es para el WHERE
+    ];
+
+    try {
+        const [result] = await pool.query(query, valores);
+        if (result.affectedRows > 0) {
+            console.log(`Empleado ${empleado.IdEmpleado} actualizado con éxito.`);
+            
+            // Avisa a la ventana principal que debe refrescarse
+            mainWindow.webContents.send('refrescar-empleados'); 
+            
+            return true;
+        }
+        return false; // No se actualizó (quizás el ID no existía)
+    } catch (error) {
+        console.error('Error al actualizar el empleado:', error);
+        return { error: error.message }; // Envía el mensaje de error
+    }
+});
+
+ipcMain.handle('eliminar-empleado', async (event, IdEmpleado) => {
+    const query = 'DELETE FROM empleado WHERE IdEmpleado = ?';
+    try {
+        const [result] = await pool.query(query, [IdEmpleado]);
+        
+        if (result.affectedRows > 0) {
+            console.log(`Empleado ${IdEmpleado} eliminado con éxito.`);
+            return true; 
+        } else {
+            console.log(`No se encontró el producto ${IdEmpleado} para eliminar.`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error al eliminar el empleado:', error);
+        return { error: error.message }; 
+    }
+})

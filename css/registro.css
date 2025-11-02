@@ -1,3 +1,21 @@
+:root {
+    --color-fondo: #e6ffe6; /* Fondo más claro y verde */
+    --color-contenedor: #f0fdf0; /* Blanco-verde claro para el contenedor */
+    --color-borde: #aaffaa; /* Verde claro para bordes */
+    --color-texto: #333;
+    --color-label: #222;
+    --color-input-bg: #fff;
+    --color-input-border: #ccd;
+    --color-input-focus-border: #88ee88; /* Verde al enfocar */
+    --color-btn-agregar: #28a745; /* Verde estándar */
+    --color-btn-agregar-hover: #218838;
+    --color-btn-cancelar: #dc3545; /* Rojo estándar */
+    --color-btn-cancelar-hover: #c82333;
+    --color-placeholder-foto-bg: #d0e0d0; /* Gris verdoso para el placeholder */
+    --color-placeholder-foto-text: #666;
+    --color-btn-modificar: #007bff; /* Azul estándar */
+    --color-btn-modificar-hover: #0056b3;
+}
 body {
     font-family: Arial, sans-serif;
     background-color: #e0ffce;
@@ -88,4 +106,17 @@ body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     font-weight: bold;
     transition: background-color 0.3s ease;
+}
+.btn-cancelar {
+    background-color: var(--color-btn-cancelar);
+    color: white;
+    grid-column: 2 / 3; /* Coloca el botón de cancelar debajo del de agregar */
+    margin-top: 10px; /* Espacio extra */
+    justify-self: center; /* Centrarlo horizontalmente */
+    max-width: 250px; /* Mismo ancho máximo que el de agregar */
+}
+
+.btn-cancelar:hover {
+    background-color: var(--color-btn-cancelar-hover);
+    transform: translateY(-1px);
 }

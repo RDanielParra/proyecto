@@ -8,6 +8,8 @@ contextBridge.exposeInMainWorld('api', {
     },
 
     getEmpleados: () => ipcRenderer.invoke('get-empleados'),
+    
+    getEmpleadosTabla: (orden) => ipcRenderer.invoke('get-empleados-tabla', orden),
 
     getProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
 
@@ -22,6 +24,8 @@ contextBridge.exposeInMainWorld('api', {
     sendNotification: (message) => ipcRenderer.send('show-notification-request', message),
     
     abrirVentanaAgregar: () => ipcRenderer.send('abrir-ventana-agregar'),
+
+    abrirVentanaAgregarEmpleado: () => ipcRenderer.send('abrir-ventana-agregar-empleado'), 
 
     guardarProducto: (datos) => ipcRenderer.invoke('guardar-producto', datos),
 
@@ -41,6 +45,15 @@ contextBridge.exposeInMainWorld('api', {
 
     guardarRegistro: (datos) => ipcRenderer.invoke('guardar-registro', datos),
 
-    encriptarContra: (password) => ipcRenderer.invoke('encriptar-contra', password)
+    encriptarContra: (password) => ipcRenderer.invoke('encriptar-contra', password),
+
+    abrirVentanaModificarEmpleado: (id) => ipcRenderer.send('abrir-ventana-modificar-empleado', id),
     
+    getDatosEmpleadoModificar: () => ipcRenderer.invoke('get-datos-empleado-modificar'),
+
+    actualizarEmpleado: (datos) => ipcRenderer.invoke('actualizar-empleado', datos),
+
+    eliminarEmpleado: (id) => ipcRenderer.invoke('eliminar-empleado', id) ,
+
+    onRefrescarEmpleados: (callback) => ipcRenderer.on('refrescar-empleados', callback),
 })

@@ -57,3 +57,8 @@ export const encriptarContra = async (password) => {
   const hash = await window.api.encriptarContra(password)
   return hash
 }
+
+export const cargarEmpleadosTabla = async (orden) => {
+  const empleados = await window.api.getEmpleadosTabla(orden)
+  return empleados
+}

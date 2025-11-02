@@ -1,10 +1,10 @@
-import { cargarProductos, verificarToken } from './renderer.js'
-let orden = 'CodigoProducto'
-const tablaCuerpo = document.getElementById('tabla-cuerpo-productos')
+import { cargarEmpleadosTabla, verificarToken } from './renderer.js'
+let orden = 'IdEmpleado'
+const tablaCuerpo = document.getElementById('tabla-cuerpo-empleados')
 console.log('Tabla cuerpo empleados:', tablaCuerpo)
 const barraBusquedaInput = document.getElementById('barraBusqueda')
 
-document.addEventListener('DOMContentLoaded', verificarToken)
+document.addEventListener('DOMContentLoaded', verificarToken) 
 
 btnEliminar.addEventListener('click', async () => { 
     console.log('Botón Eliminar presionado');
@@ -12,18 +12,18 @@ btnEliminar.addEventListener('click', async () => {
     const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
 
     if (filaSeleccionada) {
-        const idProducto = filaSeleccionada.dataset.codigoProducto;
+        const IdEmpleado = filaSeleccionada.dataset.IdEmpleado;
         
-        const confirmado = confirm(`¿Estás seguro de que quieres eliminar el producto ${idProducto}?`);
+        const confirmado = confirm(`¿Estás seguro de que quieres eliminar el empleado ${IdEmpleado}?`);
 
         if (confirmado) {
             try {
-                const resultado = await window.api.eliminarProducto(idProducto);
+                const resultado = await window.api.eliminarEmpleado(IdEmpleado);
                 
                 if (resultado === true) {
-                    console.log(`Producto ${idProducto} eliminado.`);
-                    window.api.sendNotification(`Producto ${idProducto} eliminado con éxito`);
-                    renderizarProductos(orden);
+                    console.log(`Empleado ${IdEmpleado} eliminado.`);
+                    window.api.sendNotification(`Empleado ${IdEmpleado} eliminado con éxito`);
+                    renderizarEmpleados(orden);
                 } else if (resultado.error) {
                     console.error('Error de BD:', resultado.error);
                     window.api.sendNotification(`Error: No se pudo eliminar. ${resultado.error}`);
@@ -38,14 +38,15 @@ btnEliminar.addEventListener('click', async () => {
             console.log('Eliminación cancelada por el usuario.');
         }
     } else {
-        console.warn('No se ha seleccionado ningún producto para eliminar.');
-        window.api.sendNotification('Error: Debes seleccionar un producto para eliminar');
+        console.warn('No se ha seleccionado ningún empleado para eliminar.');
+        window.api.sendNotification('Error: Debes seleccionar un empleado para eliminar');
     }
 })
 
 btnAgregar.addEventListener('click', () => {
     console.log('Botón Agregar presionado');
-    window.api.abrirVentanaAgregar(); 
+    window.api.abrirVentanaAgregarEmpleado(); 
+    
 })
 
 btnModificar.addEventListener('click', () => {
@@ -56,17 +57,17 @@ btnModificar.addEventListener('click', () => {
 
         if (filaSeleccionada) {
             // 2. Obtener el ID del producto desde el dataset
-            const idProducto = filaSeleccionada.dataset.codigoProducto;
-            console.log(`Modificando producto: ${idProducto}`);
+            const IdEmpleado = filaSeleccionada.dataset.IdEmpleado;
+            console.log(`Modificando empleado: ${IdEmpleado}`);
             
             // 3. ¡Aquí está la magia! Llama a la nueva función de la API
             //    que crearemos en preload.js.
-            window.api.abrirVentanaModificar(idProducto);
+            window.api.abrirVentanaModificarEmpleado(IdEmpleado);
 
         } else {
             // 4. Si no hay nada seleccionado, avisar al usuario
-            console.warn('No se ha seleccionado ningún producto para modificar.');
-            window.api.sendNotification('Error: Debes seleccionar un producto para modificar');
+            console.warn('No se ha seleccionado ningún empleado para modificar.');
+            window.api.sendNotification('Error: Debes seleccionar un empleado para modificar');
         }
     });
 
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log(`Filtro seleccionado: ${item.dataset.campo}`)
             orden = item.dataset.campo
-            renderizarProductos(orden)
+            renderizarEmpleados(orden)
         })
     })
 
@@ -106,17 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
         barraBusquedaInput.addEventListener('input', filtrarTabla)
     }
 
-    window.api.onRefrescarProductos(() => {
-        console.log('Evento de refrescar recibido. Recargando productos...');
-        renderizarProductos(orden);
+    window.api.onRefrescarEmpleados(() => {
+        console.log('Evento de refrescar recibido. Recargando empleados...');
+        renderizarEmpleados(orden);
     });
 
-    renderizarProductos(orden)
+    renderizarEmpleados(orden)
     
 })
 
-async function obtenerProductos(orden) {
-        return cargarProductos(orden).then(response => {
+async function obtenerEmpleados(orden) {
+        return cargarEmpleadosTabla(orden).then(response => {
             return response
         })
     }
@@ -128,21 +129,25 @@ async function obtenerProductos(orden) {
         return celda;
     }
     
-    function renderizarTabla(productos) {
+    function renderizarTabla(empleados) {
         // Limpiar filas anteriores
         tablaCuerpo.innerHTML = ''; 
 
-        productos.forEach(producto => {
+        empleados.forEach(empleado => {
             const fila = document.createElement('div');
             fila.classList.add('tabla-fila');
             
-            fila.dataset.codigoProducto = producto.CodigoProducto;
-            fila.dataset.descripcion = producto.Descripcion
+            fila.dataset.IdEmpleado = empleado.IdEmpleado;
+            fila.dataset.Usuario = empleado.Usuario
 
-            fila.appendChild(crearCelda(producto.CodigoProducto))
-            fila.appendChild(crearCelda(producto.Descripcion))
-            fila.appendChild(crearCelda(`$${producto.Precio}`))
-            fila.appendChild(crearCelda(producto.Stock))
+            fila.appendChild(crearCelda(empleado.IdEmpleado))
+            fila.appendChild(crearCelda(empleado.Puesto))
+            fila.appendChild(crearCelda(`$${empleado.Sueldo}`))
+            fila.appendChild(crearCelda(empleado.RFC))
+            fila.appendChild(crearCelda(empleado.Nombre))
+            fila.appendChild(crearCelda(empleado.Telefono))
+            fila.appendChild(crearCelda(empleado.Usuario))
+            fila.appendChild(crearCelda(empleado.Contrasena))
 
             fila.addEventListener('click', seleccionarFila)
 
@@ -159,45 +164,37 @@ async function obtenerProductos(orden) {
 
         filaSeleccionada.classList.add('fila-seleccionada');
 
-        const codigoSeleccionado = filaSeleccionada.dataset.codigoProducto;
-        console.log(`Producto seleccionado: ${codigoSeleccionado}`);
+        const IdEmpleadoSeleccionado = filaSeleccionada.dataset.IdEmpleado;
+        console.log(`Empleado seleccionado: ${IdEmpleadoSeleccionado}`);
 
     }
-    async function renderizarProductos (orden) {
+    async function renderizarEmpleados (orden) {
         verificarToken()
         try {
-            const productos = await obtenerProductos(orden);
-            renderizarTabla(productos);
+            const empleados = await obtenerEmpleados(orden);
+            renderizarTabla(empleados);
         } catch (error) {
-            console.error('Error al cargar la lista de productos:', error);
+            console.error('Error al cargar la lista de empleados:', error);
             window.api.sendNotification('Fallo al conectar en la base de datos')
         }
     }
 
     function filtrarTabla() {
     const searchTerm = barraBusquedaInput.value.toLowerCase().trim();
-    const campoFiltro = document.getElementById('campoActual').textContent.toLowerCase();
-    
+
     const filas = Array.from(tablaCuerpo.querySelectorAll('.tabla-fila'));
-    
+
     filas.forEach(fila => {
         let valorFila = '';
-        
-        switch (campoFiltro) {
-            case 'código':
-                valorFila = fila.dataset.codigoProducto;
-                break;
-            case 'descripción':
-                valorFila = fila.dataset.descripcion.toLowerCase();
-                break;
-            default:
-                valorFila = '';
+
+        if (orden === 'IdEmpleado') {
+            valorFila = fila.dataset.IdEmpleado?.toLowerCase() || '';
+        } else if (orden === 'Usuario') {
+            valorFila = fila.dataset.Usuario?.toLowerCase() || '';
         }
 
-        if (valorFila && (valorFila.includes(searchTerm) || searchTerm === '')) {
-            fila.style.display = 'grid';
-        } else {
-            fila.style.display = 'none';
-        }
-    })
+        fila.style.display = valorFila.includes(searchTerm) || searchTerm === '' 
+            ? 'grid' 
+            : 'none';
+    });
 }
