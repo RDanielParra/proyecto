@@ -56,4 +56,13 @@ contextBridge.exposeInMainWorld('api', {
     eliminarEmpleado: (id) => ipcRenderer.invoke('eliminar-empleado', id) ,
 
     onRefrescarEmpleados: (callback) => ipcRenderer.on('refrescar-empleados', callback),
+
+    getTickets: (orden) => ipcRenderer.invoke('get-tickets', orden),
+
+    eliminarTicket: (id) => ipcRenderer.invoke('eliminar-ticket', id) ,
+
+    obtenerTicketsPorFecha: (fecha) => ipcRenderer.invoke('obtenerTicketsPorFecha', fecha),
+
+    abrirVentanaReporte: () => ipcRenderer.send('abrir-ventana-reporte'),
+
 })

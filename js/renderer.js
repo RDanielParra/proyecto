@@ -62,3 +62,8 @@ export const cargarEmpleadosTabla = async (orden) => {
   const empleados = await window.api.getEmpleadosTabla(orden)
   return empleados
 }
+
+export const cargarTickets = async (orden) => {
+  const tickets = await window.api.getTickets(orden)
+  return tickets
+}

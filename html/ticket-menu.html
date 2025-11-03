@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <link rel="stylesheet" href="../css/ticket-menu.css">
+  <title>Ventas</title>
+  <script defer type="module" src="../js/ticket-menu.js"></script>
+</head>
+<body>
+  <a href="../index.html" id="volver">Volver</a>
+  <div class="container">
+        <h1 class="titulo">Ventas</h1>
+
+        <div class="controles-superiores">
+            <div class="barra-busqueda">
+                <input type="text" placeholder="Barra de búsqueda" id="barraBusqueda">
+            </div>
+
+            <div class="acciones-producto">
+                <button class="btn-accion btn-agregar" id="btnReporte"><span class="triangulo"></span>Imprimir Reporte</button>
+                <button class="btn-accion btn-eliminar" id="btnEliminar"><span class="triangulo-rojo"></span>Cancelar venta</button>
+            </div>
+        </div>
+
+        <div class="controles-filtro">
+            <span class="label-campo">Campo:</span>
+            <div class="dropdown" id="dropdownFiltro">
+                <div class="dropdown-header" id="filtroSeleccionado">
+                    <span id="campoActual">Numero de ticket</span>
+                    <span class="triangulo-dropdown"></span>
+                </div>
+                
+                <div class="dropdown-menu" id="menuFiltro">
+                    <a href="#" data-campo="NumeroTicket">Numero de ticket</a>
+                    <a href="#" data-campo="IdEmpleado">Empleado</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabla-productos">
+            <div class="tabla-header">
+                <div class="col-numTicket">Numero de ticket</div>
+                <div class="col-subtotal">Subtotal</div>
+                <div class="col-idEmpleado">Empleado</div>
+                <div class="col-fecha">Fecha</div>
+            </div>
+            <div class="tabla-cuerpo" id="tabla-cuerpo-tickets">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

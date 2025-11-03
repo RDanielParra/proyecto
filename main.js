@@ -559,3 +559,73 @@ ipcMain.handle('eliminar-empleado', async (event, IdEmpleado) => {
         return { error: error.message }; 
     }
 })
+
+ipcMain.handle('get-tickets', async (event, orden) => {
+  const query = `SELECT * FROM ticket ORDER BY ${orden}`
+  try {
+    const [rows] = await pool.query(query)
+    return rows
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+ipcMain.handle('eliminar-ticket', async (event, NumeroTicket) => {
+    const query = 'DELETE FROM ticket WHERE NumeroTicket = ?';
+    try {
+        const [result] = await pool.query(query, [NumeroTicket]);
+        
+        if (result.affectedRows > 0) {
+            console.log(`Venta ${NumeroTicket} cancelada con éxito.`);
+            return true; 
+        } else {
+            console.log(`No se encontró la venta ${NumeroTicket} para cancelar.`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error al cancelar la venta:', error);
+        return { error: error.message }; 
+    }
+})
+
+ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
+  try {
+    const query = `
+      SELECT NumeroTicket, Subtotal, IdEmpleado, Fecha
+      FROM ticket
+      WHERE DATE(Fecha) = ?
+      ORDER BY Fecha ASC
+    `;
+    const [rows] = await pool.query(query, [fecha]);
+    return rows;
+  } catch (error) {
+    console.error('Error al obtener tickets:', error);
+    return { error: error.message };
+  }
+});
+
+ipcMain.on('abrir-ventana-reporte', () => {
+    const agregarWindow = new BrowserWindow({
+        width: 500,
+        height: 600,
+        parent: mainWindow, 
+        modal: true, 
+        show: false,
+        maximizable: false,
+        frame: false,
+        minimizable: false,
+        resizable: false,
+        skipTaskbar: true,
+
+        webPreferences: {
+            preload: path.join(__dirname, 'src/preload.js') 
+        }
+    });
+    // Cargas el HTML del formulario (que debes crear)
+    agregarWindow.loadFile('./html/reporte.html'); // <-- Nuevo HTML
+    agregarWindow.setMenu(null); 
+    
+    agregarWindow.once('ready-to-show', () => {
+        agregarWindow.show();
+    });
+});

@@ -15,12 +15,20 @@ function aplicarPermisos() {
     const btnCaja = document.getElementById('cajaBtn');
     const btnRegistrar = document.getElementById('registerBtn');
     const btnCerrarSesion = document.getElementById('cerrarSesionBtn')
+    const btnTickets = document.getElementById('ticketMenuBtn');
 
     switch (puesto) {
-        case 'admin':
+        case 'gerente':
             if (btnCatalogo) btnCatalogo.style.display = 'block';
             if (btnCaja) btnCaja.style.display = 'block';
             if (btnRegistrar) btnRegistrar.style.display = 'block';
+            if (btnTickets) btnTickets.style.display = 'block';
+            if (btnCerrarSesion) btnCerrarSesion.style.display = 'block';
+            break;
+        case 'admin':
+            if (btnCatalogo) btnCatalogo.style.display = 'block';
+            if (btnCaja) btnCaja.style.display = 'block';
+            if (btnTickets) btnTickets.style.display = 'block';
             if (btnCerrarSesion) btnCerrarSesion.style.display = 'block';
             break;
 

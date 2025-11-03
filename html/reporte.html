@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte Diario de Tickets</title>
+  <link rel="stylesheet" href="../css/reporte.css">
+  <script defer type="module" src="../js/reporte.js"></script>
+</head>
+<body>
+  <h1>Reporte Diario de Tickets</h1>
+
+  <div class="filtros">
+    <label for="fechaReporte">Seleccionar fecha:</label>
+    <input type="date" id="fechaReporte">
+    <button id="btnGenerar">Generar reporte</button>
+  </div>
+
+  <div id="reporte"></div>
+
+  <div>
+    <button type="button" class="btn-accion btn-cancelar" id="btnCancelar">Cancelar</button>
+  </div>
+</body>
+</html>

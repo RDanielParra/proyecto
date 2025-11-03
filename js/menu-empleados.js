@@ -13,6 +13,13 @@ btnEliminar.addEventListener('click', async () => {
 
     if (filaSeleccionada) {
         const IdEmpleado = filaSeleccionada.dataset.IdEmpleado;
+        const puestoEmpleado = filaSeleccionada.dataset.Puesto?.toLowerCase();
+
+        if (puestoEmpleado === 'gerente') {
+            window.api.sendNotification('Error: No se puede eliminar un empleado con puesto de gerente.');
+            console.warn('Intento de eliminar un gerente bloqueado.');
+            return;
+        }
         
         const confirmado = confirm(`¿Estás seguro de que quieres eliminar el empleado ${IdEmpleado}?`);
 
@@ -139,6 +146,7 @@ async function obtenerEmpleados(orden) {
             
             fila.dataset.IdEmpleado = empleado.IdEmpleado;
             fila.dataset.Usuario = empleado.Usuario
+            fila.dataset.Puesto = empleado.Puesto
 
             fila.appendChild(crearCelda(empleado.IdEmpleado))
             fila.appendChild(crearCelda(empleado.Puesto))
