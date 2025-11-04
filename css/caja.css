@@ -14,16 +14,19 @@ body {
 }
 
 #volver {
-    display: block;
-    margin-bottom: 20px;
+    position: fixed;         
+    top: 15px;              
+    left: 15px;             
+    z-index: 1000;           
     font-size: 16px;
+    color: #fff;
     text-decoration: none;
+    background-color: #388e3c;
     padding: 8px 15px;
     border-radius: 5px;
-    background-color: #388e3c;
-    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
 }
 
 .container {

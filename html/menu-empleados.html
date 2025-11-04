@@ -12,14 +12,14 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <link rel="stylesheet" href="../css/catalogo.css">
-  <title>Catalogo de Productos</title>
-  <script defer type="module" src="../js/catalago.js"></script>
+    <link rel="stylesheet" href="../css/menu-empleados.css">
+  <title>Empleados</title>
+  <script defer type="module" src="../js/menu-empleados.js"></script>
 </head>
 <body>
   <a href="../index.html" id="volver">Volver</a>
   <div class="container">
-        <h1 class="titulo">Catálogo de Productos</h1>
+        <h1 class="titulo">Empleados</h1>
 
         <div class="controles-superiores">
             <div class="barra-busqueda">
@@ -27,9 +27,9 @@
             </div>
 
             <div class="acciones-producto">
-                <button class="btn-accion btn-agregar" id="btnAgregar"><span class="triangulo"></span>Agregar Producto</button>
-                <button class="btn-accion btn-modificar" id="btnModificar"><span class="triangulo"></span>Modificar Producto</button>
-                <button class="btn-accion btn-eliminar" id="btnEliminar"><span class="triangulo-rojo"></span>Eliminar Producto</button>
+                <button class="btn-accion btn-agregar" id="btnAgregar"><span class="triangulo"></span>Registrar empleado</button>
+                <button class="btn-accion btn-modificar" id="btnModificar"><span class="triangulo"></span>Modificar empleado</button>
+                <button class="btn-accion btn-eliminar" id="btnEliminar"><span class="triangulo-rojo"></span>Eliminar empleado</button>
             </div>
         </div>
 
@@ -37,25 +37,29 @@
             <span class="label-campo">Campo:</span>
             <div class="dropdown" id="dropdownFiltro">
                 <div class="dropdown-header" id="filtroSeleccionado">
-                    <span id="campoActual">Código</span>
+                    <span id="campoActual">Id Empleado</span>
                     <span class="triangulo-dropdown"></span>
                 </div>
                 
                 <div class="dropdown-menu" id="menuFiltro">
-                    <a href="#" data-campo="CodigoProducto">Código</a>
-                    <a href="#" data-campo="Descripcion">Descripción</a>
+                    <a href="#" data-campo="IdEmpleado">Id Empleado</a>
+                    <a href="#" data-campo="Usuario">Usuario</a>
                 </div>
             </div>
         </div>
 
         <div class="tabla-productos">
             <div class="tabla-header">
-                <div class="col-codigo">Código</div>
-                <div class="col-descripcion">Descripción</div>
-                <div class="col-precio">Precio</div>
-                <div class="col-inventario">Inventario</div>
+                <div class="col-IdEmpleados">Id Empleado</div>
+                <div class="col-Puesto">Puesto</div>
+                <div class="col-Sueldo">Sueldo</div>
+                <div class="col-RFC">RFC</div>
+                <div class="col-Nombre">Nombre</div>
+                <div class="col-Telefono">Telefono</div>
+                <div class="col-Usuario ">Usuario</div>
+                <div class="col-Contrasena">Contrasena</div>
             </div>
-            <div class="tabla-cuerpo" id="tabla-cuerpo-productos">
+            <div class="tabla-cuerpo" id="tabla-cuerpo-empleados">
             </div>
         </div>
     </div>
