@@ -35,11 +35,25 @@ body {
 }
 
 .botones {
+  width: 50%;
   user-select: none;
   height: 50vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  align-content: center;
+}
+
+.botones > a {
+  justify-self: center;
+  width: max-content;
+  height: max-content;
 }
 
 .btn {
+  justify-self: center;
   width: 130px;
   height: 70px;
   font-size: 20px;
