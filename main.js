@@ -5,6 +5,9 @@ const { connectionInfo, sql } = require('./connection.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { generateHash } = require('./encriptar.js')
+require('dotenv').config()
+
+const JWT_SECRET = process.env.JWT_SECRET || 'clave_secreta_por_defecto'
 
 let mainWindow;
 let idProductoParaModificar;
@@ -48,8 +51,6 @@ ipcMain.handle('get-empleados', async () => {
     console.log('ERROR en la consulta: ', error)
   }
 })
-
-const JWT_SECRET = 'jD/g7I0h4sD8Xg4sD8Xg7I0h4sD8Xg4sD8Xg7I0h4sD8Xg4sD8Xg=='
 
 ipcMain.handle('encriptar-contra', async (event, password) => {
     const hash = await generateHash(password)
