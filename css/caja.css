@@ -1,3 +1,6 @@
+/* ========================================
+   1. ESTILOS GLOBALES Y CONTENEDOR
+======================================== */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -14,11 +17,12 @@ body {
     display: block;
     margin-bottom: 20px;
     font-size: 16px;
-    color: #333;
     text-decoration: none;
-    background-color: #fff;
     padding: 8px 15px;
     border-radius: 5px;
+    background-color: #388e3c;
+    color: white;
+    font-weight: bold;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -30,11 +34,15 @@ body {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
 }
 
+/* ========================================
+   2. PANEL IZQUIERDO (TICKET)
+======================================== */
 .left-panel {
     flex: 2;
-    background-color: #e8f5e9;
+    background-color: white;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -58,75 +66,122 @@ body {
 .header-info {
     position: relative;
     z-index: 1;
-    text-align: left;
     margin-bottom: 20px;
-    color: #4CAF50;
+    color: #388e3c;
     font-size: 14px;
     line-height: 1.5;
 }
 
-.header-info p:first-child {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.header-info p:nth-child(2) {
-    color: #f44336;
-    font-weight: bold;
-}
+.header-info p:first-child { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
+.header-info p:nth-child(2) { color: #f44336; font-weight: bold; }
 
 .table-header {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 2px solid #a5d6a7;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 0;
     font-weight: bold;
-    color: #388E3C;
+    background-color: transparent;
+    color: #000;
+    border-bottom: 2px dashed #000;
 }
-
+.table-header .descripcion,
+.table-header .cant,
+.table-header .importe {
+    border-right: none;
+}
 .table-header .descripcion { flex: 3; text-align: left; }
 .table-header .cant { flex: 1; text-align: center; }
 .table-header .importe { flex: 1.5; text-align: right; }
 
-.items-list {
-    flex-grow: 1;
-    overflow-y: auto;
+.items-list { 
+    flex-grow: 1; 
+    overflow-y: auto; 
+    overflow-x: hidden;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.items-list::-webkit-scrollbar {
+    width: 8px;
+    background-color: #f0f0f0;
+}
+.items-list::-webkit-scrollbar-thumb {
+    background-color: #388e3c;
+    border-radius: 4px;
+    border: 2px solid #f0f0f0;
+}
+.items-list::-webkit-scrollbar-thumb:hover {
+    background-color: #2e7d32; 
+}
+.items-list::-webkit-scrollbar-track {
+    background-color: #c8e6c9; 
+    border-radius: 4px;
+}
+
+.ticket-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 2px;
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 14px;
+    border-bottom: 1px solid #c8e6c9;
+}
+.ticket-item:nth-child(even) {
+    background-color: #f7fff7;
+}
+.ticket-item .item-desc {
+    flex: 3;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ticket-item .item-cant {
+    flex: 1;
+    text-align: center;
+}
+.ticket-item .item-importe {
+    flex: 1.5;
+    text-align: right;
+    font-weight: bold;
+}
+.ticket-item-selected {
+    background-color: #a5d6a7 !important;
+    color: #000;
+    font-weight: bold;
 }
 
 .footer-info {
     display: flex;
     justify-content: space-around;
     padding-top: 15px;
-    border-top: 2px solid #a5d6a7;
-    background-color: #e8f5e9;
     margin-top: auto;
+    border-top: 2px dashed #000;
 }
 
 .footer-box {
-    background-color: #c8e6c9;
     padding: 8px 15px;
     border-radius: 5px;
     text-align: center;
-    color: #388E3C;
     font-size: 13px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-width: 100px;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+    background-color: transparent;
+    color: #000;
+    box-shadow: none;
 }
+.footer-box span:first-child { font-weight: bold; margin-bottom: 3px; }
 
-.footer-box span:first-child {
-    font-weight: bold;
-    margin-bottom: 3px;
-}
-
+/* ========================================
+   3. PANEL DERECHO (FOTO, INPUT, RESUMEN)
+======================================== */
 .right-panel {
     flex: 1.5;
     background-color: #c8e6c9;
-    padding: 10px;
     display: flex;
     flex-direction: column;
     border-top-right-radius: 15px;
@@ -135,123 +190,810 @@ body {
 
 .product-photo {
     background-color: #a5d6a7;
-    height: 220px;
+    height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
     font-weight: bold;
-    border-top-right-radius: 20px;
+    border-top-right-radius: 15px;
 }
 
 .insert-code {
     background-color: #000000;
-    padding: 8px 10px;
-    text-align: center;
     color: #ffffff;
     font-weight: bold;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.insert-code::placeholder {
+    color: #ffffff;
+    font-weight: bold;
+    opacity: 0.8;
+}
+
+.insert-code:focus {
+    outline: 2px solid #388e3c;
 }
 
 .summary {
-    background-color: #81c784;
     border-radius: 8px;
-    margin: 20px;
-    padding: 10px 0;
-    color: #fff;
+    margin: 15px;
+    overflow: hidden;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .summary-row {
     display: flex;
-    justify-content: space-between;
-    padding: 8px 15px;
-    font-size: 14px;
+    align-items: stretch;
+    padding: 0; 
+    font-size: 13px;
+    color: #333;
 }
 
-.summary-row.total {
-    background-color: #59a25d;
+.summary-row span:first-child {
+    padding: 6px 15px;
     font-weight: bold;
-    font-size: 18px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
 }
 
+.summary-row span:last-child {
+    padding: 6px 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+    background-color: #e0f5e0;
+}
+
+.summary-row.total span:first-child {
+    background-color: #63c663;
+    font-size: 16px;
+    width: 170px;
+}
+.summary-row.total span:last-child {
+    font-size: 16px;
+    margin-left: -26px;
+    padding-left: 32px;
+}
+
+.summary-row:nth-child(2) span:first-child {
+    background-color: #4fac4f;
+    width: 155px;
+}
+.summary-row:nth-child(2) span:last-child {
+    margin-left: -24px;
+    padding-left: 30px;
+}
+
+.summary-row:nth-child(3) span:first-child {
+    background-color: #3b923b;
+    width: 140px;
+}
+.summary-row:nth-child(3) span:last-child {
+    margin-left: -21px;
+    padding-left: 27px;
+}
+
+.summary-row:nth-child(4) span:first-child {
+    background-color: #2c722c;
+    width: 125px;
+}
+.summary-row:nth-child(4) span:last-child {
+    margin-left: -19px;
+    padding-left: 25px;
+}
+
+/* ========================================
+   4. PANEL DERECHO - SECCIÓN DE ACCIONES
+======================================== */
 .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 0 15px 15px 15px;
+    flex-grow: 1;
+    align-items: stretch; 
+}
+
+.actions-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    gap: 40px;
+}
+
+.actions-group-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.actions-group-middle {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    margin: 0 20px 20px 20px;
 }
 
-.btn {
-    padding: 15px 10px;
-    border: none;
-    border-radius: 8px;
+.actions-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ========================================
+   5. BOTONES DE ACCIÓN (ESPECÍFICOS)
+======================================== */
+
+.btn-action-square {
+    border-radius: 5px;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 10px;
     transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+    line-height: 1.2;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #333;
 }
 
-.btn-blue { background-color: #42a5f5; }
-.btn-blue:hover { background-color: #2196F3; }
-.btn-orange { background-color: #ff9800; }
-.btn-orange:hover { background-color: #fb8c00; }
-.btn-green { background-color: #66bb6a; }
-.btn-green:hover { background-color: #4CAF50; }
+.btn-action-rect {
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5px;
+    height: 70px;
+    font-size: 14px;
+    line-height: 1.2;
+    border: 2px solid #333;
+}
 
 .btn-pay {
-    grid-column: 2 / 3;
-    grid-row: 1 / span 2;
-    background-color: #4CAF50;
     color: #fff;
     font-weight: bold;
-    font-size: 24px;
-    border-radius: 8px;
-    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     transition: background-color 0.3s ease;
+    background-color: #388e3c;
+    font-size: 24px;
+    border: 2px solid #333;
+    flex-grow: 3;
 }
-.btn-pay:hover { background-color: #388E3C; }
+.btn-pay:hover { background-color: #2e7d32; }
 
 .btn-cancel-account {
-    grid-column: 2 / 3;
-    background-color: #ef5350;
     color: #fff;
     font-weight: bold;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    padding: 10px;
     transition: background-color 0.3s ease;
+    background-color: #e53935;
+    font-size: 12px;
+    padding: 8px;
+    border: 2px solid #333;
 }
-.btn-cancel-account:hover { background-color: #e53935; }
+.btn-cancel-account:hover { background-color: #c62828; }
 
-.bottom-buttons {
+.btn-session-square {
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5px;
+    font-size: 11px;
+    line-height: 1.2;
+    margin-top: auto; 
+    border: 2px solid #333;
+    height: 70px;
+    aspect-ratio: auto;
+    align-self: flex-end;
+}
+
+.btn-blue-custom { 
+    background-color: #00c2f8; 
+    color: #fff;
+}
+.btn-blue-custom:hover { background-color: #00a9d4; }
+
+.btn-orange-custom { 
+    background-color: #ff7300; 
+    color: #fff;
+}
+.btn-orange-custom:hover { background-color: #e66800; }
+
+.btn-green { background-color: #388e3c; }
+.btn-green:hover { background-color: #2e7d32; }
+.btn-green-gradient { background: #388e3c; }
+.btn-green-gradient:hover { opacity: 0.9; }
+.btn-red-gradient { background: #e53935; }
+.btn-red-gradient:hover { opacity: 0.9; }
+
+/* ========================================
+   6. ESTILOS GLOBALES DE MODALES
+======================================== */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-header {
+    color: white;
+    padding: 10px 15px;
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    margin-top: auto;
-    padding: 0 20px 20px 20px;
+    align-items: center;
+    background-color: #388e3c;
 }
 
-.btn-bottom {
-    flex: 1;
-    padding: 15px 10px;
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.modal-close-btn {
+    color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
     font-weight: bold;
-    color: #fff;
     cursor: pointer;
-    font-size: 13px;
-    transition: opacity 0.3s ease;
+    line-height: 25px;
+    padding: 0;
+    background-color: #e53935;
 }
 
-.green-gradient { background: linear-gradient(to bottom, #66bb6a, #4CAF50); }
-.green-gradient:hover { opacity: 0.9; }
-.red-gradient { background: linear-gradient(to bottom, #ef5350, #e53935); }
-.red-gradient:hover { opacity: 0.9; }
+.modal-content {
+    padding: 20px;
+    background-color: #f0f4f0;
+}
+
+/* ========================================
+   7. MODAL: LISTA DE PRODUCTOS
+======================================== */
+.product-list-modal {
+    width: 80%;
+    max-width: 900px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 2px solid #388e3c;
+}
+
+.modal-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.modal-controls input[type="text"] {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 2px solid #388e3c;
+}
+
+.modal-btn-buscar {
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #388e3c;
+    color: white;
+    border: none;
+}
+
+.label-campo {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    border-radius: 4px;
+    border: 2px solid #388e3c;
+    background-color: #fff;
+    width: 150px;
+}
+
+.dropdown-header {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #c8e6c9;
+    font-weight: bold;
+}
+
+.triangulo-dropdown {
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #388e3c;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+    border: 2px solid #388e3c;
+    border-top: none;
+    left: -2px;
+    width: calc(100% + 4px);
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 10px 12px;
+    text-decoration: none;
+    display: block;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+}
+.dropdown-menu a:hover {
+    background-color: #e0e0e0;
+}
+
+.tabla-productos {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 2px solid #388e3c;
+    background-color: #fff;
+}
+
+.tabla-productos .tabla-header {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 2fr 1fr 1fr;
+    color: white;
+    font-weight: bold;
+    background-color: #388e3c;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.tabla-productos .tabla-header > div {
+    padding: 10px;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.tabla-productos .tabla-header > div:last-child {
+    border-right: none;
+}
+
+.tabla-cuerpo {
+    max-height: 400px;
+    overflow-y: auto;
+    display: block;
+}
+
+.tabla-fila {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 2fr 1fr 1fr;
+    border-bottom: 1px solid #c8e6c9;
+}
+.tabla-fila:nth-child(even) {
+    background-color: #f7fff7;
+}
+.tabla-fila > div {
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 1px solid #c8e6c9;
+}
+.tabla-fila > div:last-child {
+    border-right: none;
+}
+.tabla-fila:hover {
+    background-color: #c8e6c9;
+    cursor: pointer;
+}
+.tabla-fila.fila-seleccionada {
+    background-color: #a5d6a7 !important;
+    font-weight: bold;
+}
+
+.col-codigo { grid-column: 1; }
+.col-nombre { grid-column: 2; }
+.col-descripcion { grid-column: 3; }
+.col-precio { grid-column: 4; }
+.col-inventario { grid-column: 5; }
+
+.tabla-cuerpo::-webkit-scrollbar {
+    width: 8px;
+    background-color: #f0f0f0;
+}
+.tabla-cuerpo::-webkit-scrollbar-thumb {
+    background-color: #388e3c;
+    border-radius: 4px;
+    border: 2px solid #f0f0f0;
+}
+.tabla-cuerpo::-webkit-scrollbar-thumb:hover {
+    background-color: #2e7d32; 
+}
+.tabla-cuerpo::-webkit-scrollbar-track {
+    background-color: #c8e6c9; 
+    border-radius: 4px;
+}
+
+/* ========================================
+   8. MODAL: PAGO DE CUENTA
+======================================== */
+.payment-modal {
+    width: 500px;
+    background-color: #f0f4f0;
+    border: 2px solid #388E3C;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.payment-content {
+    padding: 10px 15px;
+}
+
+.payment-info {
+    display: grid; 
+    grid-template-columns: 80px 150px 150px;
+    gap: 5px;
+    justify-content: start; 
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+    align-items: center;
+}
+
+.payment-info span:first-child {
+    grid-column: 1 / span 2; 
+}
+
+.payment-info .dolar-label {
+    font-weight: bold;
+    grid-column: 3;
+    text-align: right;
+    margin-right: 0;
+}
+
+.payment-info .dolar-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.payment-grid {
+    display: grid;
+    grid-template-columns: 80px 175px 175px; 
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: start; 
+}
+
+.payment-grid label {
+    font-weight: bold;
+    font-size: 15px;
+    text-align: right;
+    color: #333;
+}
+
+.payment-grid input[type="text"] {
+    padding: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: right;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    border: 2px solid #388e3c;
+}
+
+.payment-grid input:disabled {
+    background-color: #e0e0e0;
+    color: #555;
+    border-color: #ccc;
+}
+
+.payment-grid #payment-pago-mxn,
+.payment-grid #payment-pago-usd {
+    background-color: #e8f5e9;
+}
+
+.facturar-option {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.facturar-option label {
+    font-weight: bold;
+    font-size: 15px;
+    color: #333;
+}
+
+.facturar-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4CAF50;
+}
+
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+}
+
+.btn-payment-method {
+    color: white;
+    border-radius: 5px;
+    padding: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    line-height: 1.4;
+    background: #388e3c;
+    border: 2px solid #333;
+}
+.btn-payment-method:hover {
+    opacity: 0.9;
+}
+
+/* ========================================
+   9. MODAL: CONFIRMAR CANCELACIÓN
+======================================== */
+.cancel-confirm-modal {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    border: 2px solid #388e3c;
+}
+
+.cancel-confirm-modal h3 {
+    margin-top: 0;
+    color: #333;
+}
+.cancel-confirm-modal p {
+    color: #555;
+    font-size: 16px;
+}
+
+.cancel-confirm-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.btn-accion-cancelar {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+}
+.btn-accion-cancelar:hover {
+    transform: scale(1.05);
+}
+
+#btn-cancel-one { background-color: #388e3c; }
+#btn-cancel-all { background-color: #e53935; }
+#btn-cancel-abort { background-color: #9e9e9e; }
+
+/* ========================================
+   10. MODAL: FACTURAR TICKET
+======================================== */
+.facturar-modal {
+    width: 90%;
+    max-width: 1100px;
+    background-color: #f0f4f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 2px solid #388E3C;
+}
+
+.facturar-header {
+    color: white;
+    padding: 10px 20px;
+    background-color: #388E3C;
+}
+.facturar-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.facturar-top-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: #e8f5e9;
+    border-bottom: 2px solid #c8e6c9;
+}
+.facturar-top-controls label {
+    font-weight: bold;
+    color: #333;
+}
+.facturar-top-controls input[type="text"] {
+    padding: 8px;
+    border-radius: 4px;
+    border: 2px solid #388e3c;
+}
+.btn-factura-cargar, .btn-factura-cancelar {
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    border: 2px solid #333;
+}
+.btn-factura-cargar {
+    background-color: #388e3c;
+    margin-left: auto;
+}
+.btn-factura-cancelar {
+    background-color: #e53935;
+}
+
+.facturar-content-wrapper {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}
+
+.facturar-form-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.form-group {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+}
+.form-group label {
+    font-weight: bold;
+    color: #333;
+    text-align: right;
+    padding-right: 10px;
+}
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 2px solid #388e3c;
+}
+
+.facturar-table-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.facturar-table-wrapper {
+    width: 100%;
+    height: 300px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 2px solid #388e3c;
+}
+.facturar-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.facturar-table-wrapper th, 
+.facturar-table-wrapper td {
+    padding: 6px;
+    font-size: 12px;
+    text-align: left;
+    border: 1px solid #c8e6c9;
+}
+.facturar-table-wrapper th {
+    color: white;
+    position: sticky;
+    top: 0;
+    background-color: #388E3C;
+}
+
+.facturar-table-wrapper td {
+    height: 25px; 
+}
+
+.facturar-totals-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 15px;
+}
+
+.facturar-totals {
+    width: 300px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+.total-row.total-final {
+    font-size: 22px;
+    color: #000;
+    border-top: 2px solid #333;
+    padding-top: 8px;
+}
+
+.btn-generar-factura {
+    color: white;
+    border-radius: 5px;
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #388e3c;
+    border: 2px solid #333;
+}
+.btn-generar-factura:hover {
+    background-color: #2e7d32;
+}

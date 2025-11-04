@@ -4,12 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8"/>
     <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
+        http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'"
     />
     <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
+        http-equiv="X-Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'"
     />
     <title>Super Campestre</title>
     <link rel="stylesheet" href="../css/caja.css">
@@ -52,9 +52,7 @@
             <div class="product-photo">
                 <p>FOTO DEL PRODUCTO</p>
             </div>
-            <div class="insert-code">
-                <p>Insertar Código</p>
-            </div>
+            <input type="text" class="insert-code" id="insert-code-input" placeholder="Insertar Código">
             <div class="summary">
                 <div class="summary-row total">
                     <span>$ TOTAL</span>
@@ -73,19 +71,207 @@
                     <span>1</span>
                 </div>
             </div>
+
             <div class="actions">
-                <button class="btn btn-blue">CONSULTAR PRECIO (F4)</button>
-                <button class="btn btn-orange">CANCELAR PRODUCTO (F5)</button>
-                <button class="btn btn-green">LISTA DE PRODUCTOS (F6)</button>
-                <button class="btn-pay">PAGAR (+)</button>
-                <button class="btn-cancel-account">CANCELAR CUENTA(-)</button>
+                <div class="actions-left">
+                    <div class="actions-group-top">
+                    <button class="btn-action-square btn-blue-custom" id="btn-consultar-precio">CONSULTAR PRECIO (F4)</button>
+                    <button class="btn-action-square btn-orange-custom" id="btn-cancelar-producto">CANCELAR PRODUCTO (F5)</button>
+                    <button class="btn-action-square btn-green" id="btn-lista-productos">LISTA DE PRODUCTOS (F6)</button>
+                </div>
+                    <div class="actions-group-middle">
+                        <button class="btn-action-rect btn-green-gradient">CORTE<br>PARCIAL-F10</button>
+                        <button class="btn-action-rect btn-green-gradient">CORTE<br>FINAL-F11</button>
+                    </div>
+                </div>
+                <div class="actions-right">
+                    <button class="btn-pay" id="btn-pagar">PAGAR (+)</button>
+                    <button class="btn-cancel-account">CANCELAR CUENTA(-)</button>
+                    <button class="btn-session-square btn-red-gradient" id="btn-cerrar-sesion">CERRAR SESIÓN</button>
+                </div>
             </div>
-            <div class="bottom-buttons">
-                <button class="btn-bottom green-gradient">CORTE PARCIAL-F10</button>
-                <button class="btn-bottom green-gradient">CORTE FINAL-F11</button>
-                <button class="btn-bottom red-gradient">CERRAR SESIÓN</button>
+            </div>
+    </div> <div class="modal-backdrop" id="product-list-modal-backdrop">
+        <div class="product-list-modal">
+            <div class="modal-header">
+                <h3>Lista de Productos</h3>
+                <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-controls">
+                    <input type="text" placeholder="Barra de búsqueda" id="modalBarraBusqueda">
+                    <button class="modal-btn-buscar">Buscar-F2</button>
+                    <span class="label-campo">Campo:</span>
+                    <div class="dropdown" id="modalDropdownFiltro">
+                        <div class="dropdown-header" id="modalFiltroSeleccionado">
+                            <span id="modalCampoActual">Código</span>
+                            <span class="triangulo-dropdown"></span>
+                        </div>
+                        <div class="dropdown-menu" id="modalMenuFiltro">
+                            <a href="#" data-campo="CodigoProducto">Código</a>
+                            <a href="#" data-campo="Descripcion">Descripción</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabla-productos">
+                    <div class="tabla-header">
+                        <div class="col-codigo">Código</div>
+                        <div class="col-nombre">Nombre</div>
+                        <div class="col-descripcion">Descripción</div>
+                        <div class="col-precio">Precio</div>
+                        <div class="col-inventario">Inventario</div>
+                    </div>
+                    <div class="tabla-cuerpo" id="modal-tabla-cuerpo">
+                        </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="modal-backdrop" id="payment-modal-backdrop">
+        <div class="payment-modal">
+            <div class="modal-header">
+                <h3>Pago de la Cuenta</h3>
+                <button class="modal-close-btn" id="payment-modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-content payment-content">
+                <div class="payment-info">
+                    <span>Tipo de cambio $20.00</span>
+                    <span class="dolar-label">Dólar</span>
+                </div>
+                <div class="payment-grid">
+                    <label>Total:</label>
+                    <input type="text" id="payment-total-mxn" value="$0.00" disabled>
+                    <input type="text" id="payment-total-usd" value="$0.00" disabled>
+                    
+                    <label>Pago:</label>
+                    <input type="text" id="payment-pago-mxn" value="0.00">
+                    <input type="text" id="payment-pago-usd" value="$0.00">
+
+                    <label>Cambio:</label>
+                    <input type="text" id="payment-cambio-mxn" value="$0.00" disabled>
+                    <input type="text" id="payment-cambio-usd" value="$0.00" disabled>
+                </div>
+                <div class="facturar-option">
+                    <label for="facturar-check">Facturar</label>
+                    <input type="radio" id="facturar-check" name="facturar_radio">
+                </div>
+                <div class="payment-methods">
+                    <button class="btn-payment-method">Efectivo<br>F2</button>
+                    <button class="btn-payment-method">Tarjeta<br>F3</button>
+                    <button class="btn-payment-method">Dólar<br>F4</button>
+                    <button class="btn-payment-method">Cheque<br>F5</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="cancel-confirm-modal-backdrop">
+        <div class="cancel-confirm-modal">
+            <h3 id="cancel-confirm-title">¿Estás seguro?</h3>
+            <p id="cancel-confirm-text">¿Qué deseas hacer con este producto?</p>
+            <div class="cancel-confirm-actions">
+                <button id="btn-cancel-one" class="btn-accion-cancelar">Eliminar 1</button>
+                <button id="btn-cancel-all" class="btn-accion-cancelar">Eliminar Todos</button>
+                <button id="btn-cancel-abort" class="btn-accion-cancelar btn-abortar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="facturar-modal-backdrop">
+        <div class="facturar-modal">
+            <div class="facturar-header">
+                <h2>Facturar Ticket</h2>
+            </div>
+            <div class="facturar-top-controls">
+                <label for="factura-num-ticket">Número de ticket:</label>
+                <input type="text" id="factura-num-ticket">
+                <label for="factura-num-caja">Número de caja:</label>
+                <input type="text" id="factura-num-caja">
+                <button class="btn-factura-cargar">Cargar</button>
+                <button class="btn-factura-cancelar" id="btn-factura-cancelar">Cancelar</button>
+            </div>
+            <div class="facturar-content-wrapper">
+                <div class="facturar-form-panel">
+                    <div class="form-group">
+                        <label>Cliente:</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de CFDI:</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Uso CFDI:</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Modo de pago:</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Forma de pago:</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Condiciones de pago:</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Moneda:</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono:</label>
+                        <input type="text">
+                    </div>
+                </div>
+                <div class="facturar-table-panel">
+                    <div class="facturar-table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Clave Producto SAT</th>
+                                    <th>Clave Unidad SAT</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Importe total</th>
+                                    <th>Importe impuestos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td><td></td><td></td><td></td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
+                                </tbody>
+                        </table>
+                    </div>
+                    <div class="facturar-totals-wrapper">
+                        <div class="facturar-totals">
+                            <div class="total-row">
+                                <span>SUBTOTAL:</span>
+                                <span>$0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>IVA:</span>
+                                <span>$0.00</span>
+                            </div>
+                            <div class="total-row total-final">
+                                <span>TOTAL:</span>
+                                <span>$0.00</span>
+                            </div>
+                        </div>
+                        <button class="btn-generar-factura">Generar Factura</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script defer type="module" src="../js/caja.js"></script>
+
 </body>
 </html>
