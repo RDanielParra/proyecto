@@ -42,7 +42,7 @@ try{
 
 ipcMain.handle('get-empleados', async () => {
   try{
-    const [rows] = await pool.query('SELECT Usuario, Contrasena FROM Empleado')
+    const [rows] = await pool.query('SELECT Usuario, Contrasena, IdEmpleado, Nombre FROM Empleado')
     return rows
   } catch (error) {
     console.log('ERROR en la consulta: ', error)
@@ -597,6 +597,7 @@ ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
       ORDER BY Fecha ASC
     `;
     const [rows] = await pool.query(query, [fecha]);
+    console.log('Tickets obtenidos para la fecha', fecha, ':', rows);
     return rows;
   } catch (error) {
     console.error('Error al obtener tickets:', error);
@@ -605,7 +606,7 @@ ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
 });
 
 ipcMain.on('abrir-ventana-reporte', () => {
-    const agregarWindow = new BrowserWindow({
+    let agregarWindow = new BrowserWindow({
         width: 500,
         height: 600,
         parent: mainWindow, 
@@ -624,6 +625,7 @@ ipcMain.on('abrir-ventana-reporte', () => {
     // Cargas el HTML del formulario (que debes crear)
     agregarWindow.loadFile('./html/reporte.html'); // <-- Nuevo HTML
     agregarWindow.setMenu(null); 
+    
     
     agregarWindow.once('ready-to-show', () => {
         agregarWindow.show();

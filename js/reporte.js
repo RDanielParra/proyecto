@@ -4,32 +4,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const contenedorReporte = document.getElementById('reporte');
 
   btnGenerar.addEventListener('click', async () => {
-    const fechaSeleccionada = fechaInput.value;
+    const fechaSeleccionada = fechaInput.value
+    const fechaFormateada = new Date(fechaSeleccionada).toISOString().split('T')[0];
+    
 
-    if (!fechaSeleccionada) {
+    if (!fechaFormateada) {
       window.api.sendNotification('Selecciona una fecha para generar el reporte');
       return;
     }
 
     try {
-      const tickets = await window.api.obtenerTicketsPorFecha(fechaSeleccionada);
-
+      const tickets = await window.api.obtenerTicketsPorFecha(fechaFormateada);
+      const empleadosInfo = await window.api.getEmpleados();
       if (!tickets || tickets.length === 0) {
-        contenedorReporte.innerHTML = `<p>No hay tickets registrados para el ${fechaSeleccionada}</p>`;
+        contenedorReporte.innerHTML = `<p>No hay tickets registrados para el ${fechaFormateada}</p>`;
         return;
       }
 
       // Construcción del reporte
       let totalDia = 0;
       let html = `
-        <h2>Tickets del ${fechaSeleccionada}</h2>
+        <h2>Tickets del ${fechaFormateada}</h2>
         <table>
           <thead>
             <tr>
-              <th>Número de Ticket</th>
-              <th>Subtotal</th>
-              <th>Empleado</th>
-              <th>Fecha</th>
+              <td>Número de Ticket</td>
+              <td>Subtotal</td>
+              <td>Empleado</td>
+              <td>Fecha</td>
             </tr>
           </thead>
           <tbody>
@@ -40,12 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `
           <tr>
             <td>${ticket.NumeroTicket}</td>
-            <td>$${ticket.Subtotal.toFixed(2)}</td>
-            <td>${ticket.IdEmpleado}</td>
-            <td>${new Date(ticket.Fecha).toLocaleString('es-MX')}</td>
+            <td>$${ticket.Subtotal}</td>
+            <td>${empleadosInfo[ticket.IdEmpleado - 1].Nombre}</td>
+            <td>${new Date(ticket.Fecha).toLocaleString('es-MX', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            })}</td>
           </tr>
-        `;
-      });
+        `
+      })
 
       html += `
           </tbody>
@@ -55,9 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       contenedorReporte.innerHTML = html;
 
+
+
     } catch (error) {
       console.error('Error al generar el reporte:', error);
-      window.api.sendNotification('Error al generar el reporte');
     }
   });
 });
