@@ -33,7 +33,7 @@ body {
     display: flex;
     width: 100%;
     max-width: 1200px;
-    height: 700px;
+    flex-grow: 1;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -44,7 +44,8 @@ body {
    2. PANEL IZQUIERDO (TICKET)
 ======================================== */
 .left-panel {
-    flex: 2;
+    flex: 1.5;
+    max-width: none;
     background-color: white;
     padding: 20px;
     display: flex;
@@ -67,16 +68,28 @@ body {
 }
 
 .header-info {
-    position: relative;
-    z-index: 1;
+    text-align: center;
     margin-bottom: 20px;
     color: #388e3c;
     font-size: 14px;
     line-height: 1.5;
+    position: relative;
 }
 
-.header-info p:first-child { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
-.header-info p:nth-child(2) { color: #f44336; font-weight: bold; }
+.header-info p {
+    margin: 2px 0;
+    font-size: 13px;
+}
+
+.header-info p:first-child { 
+    font-weight: bold; 
+    font-size: 16px;
+    margin-bottom: 5px; 
+}
+.header-info p:nth-child(2) { 
+    color: #f44336; 
+    font-weight: bold; 
+}
 
 .table-header {
     display: flex;
@@ -157,27 +170,64 @@ body {
 }
 
 .footer-info {
-    display: flex;
-    justify-content: space-around;
-    padding-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     margin-top: auto;
-    border-top: 2px dashed #000;
+    border: 1px solid #a5d6a7;
+    border-radius: 5px;
+    overflow: hidden;
+    line-height: 1.5;
 }
 
 .footer-box {
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 0;
     text-align: center;
-    font-size: 13px;
+    font-size: 14px;
+    color: #388e3c;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-width: 100px;
-    background-color: transparent;
-    color: #000;
-    box-shadow: none;
+    background-color: #e8f5e9;
+    border-right: 1px solid #a5d6a7;
 }
-.footer-box span:first-child { font-weight: bold; margin-bottom: 3px; }
+.footer-box:last-child {
+    border-right: none;
+}
+.footer-box span {
+    padding: 5px;
+}
+.footer-box span:first-child { 
+    font-weight: bold; 
+    margin-bottom: 0;
+    border-bottom: 1px solid #a5d6a7;
+    padding-bottom: 2px;
+    background-color: #c8e6c9;
+}
+
+/* ========================================
+   2.5 ESTILOS DEL TICKET FINALIZADO
+======================================== */
+
+.ticket-summary-wrapper {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    margin-top: 15px;
+    border-top: 2px dashed #000;
+    padding-top: 10px;
+}
+.ticket-summary-wrapper p {
+    margin: 4px 0;
+}
+.ticket-summary-wrapper .cajero-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.ticket-summary-wrapper .gracias-msg {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
 
 /* ========================================
    3. PANEL DERECHO (FOTO, INPUT, RESUMEN)
@@ -685,10 +735,10 @@ body {
 }
 
 .payment-info {
-    display: grid; 
+    display: grid;
     grid-template-columns: 80px 150px 150px;
     gap: 5px;
-    justify-content: start; 
+    justify-content: start;
     margin-bottom: 10px;
     font-size: 14px;
     color: #333;
@@ -696,7 +746,7 @@ body {
 }
 
 .payment-info span:first-child {
-    grid-column: 1 / span 2; 
+    grid-column: 1 / span 2;
 }
 
 .payment-info .dolar-label {
@@ -706,18 +756,13 @@ body {
     margin-right: 0;
 }
 
-.payment-info .dolar-label {
-    font-weight: bold;
-    margin-right: 10px;
-}
-
 .payment-grid {
     display: grid;
-    grid-template-columns: 80px 175px 175px; 
+    grid-template-columns: 80px 150px 150px;
     gap: 5px;
     align-items: center;
     margin-bottom: 10px;
-    justify-content: start; 
+    justify-content: start;
 }
 
 .payment-grid label {
@@ -880,6 +925,11 @@ body {
     border-radius: 4px;
     border: 2px solid #388e3c;
 }
+
+#factura-num-ticket {
+    width: 250px;
+}
+
 .btn-factura-cargar, .btn-factura-cancelar {
     padding: 8px 15px;
     border-radius: 4px;
@@ -999,4 +1049,28 @@ body {
 }
 .btn-generar-factura:hover {
     background-color: #2e7d32;
+}
+
+/* ========================================
+   11. MODAL: REPORTE DE CORTE
+======================================== */
+.reporte-modal {
+    width: 400px;
+    background-color: #f0f4f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 2px solid #388E3C;
+}
+
+#reporte-contenido {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: #000;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
 }
