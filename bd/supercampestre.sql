@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `empleado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `empleado` (
-  `IdEmpleado` int NOT NULL,
+  `IdEmpleado` int NOT NULL AUTO_INCREMENT,
   `Puesto` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Sueldo` decimal(10,2) NOT NULL,
   `RFC` varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,

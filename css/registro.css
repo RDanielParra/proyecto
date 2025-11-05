@@ -1,0 +1,122 @@
+:root {
+    --color-fondo: #e6ffe6; /* Fondo más claro y verde */
+    --color-contenedor: #f0fdf0; /* Blanco-verde claro para el contenedor */
+    --color-borde: #aaffaa; /* Verde claro para bordes */
+    --color-texto: #333;
+    --color-label: #222;
+    --color-input-bg: #fff;
+    --color-input-border: #ccd;
+    --color-input-focus-border: #88ee88; /* Verde al enfocar */
+    --color-btn-agregar: #28a745; /* Verde estándar */
+    --color-btn-agregar-hover: #218838;
+    --color-btn-cancelar: #dc3545; /* Rojo estándar */
+    --color-btn-cancelar-hover: #c82333;
+    --color-placeholder-foto-bg: #d0e0d0; /* Gris verdoso para el placeholder */
+    --color-placeholder-foto-text: #666;
+    --color-btn-modificar: #007bff; /* Azul estándar */
+    --color-btn-modificar-hover: #0056b3;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0ffce;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.summary {
+    background-color: #9fd3a1;
+    width: 600px; 
+    padding: 30px 40px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.summary h1 {
+    margin-bottom: 25px;
+    color: #000;
+}
+
+.contenedor {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px; 
+    width: 100%;
+}
+
+.columna {
+    flex: 1;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px; 
+}
+
+.container label {
+    flex: 1;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
+}
+
+.container input,
+.container select {
+    flex: 2;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #42b948;
+    padding: 5px 8px;
+    font-size: 15px;
+}
+
+
+#btnresgistro {
+    padding: 10px 25px;
+    background-color: #00b300;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#btnresgistro:hover {
+    background-color: #008c00;
+}
+#volver {
+    position: fixed;         
+    top: 15px;              
+    left: 15px;             
+    z-index: 1000;           
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+    background-color: #388e3c;
+    padding: 8px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.btn-cancelar {
+    background-color: var(--color-btn-cancelar);
+    color: white;
+    grid-column: 2 / 3; /* Coloca el botón de cancelar debajo del de agregar */
+    margin-top: 10px; /* Espacio extra */
+    justify-self: center; /* Centrarlo horizontalmente */
+    max-width: 250px; /* Mismo ancho máximo que el de agregar */
+}
+
+.btn-cancelar:hover {
+    background-color: var(--color-btn-cancelar-hover);
+    transform: translateY(-1px);
+}
