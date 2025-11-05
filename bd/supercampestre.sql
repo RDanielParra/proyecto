@@ -139,14 +139,21 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `ticket`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
+--
+-- Table structure for table `ticket`
+--
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ticket` (
-  `NumeroTicket` int NOT NULL AUTO_INCREMENT,
-  `Subtotal` decimal(10,2) NOT NULL,
-  `IdEmpleado` int NOT NULL,
-  PRIMARY KEY (`NumeroTicket`),
-  KEY `IdEmpleado` (`IdEmpleado`),
-  CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`IdEmpleado`) REFERENCES `empleado` (`IdEmpleado`) ON UPDATE CASCADE
+  `NumeroTicket` int NOT NULL AUTO_INCREMENT,
+  `Subtotal` decimal(10,2) NOT NULL,
+  `IdEmpleado` int NOT NULL,
+  `FechaHora` timestamp NULL DEFAULT CURRENT_TIMESTAMP, -- <-- LÍNEA AÑADIDA
+  PRIMARY KEY (`NumeroTicket`),
+  KEY `IdEmpleado` (`IdEmpleado`),
+  CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`IdEmpleado`) REFERENCES `empleado` (`IdEmpleado`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

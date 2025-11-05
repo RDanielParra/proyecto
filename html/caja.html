@@ -16,8 +16,6 @@
 </head>
 <body>
 
-    <a href="../html/sesion.html" id="volver">Volver</a>
-
     <div class="container">
         <div class="left-panel">
             <div class="header-info">
@@ -32,8 +30,8 @@
                 <span class="importe">IMPORTE</span>
             </div>
             <div class="items-list">
-                </div>
-            <div class="footer-info">
+            </div>
+            <div class="footer-info" id="ticket-footer">
                 <div class="footer-box">
                     <span>Cajero</span>
                     <span>Nombre Cajero</span>
@@ -75,23 +73,26 @@
             <div class="actions">
                 <div class="actions-left">
                     <div class="actions-group-top">
-                    <button class="btn-action-square btn-blue-custom" id="btn-consultar-precio">CONSULTAR PRECIO (F4)</button>
-                    <button class="btn-action-square btn-orange-custom" id="btn-cancelar-producto">CANCELAR PRODUCTO (F5)</button>
-                    <button class="btn-action-square btn-green" id="btn-lista-productos">LISTA DE PRODUCTOS (F6)</button>
-                </div>
+                        <button class="btn-action-square btn-blue-custom" id="btn-consultar-precio">CONSULTAR PRECIO (F4)</button>
+                        <button class="btn-action-square btn-orange-custom" id="btn-cancelar-producto">CANCELAR PRODUCTO (F5)</button>
+                        <button class="btn-action-square btn-green" id="btn-lista-productos">LISTA DE PRODUCTOS (F6)</button>
+                    </div>
                     <div class="actions-group-middle">
-                        <button class="btn-action-rect btn-green-gradient">CORTE<br>PARCIAL-F10</button>
-                        <button class="btn-action-rect btn-green-gradient">CORTE<br>FINAL-F11</button>
+                        <button class="btn-action-rect btn-green-gradient" id="btn-corte-parcial">CORTE<br>PARCIAL-F10</button>
+                        <button class="btn-action-rect btn-green-gradient" id="btn-corte-final">CORTE<br>FINAL-F11</button>
                     </div>
                 </div>
                 <div class="actions-right">
                     <button class="btn-pay" id="btn-pagar">PAGAR (+)</button>
-                    <button class="btn-cancel-account">CANCELAR CUENTA(-)</button>
+                    <button class="btn-cancel-account" id="btn-cancelar-cuenta">CANCELAR CUENTA(-)</button>
                     <button class="btn-session-square btn-red-gradient" id="btn-cerrar-sesion">CERRAR SESIÓN</button>
                 </div>
             </div>
-            </div>
-    </div> <div class="modal-backdrop" id="product-list-modal-backdrop">
+            
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="product-list-modal-backdrop">
         <div class="product-list-modal">
             <div class="modal-header">
                 <h3>Lista de Productos</h3>
@@ -122,7 +123,7 @@
                         <div class="col-inventario">Inventario</div>
                     </div>
                     <div class="tabla-cuerpo" id="modal-tabla-cuerpo">
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,7 +147,7 @@
                     
                     <label>Pago:</label>
                     <input type="text" id="payment-pago-mxn" value="0.00">
-                    <input type="text" id="payment-pago-usd" value="$0.00">
+                    <input type="text" id="payment-pago-usd" value="$0.00" disabled>
 
                     <label>Cambio:</label>
                     <input type="text" id="payment-cambio-mxn" value="$0.00" disabled>
@@ -157,10 +158,10 @@
                     <input type="radio" id="facturar-check" name="facturar_radio">
                 </div>
                 <div class="payment-methods">
-                    <button class="btn-payment-method">Efectivo<br>F2</button>
-                    <button class="btn-payment-method">Tarjeta<br>F3</button>
-                    <button class="btn-payment-method">Dólar<br>F4</button>
-                    <button class="btn-payment-method">Cheque<br>F5</button>
+                    <button class="btn-payment-method" id="btn-pago-efectivo">Efectivo<br>F2</button>
+                    <button class="btn-payment-method" id="btn-pago-tarjeta">Tarjeta<br>F3</button>
+                    <button class="btn-payment-method" id="btn-pago-dolar">Dólar<br>F4</button>
+                    <button class="btn-payment-method" id="btn-pago-cheque">Cheque<br>F5</button>
                 </div>
             </div>
         </div>
@@ -246,7 +247,7 @@
                                     <td></td><td></td><td></td><td></td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                     <div class="facturar-totals-wrapper">
@@ -267,6 +268,18 @@
                         <button class="btn-generar-factura">Generar Factura</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="reporte-modal-backdrop">
+        <div class="reporte-modal">
+            <div class="modal-header">
+                <h3 id="reporte-titulo">Reporte de Corte</h3>
+                <button class="modal-close-btn" id="reporte-modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-content">
+                <pre id="reporte-contenido"></pre>
             </div>
         </div>
     </div>

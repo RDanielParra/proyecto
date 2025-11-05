@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('api', {
 
     getEmpleados: () => ipcRenderer.invoke('get-empleados'),
 
-    getProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
+    cargarProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
 
     verificarLogin: (usuario, contrasena) => ipcRenderer.invoke('verificar-login', usuario, contrasena),
 
@@ -17,5 +17,13 @@ contextBridge.exposeInMainWorld('api', {
 
     onNotificationMessage: (callback) => ipcRenderer.on('show-notification-message', (event, ...args) => callback(event, ...args)),
 
-    sendNotification: (message) => ipcRenderer.send('show-notification-request', message)
+    sendNotification: (message) => ipcRenderer.send('show-notification-request', message),
+    
+    registrarVenta: (datosVenta) => ipcRenderer.invoke('registrar-venta', datosVenta),
+
+    solicitarImpresion: () => ipcRenderer.invoke('solicitar-impresion'),
+
+    generarCorteParcial: (idEmpleado) => ipcRenderer.invoke('generar-corte-parcial', idEmpleado),
+    
+    generarCorteFinal: () => ipcRenderer.invoke('generar-corte-final')
 })
