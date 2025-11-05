@@ -59,20 +59,15 @@ btnAgregar.addEventListener('click', () => {
 btnModificar.addEventListener('click', () => {
         console.log('Botón Modificar presionado');
         
-        // 1. Encontrar la fila que está seleccionada
         const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
 
         if (filaSeleccionada) {
-            // 2. Obtener el ID del producto desde el dataset
             const IdEmpleado = filaSeleccionada.dataset.IdEmpleado;
             console.log(`Modificando empleado: ${IdEmpleado}`);
             
-            // 3. ¡Aquí está la magia! Llama a la nueva función de la API
-            //    que crearemos en preload.js.
             window.api.abrirVentanaModificarEmpleado(IdEmpleado);
 
         } else {
-            // 4. Si no hay nada seleccionado, avisar al usuario
             console.warn('No se ha seleccionado ningún empleado para modificar.');
             window.api.sendNotification('Error: Debes seleccionar un empleado para modificar');
         }

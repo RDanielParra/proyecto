@@ -65,4 +65,6 @@ contextBridge.exposeInMainWorld('api', {
 
     abrirVentanaReporte: () => ipcRenderer.send('abrir-ventana-reporte'),
 
+    obtenerNombreEmpleado: (id) => ipcRenderer.invoke('obtener-nombre-empleado', id),
+
 })
