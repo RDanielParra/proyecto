@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld('api', {
     getEmpleados: () => ipcRenderer.invoke('get-empleados'),
     
     getEmpleadosTabla: (orden) => ipcRenderer.invoke('get-empleados-tabla', orden),
+    
+    cargarProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
 
     getProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
 
