@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fechaInput = document.getElementById('fechaReporte');
   const btnGenerar = document.getElementById('btnGenerar');
   const contenedorReporte = document.getElementById('reporte');
+  const btnCancelar = document.getElementById('btnCancelar');
 
   btnGenerar.addEventListener('click', async () => {
     const fechaSeleccionada = fechaInput.value
@@ -67,4 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error al generar el reporte:', error);
     }
   });
+
+  btnCancelar.addEventListener('click', () => {
+        window.api.cerrarVentanaModal();
+    });
 });
