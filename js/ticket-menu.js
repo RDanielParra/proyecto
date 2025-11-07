@@ -49,6 +49,7 @@ btnReporte.addEventListener('click', () => {
 })
 
 document.addEventListener('DOMContentLoaded', () => {
+
     const dropdown = document.getElementById('dropdownFiltro')
     const header = document.getElementById('filtroSeleccionado')
     const menu = document.getElementById('menuFiltro')
@@ -111,12 +112,12 @@ async function obtenerProductos(orden) {
             const fila = document.createElement('div');
             fila.classList.add('tabla-fila');
             
-            fila.dataset.codigoProducto = producto.CodigoProducto;
-            fila.dataset.descripcion = producto.Descripcion
+            fila.dataset.NumeroTicket = producto.NumeroTicket
+            fila.dataset.IdEmpleado = producto.IdEmpleado
 
             fila.appendChild(crearCelda(producto.NumeroTicket))
             fila.appendChild(crearCelda(`$${producto.Subtotal}`))
-            fila.appendChild(crearCelda(producto.Empleado))
+            fila.appendChild(crearCelda(producto.IdEmpleado))
             fila.appendChild(crearCelda(producto.Fecha))
 
             fila.addEventListener('click', seleccionarFila)

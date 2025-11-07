@@ -7,13 +7,15 @@ contextBridge.exposeInMainWorld('api', {
         ipcRenderer.on(channel, listener)
     },
 
-    getEmpleados: () => ipcRenderer.invoke('get-empleados'),
-    
-    getEmpleadosTabla: (orden) => ipcRenderer.invoke('get-empleados-tabla', orden),
+    getEmpleados: () => ipcRenderer.invoke('get-empleados'),
+    
+    getEmpleadosTabla: (orden) => ipcRenderer.invoke('get-empleados-tabla', orden),
+    
+    cargarProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
 
-    cargarProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
+    getProductos: (orden) => ipcRenderer.invoke('get-productos', orden),
 
-    eliminarProducto: (id) => ipcRenderer.invoke('eliminar-producto', id) ,
+    eliminarProducto: (id) => ipcRenderer.invoke('eliminar-producto', id) ,
 
     verificarLogin: (usuario, contrasena) => ipcRenderer.invoke('verificar-login', usuario, contrasena),
 
