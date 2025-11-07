@@ -617,7 +617,7 @@ async function handleRealizarPago(metodoDePago) {
             } else {
                 paymentModal.style.display = 'none';
                 await mostrarTicketFinal(datosVenta, datosPago);
-                limpiarVentaCompleta();
+                setTimeout(limpiarVentaCompleta, 3000)
             }
 
         } else {

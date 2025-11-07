@@ -1072,3 +1072,26 @@ body {
     max-height: 400px;
     overflow-y: auto;
 }
+
+@media print {
+    .right-panel, 
+    .modal-backdrop {
+        display: none !important;
+    }
+
+    body, .container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .left-panel {
+        width: 100% !important; 
+        box-sizing: border-box;
+        float: none !important;
+    }
+
+    .insert-code {
+        display: none !important;
+    }
+}
