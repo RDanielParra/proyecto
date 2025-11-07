@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^38.2.1",
+    "electron": "^38.5.0",
     "standard": "^17.1.2"
   },
   "eslintConfig": {
