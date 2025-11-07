@@ -1,11 +1,11 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-    onUpdateTheme: (callback) => {
-        const channel = 'update-theme'
-        const listener = (event, ...args) => callback(event,...args)
-        ipcRenderer.on(channel, listener)
-    },
+    onUpdateTheme: (callback) => {
+        const channel = 'update-theme'
+        const listener = (event, ...args) => callback(event,...args)
+        ipcRenderer.on(channel, listener)
+    },
 
     getEmpleados: () => ipcRenderer.invoke('get-empleados'),
     
@@ -17,56 +17,59 @@ contextBridge.exposeInMainWorld('api', {
 
     eliminarProducto: (id) => ipcRenderer.invoke('eliminar-producto', id) ,
 
-    verificarLogin: (usuario, contrasena) => ipcRenderer.invoke('verificar-login', usuario, contrasena),
+    verificarLogin: (usuario, contrasena) => ipcRenderer.invoke('verificar-login', usuario, contrasena),
 
-    verificarToken: (token) => ipcRenderer.invoke('verificar-token', token),
+    verificarToken: (token) => ipcRenderer.invoke('verificar-token', token),
 
-    onNotificationMessage: (callback) => ipcRenderer.on('show-notification-message', (event, ...args) => callback(event, ...args)),
+    onNotificationMessage: (callback) => ipcRenderer.on('show-notification-message', (event, ...args) => callback(event, ...args)),
 
-    sendNotification: (message) => ipcRenderer.send('show-notification-request', message),
-    
-    abrirVentanaAgregar: () => ipcRenderer.send('abrir-ventana-agregar'),
+    sendNotification: (message) => ipcRenderer.send('show-notification-request', message),
+    
+    abrirVentanaAgregar: () => ipcRenderer.send('abrir-ventana-agregar'),
 
-    abrirVentanaAgregarEmpleado: () => ipcRenderer.send('abrir-ventana-agregar-empleado'), 
+    abrirVentanaAgregarEmpleado: () => ipcRenderer.send('abrir-ventana-agregar-empleado'), 
 
-    guardarProducto: (datos) => ipcRenderer.invoke('guardar-producto', datos),
+    guardarProducto: (datos) => ipcRenderer.invoke('guardar-producto', datos),
 
-    getDepartamentos: () => ipcRenderer.invoke('get-departamentos'),
+    getDepartamentos: () => ipcRenderer.invoke('get-departamentos'),
 
-    seleccionarRutaArchivo: () => ipcRenderer.invoke('open-file-dialog'),
-    
-    cerrarVentanaModal: () => ipcRenderer.send('cerrar-ventana-modal'),
+    seleccionarRutaArchivo: () => ipcRenderer.invoke('open-file-dialog'),
+    
+    cerrarVentanaModal: () => ipcRenderer.send('cerrar-ventana-modal'),
 
-    onRefrescarProductos: (callback) => ipcRenderer.on('refrescar-productos', callback),
+    onRefrescarProductos: (callback) => ipcRenderer.on('refrescar-productos', callback),
 
-    abrirVentanaModificar: (id) => ipcRenderer.send('abrir-ventana-modificar', id),
+    abrirVentanaModificar: (id) => ipcRenderer.send('abrir-ventana-modificar', id),
 
-    getDatosProductoModificar: () => ipcRenderer.invoke('get-datos-producto-modificar'),
+    getDatosProductoModificar: () => ipcRenderer.invoke('get-datos-producto-modificar'),
 
-    actualizarProducto: (datos) => ipcRenderer.invoke('actualizar-producto', datos),
+    actualizarProducto: (datos) => ipcRenderer.invoke('actualizar-producto', datos),
 
-    guardarRegistro: (datos) => ipcRenderer.invoke('guardar-registro', datos),
+    guardarRegistro: (datos) => ipcRenderer.invoke('guardar-registro', datos),
 
-    encriptarContra: (password) => ipcRenderer.invoke('encriptar-contra', password),
+    encriptarContra: (password) => ipcRenderer.invoke('encriptar-contra', password),
 
-    abrirVentanaModificarEmpleado: (id) => ipcRenderer.send('abrir-ventana-modificar-empleado', id),
-    
-    getDatosEmpleadoModificar: () => ipcRenderer.invoke('get-datos-empleado-modificar'),
+    abrirVentanaModificarEmpleado: (id) => ipcRenderer.send('abrir-ventana-modificar-empleado', id),
+    
+    getDatosEmpleadoModificar: () => ipcRenderer.invoke('get-datos-empleado-modificar'),
 
-    actualizarEmpleado: (datos) => ipcRenderer.invoke('actualizar-empleado', datos),
+    actualizarEmpleado: (datos) => ipcRenderer.invoke('actualizar-empleado', datos),
 
-    eliminarEmpleado: (id) => ipcRenderer.invoke('eliminar-empleado', id) ,
+    eliminarEmpleado: (id) => ipcRenderer.invoke('eliminar-empleado', id) ,
 
-    onRefrescarEmpleados: (callback) => ipcRenderer.on('refrescar-empleados', callback),
+    onRefrescarEmpleados: (callback) => ipcRenderer.on('refrescar-empleados', callback),
 
-    getTickets: (orden) => ipcRenderer.invoke('get-tickets', orden),
+    getTickets: (orden) => ipcRenderer.invoke('get-tickets', orden),
 
-    eliminarTicket: (id) => ipcRenderer.invoke('eliminar-ticket', id) ,
+    eliminarTicket: (id) => ipcRenderer.invoke('eliminar-ticket', id) ,
 
-    obtenerTicketsPorFecha: (fecha) => ipcRenderer.invoke('obtenerTicketsPorFecha', fecha),
+    obtenerTicketsPorFecha: (fecha) => ipcRenderer.invoke('obtenerTicketsPorFecha', fecha),
 
-    abrirVentanaReporte: () => ipcRenderer.send('abrir-ventana-reporte'),
+    abrirVentanaReporte: () => ipcRenderer.send('abrir-ventana-reporte'),
 
-    obtenerNombreEmpleado: (id) => ipcRenderer.invoke('obtener-nombre-empleado', id),
-
+    obtenerNombreEmpleado: (id) => ipcRenderer.invoke('obtener-nombre-empleado', id),
+    registrarVenta: (datosVenta) => ipcRenderer.invoke('registrar-venta', datosVenta),
+    solicitarImpresion: () => ipcRenderer.invoke('solicitar-impresion'),
+    generarCorteParcial: (idEmpleado) => ipcRenderer.invoke('generar-corte-parcial', idEmpleado),
+    generarCorteFinal: () => ipcRenderer.invoke('generar-corte-final')
 })

@@ -284,7 +284,6 @@ function renderizarTablaModal(productos) {
         fila.dataset.stock = producto.Stock;
 
         fila.appendChild(crearCelda(producto.CodigoProducto));
-        fila.appendChild(crearCelda(producto.Nombre));
         fila.appendChild(crearCelda(producto.Descripcion));
         fila.appendChild(crearCelda(`$${producto.Precio}`));
         fila.appendChild(crearCelda(producto.Stock));
@@ -472,7 +471,7 @@ function cancelarProductoSeleccionado() {
     const itemSeleccionado = document.querySelector('.ticket-item-selected');
     
     if (!itemSeleccionado) {
-        alert("Por favor, seleccione un producto para cancelar.");
+        window.api.sendNotification("Por favor, seleccione un producto para cancelar.");
         return;
     }
 
@@ -515,7 +514,7 @@ function reducirCantidadItem(codigo) {
     
     actualizarTotales(1);
     
-    alert(`Se eliminó 1 unidad de "${productoEnTicket.descripcion}". Quedan ${productoEnTicket.cantidad}.`);
+    window.api.sendNotification(`Se eliminó 1 unidad de "${productoEnTicket.descripcion}". Quedan ${productoEnTicket.cantidad}.`);
 }
 
 function eliminarItemCompleto(codigo) {
@@ -536,7 +535,7 @@ function eliminarItemCompleto(codigo) {
     
     actualizarTotales(0);
     
-    alert(`Se eliminaron ${cantidadEliminada} unidades de "${descripcion}".`);
+    window.api.sendNotification(`Se eliminaron ${cantidadEliminada} unidades de "${descripcion}".`);
 }
 
 function handleCancelarCuenta() {
@@ -567,7 +566,7 @@ function calcularCambio() {
 
 async function handleRealizarPago(metodoDePago) {
     if (ticketActual.length === 0) {
-        alert("No hay productos en el ticket.");
+        window.api.sendNotification("No hay productos en el ticket.");
         return;
     }
 
@@ -579,7 +578,7 @@ async function handleRealizarPago(metodoDePago) {
     if (metodoDePago === 'Efectivo' || metodoDePago === 'Dolar') {
         pago = parseFloat(pagoMxnInput.value) || 0;
         if (pago < totalVenta) {
-            alert("El pago es insuficiente.");
+            window.api.sendNotification("El pago es insuficiente.");
             return;
         }
         cambio = pago - totalVenta;
@@ -622,12 +621,12 @@ async function handleRealizarPago(metodoDePago) {
             }
 
         } else {
-            alert(`Error al registrar la venta: ${resultado.error}`);
+            window.api.sendNotification(`Error al registrar la venta: ${resultado.error}`);
         }
 
     } catch (error) {
         console.error('Error al invocar registrar-venta:', error);
-        alert('Error fatal de comunicación. Revise la consola.');
+        window.api.sendNotification('Error fatal de comunicación. Revise la consola.');
     }
 }
 
@@ -703,23 +702,9 @@ function limpiarVentaCompleta() {
    FUNCIONES DE CORTE (REPORTES)
 ======================================== */
 function mostrarReporte(titulo, data) {
-    let totalGeneralVentas = 0;
-    let totalGeneralTickets = 0;
-    let detalleMetodos = '';
+    const { resumen, detalle } = data;
 
-    if (Array.isArray(data) && data.length > 0) {
-        data.forEach(reporte => {
-            const totalFormateado = parseFloat(reporte.totalVentas).toFixed(2);
-            totalGeneralVentas += parseFloat(reporte.totalVentas);
-            totalGeneralTickets += reporte.numeroTickets;
-
-            let metodo = (reporte.MetodoPago || 'Desconocido').padEnd(10);
-            let tickets = `(${reporte.numeroTickets} tickets)`.padEnd(15);
-            detalleMetodos += `${metodo}: ${tickets} $${totalFormateado}\n`;
-        });
-    }
-
-    const totalGeneralFormateado = totalGeneralVentas.toFixed(2);
+    const totalFormateado = resumen.totalVentas ? parseFloat(resumen.totalVentas).toFixed(2) : '0.00';
     
     let contenido = `
 ================================
@@ -730,18 +715,29 @@ Fecha: ${new Date().toLocaleDateString()}
 Hora:  ${new Date().toLocaleTimeString()}
 
 --------------------------------
-RESUMEN POR PAGO
---------------------------------
-${detalleMetodos || 'No hay ventas registradas.'}
-
---------------------------------
-RESUMEN GENERAL
+RESUMEN DE VENTAS
 --------------------------------
 
-Total de Tickets Vendidos: ${totalGeneralTickets}
-Monto Total Vendido:    $${totalGeneralFormateado}
+Total de Tickets Vendidos: ${resumen.numeroTickets}
+Monto Total Vendido:    $${totalFormateado}
 
-================================
+--------------------------------
+DETALLE POR PAGO
+--------------------------------
+`;
+
+    if (detalle.length > 0) {
+        detalle.forEach(metodo => {
+            const totalMetodoFormateado = parseFloat(metodo.totalMetodo).toFixed(2);
+            let nombreMetodo = (metodo.MetodoPago + ":").padEnd(10);
+            let ticketsMetodo = `(${metodo.numTicketsMetodo} tickets)`;
+            contenido += `${nombreMetodo} $${totalMetodoFormateado.padStart(10)} ${ticketsMetodo}\n`;
+        });
+    } else {
+        contenido += "(No se encontraron ventas detalladas)\n";
+    }
+
+    contenido += `================================
 `;
 
     reporteTitulo.textContent = titulo;
@@ -758,11 +754,11 @@ async function handleCorteParcial() {
         if (resultado.success) {
             mostrarReporte('CORTE PARCIAL (CAJERO)', resultado.data);
         } else {
-            alert(`Error al generar corte: ${resultado.error}`);
+            window.api.sendNotification(`Error al generar corte: ${resultado.error}`);
         }
     } catch (error) {
         console.error("Error al invocar corte parcial:", error);
-        alert("Error de comunicación al generar el corte.");
+        window.api.sendNotification("Error de comunicación al generar el corte.");
     }
 }
 
@@ -773,10 +769,10 @@ async function handleCorteFinal() {
         if (resultado.success) {
             mostrarReporte('CORTE FINAL (DÍA)', resultado.data);
         } else {
-            alert(`Error al generar corte: ${resultado.error}`);
+            window.api.sendNotification(`Error al generar corte: ${resultado.error}`);
         }
     } catch (error) {
         console.error("Error al invocar corte final:", error);
-        alert("Error de comunicación al generar el corte.");
+        window.api.sendNotification("Error de comunicación al generar el corte.");
     }
 }

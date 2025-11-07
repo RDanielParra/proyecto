@@ -645,7 +645,7 @@ body {
 
 .tabla-productos .tabla-header {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 2fr 1fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr 1fr;
     color: white;
     font-weight: bold;
     background-color: #388e3c;
@@ -670,7 +670,7 @@ body {
 
 .tabla-fila {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 2fr 1fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr 1fr;
     border-bottom: 1px solid #c8e6c9;
 }
 .tabla-fila:nth-child(even) {
@@ -696,11 +696,9 @@ body {
 }
 
 .col-codigo { grid-column: 1; }
-.col-nombre { grid-column: 2; }
-.col-descripcion { grid-column: 3; }
-.col-precio { grid-column: 4; }
-.col-inventario { grid-column: 5; }
-
+.col-descripcion { grid-column: 2; } 
+.col-precio { grid-column: 3; }     
+.col-inventario { grid-column: 4; }
 .tabla-cuerpo::-webkit-scrollbar {
     width: 8px;
     background-color: #f0f0f0;
