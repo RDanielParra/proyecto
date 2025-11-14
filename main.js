@@ -247,12 +247,8 @@ ipcMain.on('abrir-ventana-agregar-empleado', () => {
 })
 
 ipcMain.handle('guardar-producto', async (event, producto) => {
-
-    const query = `
-        INSERT INTO Producto 
-        (CodigoProducto, Precio, IdDepartamento, Descripcion, ClaveSAT, ClaveUnidadMedida, Stock, RutaFoto) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+    // CAMBIO: Consulta multi-línea convertida a una sola línea
+    const query = 'INSERT INTO Producto (CodigoProducto, Precio, IdDepartamento, Descripcion, ClaveSAT, ClaveUnidadMedida, Stock, RutaFoto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     
     const valores = [
         producto.CodigoProducto,
@@ -357,17 +353,7 @@ ipcMain.handle('get-datos-producto-modificar', async () => {
 });
 
 ipcMain.handle('actualizar-producto', async (event, producto) => {
-    const query = `
-        UPDATE Producto SET
-            Precio = ?,
-            IdDepartamento = ?,
-            Descripcion = ?,
-            ClaveSAT = ?,
-            ClaveUnidadMedida = ?,
-            Stock = ?,
-            RutaFoto = ?
-        WHERE CodigoProducto = ? 
-    `;
+    const query = `UPDATE Producto SET Precio = ?, IdDepartamento = ?, Descripcion = ?, ClaveSAT = ?, ClaveUnidadMedida = ?, Stock = ?, RutaFoto = ? WHERE CodigoProducto = ? `;
     
     const valores = [
         producto.Precio,
@@ -404,12 +390,8 @@ ipcMain.on('cerrar-ventana-modal', (event) => {
 });
 
 ipcMain.handle('guardar-registro', async (event, empleado) => {
-
-    const query = `
-        INSERT INTO empleado 
-        (Puesto, Sueldo, RFC, Nombre, Telefono, Usuario, Contrasena) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
+    // CAMBIO: Consulta multi-línea convertida a una sola línea
+    const query = 'INSERT INTO empleado (Puesto, Sueldo, RFC, Nombre, Telefono, Usuario, Contrasena) VALUES (?, ?, ?, ?, ?, ?, ?)';
     
     const valores = [
         empleado.Puesto,
@@ -459,7 +441,7 @@ ipcMain.on('abrir-ventana-modificar-empleado', (event, IdEmpleado) => {
     
     modificarWindow.once('ready-to-show', () => {
         modificarWindow.show();
-  	});
+    });
 });
 
 ipcMain.handle('get-datos-empleado-modificar', async () => {
@@ -468,72 +450,63 @@ ipcMain.handle('get-datos-empleado-modificar', async () => {
     }
     
     const query = 'SELECT * FROM empleado WHERE IdEmpleado = ?';
-  	try {
+    try {
         const [rows] = await pool.query(query, [IdEmpleadoModificar]);
         if (rows.length > 0) {
             return rows[0];
         } else {
             return { error: 'Empleado no encontrado.' };
         }
-  	} catch (error) {
+    } catch (error) {
         console.error('Error al obtener datos del empleado:', error);
         return { error: error.message };
     }
 });
 
 ipcMain.handle('actualizar-empleado', async (event, empleado) => {
-    const query = `
-        UPDATE empleado SET
-            Puesto = ?,
-          	Sueldo = ?,
-          	RFC = ?,
-          	Nombre = ?,
-          	Telefono = ?,
-          	Usuario = ?
-        WHERE IdEmpleado = ?
-    `;
+    const query = `UPDATE empleado SET Puesto = ?, Sueldo = ?, RFC = ?, Nombre = ?, Telefono = ?, Usuario = ? WHERE IdEmpleado = ?`;
     
     const valores = [
         empleado.Puesto,
         empleado.Sueldo,
-      	empleado.RFC,
-      	empleado.Nombre,
-      	empleado.Telefono,
-      	empleado.Usuario,
-      	empleado.IdEmpleado
+        empleado.RFC,
+        empleado.Nombre,
+        empleado.Telefono,
+        empleado.Usuario,
+        empleado.IdEmpleado
     ];
 
-  	try {
-      	const [result] = await pool.query(query, valores);
-      	if (result.affectedRows > 0) {
-          	console.log(`Empleado ${empleado.IdEmpleado} actualizado con éxito.`);
-          	
-          	mainWindow.webContents.send('refrescar-empleados'); 
-          	
-          	return true;
-      	}
-      	return false;
-  	} catch (error) {
-      	console.error('Error al actualizar el empleado:', error);
-      	return { error: error.message };
+    try {
+        const [result] = await pool.query(query, valores);
+        if (result.affectedRows > 0) {
+            console.log(`Empleado ${empleado.IdEmpleado} actualizado con éxito.`);
+            
+            mainWindow.webContents.send('refrescar-empleados'); 
+            
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error al actualizar el empleado:', error);
+        return { error: error.message };
     }
 });
 
 ipcMain.handle('eliminar-empleado', async (event, IdEmpleado) => {
     const query = 'DELETE FROM empleado WHERE IdEmpleado = ?';
-  	try {
-      	const [result] = await pool.query(query, [IdEmpleado]);
-      	
-      	if (result.affectedRows > 0) {
-          	console.log(`Empleado ${IdEmpleado} eliminado con éxito.`);
-          	return true; 
-      	} else {
-          	console.log(`No se encontró el producto ${IdEmpleado} para eliminar.`);
-          	return false;
-      	}
-  	} catch (error) {
-      	console.error('Error al eliminar el empleado:', error);
-      	return { error: error.message }; 
+    try {
+        const [result] = await pool.query(query, [IdEmpleado]);
+        
+        if (result.affectedRows > 0) {
+            console.log(`Empleado ${IdEmpleado} eliminado con éxito.`);
+            return true; 
+        } else {
+            console.log(`No se encontró el producto ${IdEmpleado} para eliminar.`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error al eliminar el empleado:', error);
+        return { error: error.message }; 
     }
 })
 
@@ -549,30 +522,26 @@ ipcMain.handle('get-tickets', async (event, orden) => {
 
 ipcMain.handle('eliminar-ticket', async (event, NumeroTicket) => {
     const query = 'DELETE FROM ticket WHERE NumeroTicket = ?';
-  	try {
-      	const [result] = await pool.query(query, [NumeroTicket]);
-      	
-      	if (result.affectedRows > 0) {
-          	console.log(`Venta ${NumeroTicket} cancelada con éxito.`);
-          	return true; 
-      	} else {
-          	console.log(`No se encontró la venta ${NumeroTicket} para cancelar.`);
-          	return false;
-      	}
-  	} catch (error) {
-      	console.error('Error al cancelar la venta:', error);
-      	return { error: error.message }; 
+    try {
+        const [result] = await pool.query(query, [NumeroTicket]);
+        
+        if (result.affectedRows > 0) {
+            console.log(`Venta ${NumeroTicket} cancelada con éxito.`);
+            return true; 
+        } else {
+            console.log(`No se encontró la venta ${NumeroTicket} para cancelar.`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error al cancelar la venta:', error);
+        return { error: error.message }; 
     }
 })
 
 ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
   try {
-    const query = `
-            SELECT NumeroTicket, Subtotal, IdEmpleado, FechaHora
-            FROM ticket
-            WHERE DATE(FechaHora) = ?  -- FILTRA SOLO POR LA PARTE DE LA FECHA
-            ORDER BY FechaHora ASC
-        `;
+    // CAMBIO: Consulta multi-línea convertida a una sola línea (y se quitó el comentario SQL)
+    const query = 'SELECT NumeroTicket, Subtotal, IdEmpleado, FechaHora FROM ticket WHERE DATE(FechaHora) = ? ORDER BY FechaHora ASC';
     const [rows] = await pool.query(query, [fecha]);
     console.log('Tickets obtenidos para la fecha', fecha, ':', rows);
     return rows;
@@ -585,27 +554,27 @@ ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
 ipcMain.on('abrir-ventana-reporte', () => {
     let agregarWindow = new BrowserWindow({
         width: 500,
-      	height: 600,
-      	parent: mainWindow, 
-      	modal: true, 
-      	show: false,
-      	maximizable: false,
-      	frame: false,
-      	minimizable: false,
-      	resizable: false,
-      	skipTaskbar: true,
+        height: 600,
+        parent: mainWindow, 
+        modal: true, 
+        show: false,
+        maximizable: false,
+        frame: false,
+        minimizable: false,
+        resizable: false,
+        skipTaskbar: true,
 
-      	webPreferences: {
-          	preload: path.join(__dirname, 'src/preload.js') 
-      	}
+        webPreferences: {
+            preload: path.join(__dirname, 'src/preload.js') 
+        }
     });
-  	agregarWindow.loadFile('./html/reporte.html');
-  	agregarWindow.setMenu(null); 
-  	
-  	
-  	agregarWindow.once('ready-to-show', () => {
-      	agregarWindow.show();
-  	});
+    agregarWindow.loadFile('./html/reporte.html');
+    agregarWindow.setMenu(null); 
+    
+    
+    agregarWindow.once('ready-to-show', () => {
+        agregarWindow.show();
+    });
 });
 
 // ===================================================
@@ -613,155 +582,139 @@ ipcMain.on('abrir-ventana-reporte', () => {
 // ===================================================
 
 ipcMain.handle('registrar-venta', async (event, datosVenta) => {
-    
-    let connection;
-    try {
-        connection = await pool.getConnection(); 
-    } catch (error) {
-        console.error("Error al obtener conexión:", error);
-        return { success: false, error: "Error de conexión a la base de datos." };
-    }
+    
+    let connection;
+    try {
+        connection = await pool.getConnection(); 
+    } catch (error) {
+        console.error("Error al obtener conexión:", error);
+        return { success: false, error: "Error de conexión a la base de datos." };
+    }
 
-    try {
-        await connection.beginTransaction();
+    try {
+        await connection.beginTransaction();
 
-        const [ticketResult] = await connection.execute(
-            'INSERT INTO ticket (Subtotal, IdEmpleado, MetodoPago, FechaHora) VALUES (?, ?, ?, CURRENT_TIMESTAMP)',
-            [datosVenta.total, datosVenta.idEmpleado, datosVenta.metodo]
-        );
+        const [ticketResult] = await connection.execute(
+            'INSERT INTO ticket (Subtotal, IdEmpleado, MetodoPago, FechaHora) VALUES (?, ?, ?, CURRENT_TIMESTAMP)',
+            [datosVenta.total, datosVenta.idEmpleado, datosVenta.metodo]
+        );
 
-        const nuevoNumeroTicket = ticketResult.insertId;
+        const nuevoNumeroTicket = ticketResult.insertId;
 
-        const promesasVenta = datosVenta.items.map(async (item) => {
-            
-            await connection.execute(
-                'INSERT INTO venta (CodigoProducto, NumeroTicket, Cantidad, Subtotal) VALUES (?, ?, ?, ?)',
-                [item.codigo, nuevoNumeroTicket, item.cantidad, (item.precio * item.cantidad)]
-            );
+        const promesasVenta = datosVenta.items.map(async (item) => {
+            
+            await connection.execute(
+                'INSERT INTO venta (CodigoProducto, NumeroTicket, Cantidad, Subtotal) VALUES (?, ?, ?, ?)',
+                [item.codigo, nuevoNumeroTicket, item.cantidad, (item.precio * item.cantidad)]
+            );
 
-            const [updateResult] = await connection.execute(
-                'UPDATE producto SET Stock = Stock - ? WHERE CodigoProducto = ? AND Stock >= ?',
-                [item.cantidad, item.codigo, item.cantidad]
-            );
+            const [updateResult] = await connection.execute(
+                'UPDATE producto SET Stock = Stock - ? WHERE CodigoProducto = ? AND Stock >= ?',
+                [item.cantidad, item.codigo, item.cantidad]
+            );
 
-            if (updateResult.affectedRows === 0) {
-                throw new Error(`Stock insuficiente para el producto ${item.codigo}`);
-            }
-        });
+            if (updateResult.affectedRows === 0) {
+                throw new Error(`Stock insuficiente para el producto ${item.codigo}`);
+            }
+        });
 
-        await Promise.all(promesasVenta);
-        await connection.commit();
-        return { success: true, numeroTicket: nuevoNumeroTicket };
+        await Promise.all(promesasVenta);
+        await connection.commit();
+        return { success: true, numeroTicket: nuevoNumeroTicket };
 
-    } catch (error) {
-        if (connection) {
-            await connection.rollback();
-        }
-        console.error('Error en la transacción de venta:', error);
-        return { success: false, error: error.message || "Error desconocido." };
+    } catch (error) {
+        if (connection) {
+            await connection.rollback();
+        }
+        console.error('Error en la transacción de venta:', error);
+        return { success: false, error: error.message || "Error desconocido." };
 
-    } finally {
-        if (connection) {
-            connection.release();
-        }
-    }
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
 });
 
 ipcMain.handle('solicitar-impresion', async (event) => {
-    if (!mainWindow) {
-        console.error("mainWindow no está definida.");
-        return false;
-    }
+    if (!mainWindow) {
+        console.error("mainWindow no está definida.");
+        return false;
+    }
 
-    try {
-        const { response } = await dialog.showMessageBox(mainWindow, {
-            type: 'question',
-            buttons: ['Imprimir Ticket', 'No Imprimir'],
-            title: 'Confirmar Impresión',
-            message: '¿Deseas imprimir el ticket de venta?',
-            defaultId: 0,
-            cancelId: 1
-        });
+    try {
+        const { response } = await dialog.showMessageBox(mainWindow, {
+            type: 'question',
+            buttons: ['Imprimir Ticket', 'No Imprimir'],
+            title: 'Confirmar Impresión',
+            message: '¿Deseas imprimir el ticket de venta?',
+            defaultId: 0,
+            cancelId: 1
+        });
 
-        if (response === 0) {
-            event.sender.print({ silent: false, printBackground: false }, (success, error) => {
-                if (!success) console.error('Error al imprimir:', error);
-            });
-            return true;
-        }
+        if (response === 0) {
+            event.sender.print({ silent: false, printBackground: false }, (success, error) => {
+                if (!success) console.error('Error al imprimir:', error);
+            });
+            return true;
+        }
 
-    } catch (error) {
-        console.error("Error al mostrar el diálogo de impresión:", error);
-        return false;
-    }
-    
-    return false;
+    } catch (error) {
+        console.error("Error al mostrar el diálogo de impresión:", error);
+        return false;
+    }
+    
+    return false;
 });
 
 ipcMain.handle('generar-corte-parcial', async (event, idEmpleado) => {
-    if (!idEmpleado) {
-        return { success: false, error: "ID de empleado no proporcionado." };
-    }
+    if (!idEmpleado) {
+        return { success: false, error: "ID de empleado no proporcionado." };
+    }
 
-    const totalQuery = `
-        SELECT 
-            COUNT(*) as numeroTickets, 
-            SUM(Subtotal) as totalVentas 
-        FROM ticket 
-        WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE();
-    `;
-    const detalleQuery = `
-        SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo
-        FROM ticket
-        WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE()
-        GROUP BY MetodoPago;
-    `;
+    // CAMBIO: Consulta multi-línea convertida a una sola línea
+    const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE()';
+    
+    // CAMBIO: Consulta multi-línea convertida a una sola línea
+    const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE() GROUP BY MetodoPago';
 
-    try {
-        const [totalResults] = await pool.query(totalQuery, [idEmpleado]);
-        const [detalleResults] = await pool.query(detalleQuery, [idEmpleado]);
-        
-        return { 
-            success: true, 
-            data: {
-                resumen: totalResults[0],
-                detalle: detalleResults
-            } 
-        };
-    } catch (error) {
-        console.error("Error en DB (Corte Parcial):", error);
-        return { success: false, error: error.message };
-    }
+    try {
+        const [totalResults] = await pool.query(totalQuery, [idEmpleado]);
+        const [detalleResults] = await pool.query(detalleQuery, [idEmpleado]);
+        
+        return { 
+            success: true, 
+           data: {
+                resumen: totalResults[0],
+                detalle: detalleResults
+            } 
+        };
+    } catch (error) {
+        console.error("Error en DB (Corte Parcial):", error);
+        return { success: false, error: error.message };
+    }
 });
 
 ipcMain.handle('generar-corte-final', async (event) => {
-    const totalQuery = `
-        SELECT 
-            COUNT(*) as numeroTickets, 
-            SUM(Subtotal) as totalVentas 
-        FROM ticket 
-        WHERE DATE(FechaHora) = CURDATE();
-    `;
-    const detalleQuery = `
-        SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo
-        FROM ticket
-        WHERE DATE(FechaHora) = CURDATE()
-        GROUP BY MetodoPago;
-    `;
+    // CAMBIO: Consulta multi-línea convertida a una sola línea
+    const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE DATE(FechaHora) = CURDATE()';
+    
+    // CAMBIO: Consulta multi-línea convertida a una sola línea
+    const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE DATE(FechaHora) = CURDATE() GROUP BY MetodoPago';
 
-    try {
-        const [totalResults] = await pool.query(totalQuery);
-        const [detalleResults] = await pool.query(detalleQuery);
-        
-        return { 
-            success: true, 
-            data: {
-                resumen: totalResults[0],
-                detalle: detalleResults
-            } 
-        };
-    } catch (error) {
-        console.error("Error en DB (Corte Final):", error);
-        return { success: false, error: error.message };
-    }
+    try {
+        const [totalResults] = await pool.query(totalQuery);
+        const [detalleResults] = await pool.query(detalleQuery);
+        
+        return { 
+            success: true, 
+            data: {
+                resumen: totalResults[0],
+                detalle: detalleResults
+            } 
+        };
+    } catch (error) {
+        console.error("Error en DB (Corte Final):", error);
+        return { success: false, error: error.message };
+    }
 });
