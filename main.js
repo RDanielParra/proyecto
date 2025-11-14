@@ -568,11 +568,11 @@ ipcMain.handle('eliminar-ticket', async (event, NumeroTicket) => {
 ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
   try {
     const query = `
-      SELECT NumeroTicket, Subtotal, IdEmpleado, Fecha
-  	  FROM ticket
-      WHERE DATE(Fecha) = ?
-      ORDER BY Fecha ASC
-    `;
+            SELECT NumeroTicket, Subtotal, IdEmpleado, FechaHora
+            FROM ticket
+            WHERE DATE(FechaHora) = ?  -- FILTRA SOLO POR LA PARTE DE LA FECHA
+            ORDER BY FechaHora ASC
+        `;
     const [rows] = await pool.query(query, [fecha]);
     console.log('Tickets obtenidos para la fecha', fecha, ':', rows);
     return rows;

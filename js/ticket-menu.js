@@ -118,7 +118,11 @@ async function obtenerProductos(orden) {
             fila.appendChild(crearCelda(producto.NumeroTicket))
             fila.appendChild(crearCelda(`$${producto.Subtotal}`))
             fila.appendChild(crearCelda(producto.IdEmpleado))
-            fila.appendChild(crearCelda(producto.Fecha))
+            fila.appendChild(crearCelda(new Date(producto.FechaHora).toLocaleString('es-MX', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            })))
 
             fila.addEventListener('click', seleccionarFila)
 

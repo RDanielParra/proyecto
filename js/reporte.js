@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fechaSeleccionada = fechaInput.value
     const fechaFormateada = new Date(fechaSeleccionada).toISOString().split('T')[0];
     
-
+    console.log(fechaFormateada)
     if (!fechaFormateada) {
       window.api.sendNotification('Selecciona una fecha para generar el reporte');
       return;
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const tickets = await window.api.obtenerTicketsPorFecha(fechaFormateada);
+      console.log(tickets)
       const empleadosInfo = await window.api.getEmpleados();
       if (!tickets || tickets.length === 0) {
         contenedorReporte.innerHTML = `<p>No hay tickets registrados para el ${fechaFormateada}</p>`;
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${ticket.NumeroTicket}</td>
             <td>$${ticket.Subtotal}</td>
             <td>${empleadosInfo[ticket.IdEmpleado - 1].Nombre}</td>
-            <td>${new Date(ticket.Fecha).toLocaleString('es-MX', {
+            <td>${new Date(ticket.FechaHora).toLocaleString('es-MX', {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
