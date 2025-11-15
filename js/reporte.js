@@ -26,14 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
       // Construcción del reporte
       let totalDia = 0;
       let html = `
-        <h2>Tickets del ${fechaFormateada}</h2>
-        <table>
+        <h2 class="titulo-reporte">Tickets del ${fechaFormateada}</h2>
+        <table class="reporte-tabla">
           <thead>
             <tr>
-              <td>Número de Ticket</td>
-              <td>Subtotal</td>
-              <td>Empleado</td>
-              <td>Fecha</td>
+              <th>Número de Ticket</th>
+              <th>Subtotal</th>
+              <th>Empleado</th>
+              <th>Fecha</th>
             </tr>
           </thead>
           <tbody>
@@ -46,11 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${ticket.NumeroTicket}</td>
             <td>$${ticket.Subtotal}</td>
             <td>${empleadosInfo[ticket.IdEmpleado - 1].Nombre}</td>
-            <td>${new Date(ticket.FechaHora).toLocaleString('es-MX', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-            })}</td>
+            <td>${new Date(ticket.FechaHora).toLocaleDateString('es-MX')}</td>
           </tr>
         `
       })
@@ -58,19 +54,37 @@ document.addEventListener('DOMContentLoaded', () => {
       html += `
           </tbody>
         </table>
-        <h3>Total del día: $${totalDia.toFixed(2)}</h3>
+        <p class="total-reporte">Total del día: <span>$${totalDia.toFixed(2)}</span></p>
       `;
 
       contenedorReporte.innerHTML = html;
-
-
-
     } catch (error) {
       console.error('Error al generar el reporte:', error);
     }
+    contenedorReporte.innerHTML = html;
+
+// Pregunta si imprimir
+const deseaImprimir = await window.api.solicitarImpresion();
+
+if (deseaImprimir) {
+    console.log("Imprimiendo reporte...");
+}
   });
+
 
   btnCancelar.addEventListener('click', () => {
         window.api.cerrarVentanaModal();
     });
+});
+
+const btnImprimir = document.getElementById('btnImprimir');
+
+btnImprimir?.addEventListener('click', async () => {
+    const respuesta = await window.api.solicitarImpresion();
+
+    if (respuesta) {
+        console.log("Impresión solicitada");
+    } else {
+        console.log("El usuario decidió no imprimir.");
+    }
 });
