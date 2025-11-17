@@ -71,5 +71,7 @@ contextBridge.exposeInMainWorld('api', {
     registrarVenta: (datosVenta) => ipcRenderer.invoke('registrar-venta', datosVenta),
     solicitarImpresion: () => ipcRenderer.invoke('solicitar-impresion'),
     generarCorteParcial: (idEmpleado) => ipcRenderer.invoke('generar-corte-parcial', idEmpleado),
-    generarCorteFinal: () => ipcRenderer.invoke('generar-corte-final')
+    generarCorteFinal: () => ipcRenderer.invoke('generar-corte-final'),
+
+    mostrarDialogoContextual: (opciones) => ipcRenderer.invoke('mostrar-dialogo-contextual', opciones)
 })
