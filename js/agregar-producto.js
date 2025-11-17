@@ -1,5 +1,3 @@
-// No necesitas importar nada, 'window.api' ya está disponible gracias al preload
-
 document.addEventListener('DOMContentLoaded', async () => {
     // --- Obtener elementos del DOM ---
     const formProducto = document.getElementById('formProducto');

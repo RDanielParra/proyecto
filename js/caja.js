@@ -1,6 +1,3 @@
-/* ========================================
-   IMPORTACIONES Y VARIABLES GLOBALES
-======================================== */
 import { verificarToken, cargarProductos } from './renderer.js';
 
 let ordenModal = 'CodigoProducto';
@@ -11,9 +8,6 @@ let originalFooterHTML = '';
 let currentItemCodigoToCancel = null;
 let esCorteFinal = false;
 
-/* ========================================
-   SELECTORES DE ELEMENTOS
-======================================== */
 const headerInfoElement = document.querySelector('.header-info p:nth-child(2)');
 const ticketFooter = document.getElementById('ticket-footer');
 
@@ -53,10 +47,8 @@ const btnCorteParcial = document.getElementById('btn-corte-parcial');
 const btnCorteFinal = document.getElementById('btn-corte-final');
 const btnCerrarSesion = document.getElementById('btn-cerrar-sesion');
 const btnCancelarCuenta = document.getElementById('btn-cancelar-cuenta');
+const inputCodigo = document.getElementById('insert-code-input');
 
-/* ========================================
-   INICIALIZADOR PRINCIPAL
-======================================== */
 document.addEventListener('DOMContentLoaded', () => {
     verificarToken();
     originalFooterHTML = document.getElementById('ticket-footer').innerHTML;
@@ -74,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeBtn) {
         closeBtn.addEventListener('click', () => {
             modal.style.display = 'none';
+            inputCodigo.focus();
         });
     }
 
@@ -81,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
+                inputCodigo.focus();
             }
         });
     }
@@ -130,12 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closePaymentBtn) {
         closePaymentBtn.addEventListener('click', () => {
             paymentModal.style.display = 'none';
+            inputCodigo.focus();
         });
     }
     if (paymentModal) {
         paymentModal.addEventListener('click', (e) => {
             if (e.target === paymentModal) {
                 paymentModal.style.display = 'none';
+                inputCodigo.focus();
             }
         });
     }
@@ -144,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pagoMxnInput.addEventListener('input', calcularCambio);
     }
 
-    const inputCodigo = document.getElementById('insert-code-input');
     if (inputCodigo) {
         inputCodigo.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' || e.keyCode === 13) {
@@ -168,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCancelAbort.addEventListener('click', () => {
             cancelConfirmModal.style.display = 'none';
             currentItemCodigoToCancel = null;
+            inputCodigo.focus();
         });
     }
     if (btnCancelOne) {
@@ -175,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reducirCantidadItem(currentItemCodigoToCancel);
             cancelConfirmModal.style.display = 'none';
             currentItemCodigoToCancel = null;
+            inputCodigo.focus();
         });
     }
     if (btnCancelAll) {
@@ -182,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             eliminarItemCompleto(currentItemCodigoToCancel);
             cancelConfirmModal.style.display = 'none';
             currentItemCodigoToCancel = null;
+            inputCodigo.focus();
         });
     }
     
@@ -202,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnFacturaCancelar.addEventListener('click', () => {
             facturarModal.style.display = 'none';
             limpiarVentaCompleta();
+            inputCodigo.focus();
         });
     }
 
@@ -218,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 esCorteFinal = false;
                 window.location.href = '../html/sesion.html';
             }
+            inputCodigo.focus();
         });
     }
 
@@ -232,9 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/* ========================================
-   FUNCIONES DE FECHA Y HORA
-======================================== */
 function actualizarFechaHora() {
     const ahora = new Date();
     const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -256,9 +253,6 @@ function actualizarFechaHora() {
     }
 }
 
-/* ========================================
-   FUNCIONES DE MODAL DE PRODUCTOS
-======================================== */
 async function obtenerProductos(orden) {
     return window.api.cargarProductos(orden).then(response => {
         return response;
@@ -311,6 +305,7 @@ function seleccionarFilaModal(event) {
     agregarProductoAlTicket(productoData);
     
     modal.style.display = 'none';
+    inputCodigo.focus();
 }
 
 async function renderizarProductosModal(orden) {
@@ -356,9 +351,6 @@ function filtrarTablaModal() {
     });
 }
 
-/* ========================================
-   FUNCIONES DE LÓGICA DEL TICKET
-======================================== */
 function agregarProductoAlTicket(producto) {
     const itemsList = document.querySelector('.items-list');
     const productoExistente = ticketActual.find(p => p.codigo == producto.codigo);
@@ -464,9 +456,6 @@ function manejarSeleccionTicket(event) {
     event.currentTarget.classList.add('ticket-item-selected');
 }
 
-/* ========================================
-   FUNCIONES DE CANCELACIÓN
-======================================== */
 function cancelarProductoSeleccionado() {
     const itemSeleccionado = document.querySelector('.ticket-item-selected');
     
@@ -544,11 +533,9 @@ function handleCancelarCuenta() {
             limpiarVentaCompleta();
         }
     }
+    inputCodigo.focus();
 }
 
-/* ========================================
-   FUNCIONES DE PAGO E IMPRESIÓN
-======================================== */
 function calcularCambio() {
     const total = parseFloat(totalMxnInput.value.replace('$', '')) || 0;
     const pago = parseFloat(pagoMxnInput.value) || 0;
@@ -611,7 +598,7 @@ async function handleRealizarPago(metodoDePago) {
             };
                 paymentModal.style.display = 'none';
                 await mostrarTicketFinal(datosVenta, datosPago);
-                setTimeout(limpiarVentaCompleta, 3000)  
+                setTimeout(limpiarVentaCompleta, 3000) 	
 
         } else {
             window.api.sendNotification(`Error al registrar la venta: ${resultado.error}`);
@@ -689,11 +676,9 @@ function limpiarVentaCompleta() {
         ticketFooter.className = 'footer-info';
         actualizarFechaHora();
     }
+    inputCodigo.focus();
 }
 
-/* ========================================
-   FUNCIONES DE CORTE (REPORTES)
-======================================== */
 function mostrarReporte(titulo, data) {
     const { resumen, detalle } = data;
 
@@ -701,7 +686,7 @@ function mostrarReporte(titulo, data) {
     
     let contenido = `
 ================================
-     ${titulo}
+      ${titulo}
 ================================
 
 Fecha: ${new Date().toLocaleDateString()}
@@ -712,7 +697,7 @@ RESUMEN DE VENTAS
 --------------------------------
 
 Total de Tickets Vendidos: ${resumen.numeroTickets}
-Monto Total Vendido:    $${totalFormateado}
+Monto Total Vendido:     $${totalFormateado}
 
 --------------------------------
 DETALLE POR PAGO

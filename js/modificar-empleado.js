@@ -11,17 +11,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const inputIdEmpleado = document.getElementById('inputIdEmpleado');
     verificarToken()
 
-     // --- 2. Lógica para el botón Cancelar (igual) ---
     const btnCancelar = document.getElementById('btnCancelar');
      btnCancelar.addEventListener('click', () => {
         window.api.cerrarVentanaModal();
     });
 
    try {
-        // --- NUEVO: Carga de Datos del Producto ---
         const empleado = await window.api.getDatosEmpleadoModificar();
         if (empleado && !empleado.error) {
-            // Rellenar todos los campos del formulario
             inputIdEmpleado.value = empleado.IdEmpleado;
             inputNombre.value = empleado.Nombre;
             inputRFC.value = empleado.RFC;
@@ -37,23 +34,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error('Error al cargar datos:', error);
         window.api.sendNotification(`Error al cargar datos: ${error.message}`);
-        // Cierra el modal si no se pudieron cargar los datos
         window.api.cerrarVentanaModal();
     }
     
     formRegister.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evita que el formulario se recargue
-        // Recopila todos los datos del formulario
+        event.preventDefault(); 
         const datosResgister = {
             IdEmpleado: inputIdEmpleado.value,
             Nombre: document.getElementById('inputNombre').value,
             RFC: document.getElementById('inputRFC').value,
             Sueldo: parseFloat(document.getElementById('inputSueldo').value),
-            Telefono: document.getElementById('inputTelefono').value  || null, // Permite nulos
+            Telefono: document.getElementById('inputTelefono').value  || null, 
             Usuario: document.getElementById('inputUsuario').value,
             Puesto: document.getElementById('inputPuesto').value,
         };
-            // Validación simple
         if (!datosResgister.Nombre || !datosResgister.RFC  || !datosResgister.Sueldo || !datosResgister.Usuario || !datosResgister.Puesto) 
         {
             window.api.sendNotification('Error: Nombre, RFC y Sueldo, Usuario, y Puesto son obligatorios.');
@@ -68,7 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 window.api.sendNotification('Empleado actualizado con éxito.');
                 window.api.cerrarVentanaModal();
             } else {
-                // Muestra el error específico de la base de datos (ej. Llave duplicada)
                 window.api.sendNotification(`Error: ${resultado.error || 'Desconocido'}`);
                 console.error('Error al actualizar empleado:', resultado);
             }
