@@ -40,7 +40,9 @@ UNLOCK TABLES;
 -- Se mantiene el IdEmpleado como clave primaria pero **sin AUTO_INCREMENT** para poder insertar el empleado '0' de la data.
 DROP TABLE IF EXISTS `empleado`;
 CREATE TABLE IF NOT EXISTS `empleado` (
-  `IdEmpleado` int(11) NOT NULL,
+  /* Aquí está el cambio: */
+  `IdEmpleado` int(11) NOT NULL AUTO_INCREMENT,
+  
   `Puesto` varchar(20) NOT NULL,
   `Sueldo` decimal(10,2) NOT NULL,
   `RFC` varchar(13) NOT NULL,
