@@ -1,4 +1,4 @@
-const sql = require("mysql2/promise")
+import sql from "mysql2/promise"
 
 const connection = {
     host: 'localhost',
@@ -7,5 +7,6 @@ const connection = {
     database: 'supercampestre'
 }
 
-module.exports.sql = sql
-module.exports.connectionInfo = connection
+const _sql = sql
+export { _sql as sql }
+export const connectionInfo = connection
