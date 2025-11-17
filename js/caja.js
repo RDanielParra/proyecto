@@ -10,6 +10,7 @@ let ticketItemCounter = 0;
 let originalFooterHTML = '';
 let currentItemCodigoToCancel = null;
 let esCorteFinal = false;
+let cajaIniciadaDesde = null;
 
 /* ========================================
    SELECTORES DE ELEMENTOS
@@ -63,6 +64,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     actualizarFechaHora();
     setInterval(actualizarFechaHora, 1000);
+
+    function obtenerFechaHora(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    cajaIniciadaDesde = obtenerFechaHora(new Date());
 
     if (openBtn) {
         openBtn.addEventListener('click', () => {
@@ -741,9 +755,10 @@ DETALLE POR PAGO
 async function handleCorteParcial() {
     esCorteFinal = false;
     const idEmpleadoLogueado = 1; 
+    const fechaInicioCaja = cajaIniciadaDesde;
 
     try {
-        const resultado = await window.api.generarCorteParcial(idEmpleadoLogueado);
+        const resultado = await window.api.generarCorteParcial(idEmpleadoLogueado, fechaInicioCaja);
         if (resultado.success) {
             mostrarReporte('CORTE PARCIAL (CAJERO)', resultado.data);
         } else {
@@ -757,8 +772,9 @@ async function handleCorteParcial() {
 
 async function handleCorteFinal() {
     esCorteFinal = true;
+    const fechaInicioCaja = cajaIniciadaDesde;
     try {
-        const resultado = await window.api.generarCorteFinal();
+        const resultado = await window.api.generarCorteFinal(fechaInicioCaja);
         if (resultado.success) {
             mostrarReporte('CORTE FINAL (DÍA)', resultado.data);
         } else {

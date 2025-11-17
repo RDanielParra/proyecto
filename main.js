@@ -669,18 +669,18 @@ ipcMain.handle('solicitar-impresion', async (event) => {
     return false;
 });
 
-ipcMain.handle('generar-corte-parcial', async (event, idEmpleado) => {
-    if (!idEmpleado) {
-        return { success: false, error: "ID de empleado no proporcionado." };
+ipcMain.handle('generar-corte-parcial', async (event, idEmpleado, fechaInicioCaja) => {
+    if (!idEmpleado || !fechaInicioCaja) {
+        return { success: false, error: "ID de empleado o hora de inicio de la caja no proporcionado." };
     }
 
-    const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE()';
+    const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE IdEmpleado = ? AND FechaHora >= ?'; 
     
-    const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE() GROUP BY MetodoPago';
+    const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE IdEmpleado = ? AND FechaHora >= ? GROUP BY MetodoPago';
 
     try {
-        const [totalResults] = await pool.query(totalQuery, [idEmpleado]);
-        const [detalleResults] = await pool.query(detalleQuery, [idEmpleado]);
+        const [totalResults] = await pool.query(totalQuery, [idEmpleado, fechaInicioCaja]);
+        const [detalleResults] = await pool.query(detalleQuery, [idEmpleado, fechaInicioCaja]);
         
         return { 
             success: true, 
@@ -695,14 +695,18 @@ ipcMain.handle('generar-corte-parcial', async (event, idEmpleado) => {
     }
 });
 
-ipcMain.handle('generar-corte-final', async (event) => {
-    const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE DATE(FechaHora) = CURDATE()';
+ipcMain.handle('generar-corte-final', async (event, fechaInicioCaja) => {
+    if (!fechaInicioCaja) {
+                return { success: false, error: "Hora de inicio de la caja no proporcionado." };
+    }
+
+    const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE FechaHora >= ? ';
     
-    const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE DATE(FechaHora) = CURDATE() GROUP BY MetodoPago';
+    const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE FechaHora >= ? GROUP BY MetodoPago';
 
     try {
-        const [totalResults] = await pool.query(totalQuery);
-        const [detalleResults] = await pool.query(detalleQuery);
+        const [totalResults] = await pool.query(totalQuery, [fechaInicioCaja]);
+        const [detalleResults] = await pool.query(detalleQuery, [fechaInicioCaja]);
         
         return { 
             success: true, 

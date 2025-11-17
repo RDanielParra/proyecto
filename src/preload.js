@@ -70,6 +70,6 @@ contextBridge.exposeInMainWorld('api', {
     obtenerNombreEmpleado: (id) => ipcRenderer.invoke('obtener-nombre-empleado', id),
     registrarVenta: (datosVenta) => ipcRenderer.invoke('registrar-venta', datosVenta),
     solicitarImpresion: () => ipcRenderer.invoke('solicitar-impresion'),
-    generarCorteParcial: (idEmpleado) => ipcRenderer.invoke('generar-corte-parcial', idEmpleado),
-    generarCorteFinal: () => ipcRenderer.invoke('generar-corte-final')
+    generarCorteParcial: (idEmpleado, fechaInicioCaja) => ipcRenderer.invoke('generar-corte-parcial', idEmpleado, fechaInicioCaja),
+    generarCorteFinal: (fechaInicioCaja) => ipcRenderer.invoke('generar-corte-final', fechaInicioCaja)
 })

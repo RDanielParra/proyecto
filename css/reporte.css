@@ -23,7 +23,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
 }
 
@@ -96,9 +96,12 @@ h1 {
     color: var(--color-texto);
 }
 
-/* Botón Cancelar */
 .btn-cancelar {
-    margin-top: 20px;
+   display: block; 
+    margin-left: auto;
+    margin-right: auto; 
+    margin-top: 0; 
+    
     background-color: var(--color-btn-cancelar);
     color: white;
     padding: 10px 25px;
@@ -107,9 +110,6 @@ h1 {
     font-size: 17px;
     font-weight: bold;
     cursor: pointer;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
     transition: background-color 0.3s ease, transform 0.1s;
 }
 
@@ -207,4 +207,10 @@ h1 {
 .total-reporte span {
     font-size: 20px;
     color: #000;
+}
+
+.contenedor-btn-cancelar {
+    width: 100%;
+    max-width: 700px; 
+    margin: 20px auto 40px auto; 
 }
