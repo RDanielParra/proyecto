@@ -247,6 +247,11 @@ ipcMain.on('abrir-ventana-agregar-empleado', () => {
 })
 
 ipcMain.handle('guardar-producto', async (event, producto) => {
+
+    if (isNaN(producto.CodigoProducto)) {
+        console.error('Error de validación: El código de producto no es un número:', producto.CodigoProducto);
+        return { error: 'El código del producto debe ser solo números.' };
+    }
     const query = 'INSERT INTO Producto (CodigoProducto, Precio, IdDepartamento, Descripcion, ClaveSAT, ClaveUnidadMedida, Stock, RutaFoto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     
     const valores = [
