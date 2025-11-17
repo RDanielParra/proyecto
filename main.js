@@ -720,3 +720,24 @@ ipcMain.handle('generar-corte-final', async (event, fechaInicioCaja) => {
         return { success: false, error: error.message };
     }
 });
+
+ipcMain.handle('mostrar-dialogo-contextual', async (event, { titulo, mensaje }) => {
+    if (!mainWindow) {
+        console.error("mainWindow no está definida.");
+        return false;
+    }
+
+    try {
+        await dialog.showMessageBox(mainWindow, {
+            type: 'info',
+            buttons: ['Aceptar'],
+            title: titulo || 'Aviso',
+            message: mensaje || 'Operación completada.',
+            defaultId: 0
+        });
+        return true;
+    } catch (error) {
+        console.error("Error al mostrar el diálogo contextual:", error);
+        return false;
+    }
+});
