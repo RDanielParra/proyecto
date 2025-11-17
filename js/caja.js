@@ -609,16 +609,9 @@ async function handleRealizarPago(metodoDePago) {
                 cajero: "Nombre Cajero",
                 cajaNum: 1
             };
-
-            if (facturarCheck.checked) {
-                paymentModal.style.display = 'none';
-                document.getElementById('factura-num-ticket').value = resultado.numeroTicket;
-                facturarModal.style.display = 'flex';
-            } else {
                 paymentModal.style.display = 'none';
                 await mostrarTicketFinal(datosVenta, datosPago);
-                setTimeout(limpiarVentaCompleta, 3000)
-            }
+                setTimeout(limpiarVentaCompleta, 3000)  
 
         } else {
             window.api.sendNotification(`Error al registrar la venta: ${resultado.error}`);
