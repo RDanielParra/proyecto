@@ -1,11 +1,11 @@
-const bcrypt = require('bcrypt')
+import { hash } from 'bcrypt';
 
 const saltRounds = 10;
 
 async function generateHash(password) {
     try {
         console.log(password)
-        const hashtext = await bcrypt.hash(password, saltRounds);
+        const hashtext = await hash(password, saltRounds);
         console.log(hashtext)
         return hashtext
 
@@ -14,4 +14,5 @@ async function generateHash(password) {
     }
 }
 
-module.exports.generateHash = generateHash
+const _generateHash = generateHash;
+export { _generateHash as generateHash };

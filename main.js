@@ -11,7 +11,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'clave_secreta_por_defecto'
 
 let mainWindow;
 let idProductoParaModificar;
-let IdEmpleadoModificar; // Definir IdEmpleadoModificar
+let IdEmpleadoModificar; 
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -247,7 +247,6 @@ ipcMain.on('abrir-ventana-agregar-empleado', () => {
 })
 
 ipcMain.handle('guardar-producto', async (event, producto) => {
-    // CAMBIO: Consulta multi-línea convertida a una sola línea
     const query = 'INSERT INTO Producto (CodigoProducto, Precio, IdDepartamento, Descripcion, ClaveSAT, ClaveUnidadMedida, Stock, RutaFoto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     
     const valores = [
@@ -390,7 +389,6 @@ ipcMain.on('cerrar-ventana-modal', (event) => {
 });
 
 ipcMain.handle('guardar-registro', async (event, empleado) => {
-    // CAMBIO: Consulta multi-línea convertida a una sola línea
     const query = 'INSERT INTO empleado (Puesto, Sueldo, RFC, Nombre, Telefono, Usuario, Contrasena) VALUES (?, ?, ?, ?, ?, ?, ?)';
     
     const valores = [
@@ -540,7 +538,6 @@ ipcMain.handle('eliminar-ticket', async (event, NumeroTicket) => {
 
 ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
   try {
-    // CAMBIO: Consulta multi-línea convertida a una sola línea (y se quitó el comentario SQL)
     const query = 'SELECT NumeroTicket, Subtotal, IdEmpleado, FechaHora FROM ticket WHERE DATE(FechaHora) = ? ORDER BY FechaHora ASC';
     const [rows] = await pool.query(query, [fecha]);
     console.log('Tickets obtenidos para la fecha', fecha, ':', rows);
@@ -578,7 +575,7 @@ ipcMain.on('abrir-ventana-reporte', () => {
 });
 
 // ===================================================
-// MANEJADORES PARA LA VENTANA DE CAJA (AÑADIDOS)
+// MANEJADORES PARA LA VENTANA DE CAJA
 // ===================================================
 
 ipcMain.handle('registrar-venta', async (event, datosVenta) => {
@@ -672,10 +669,8 @@ ipcMain.handle('generar-corte-parcial', async (event, idEmpleado) => {
         return { success: false, error: "ID de empleado no proporcionado." };
     }
 
-    // CAMBIO: Consulta multi-línea convertida a una sola línea
     const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE()';
     
-    // CAMBIO: Consulta multi-línea convertida a una sola línea
     const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE IdEmpleado = ? AND DATE(FechaHora) = CURDATE() GROUP BY MetodoPago';
 
     try {
@@ -696,10 +691,8 @@ ipcMain.handle('generar-corte-parcial', async (event, idEmpleado) => {
 });
 
 ipcMain.handle('generar-corte-final', async (event) => {
-    // CAMBIO: Consulta multi-línea convertida a una sola línea
     const totalQuery = 'SELECT COUNT(*) as numeroTickets, SUM(Subtotal) as totalVentas FROM ticket WHERE DATE(FechaHora) = CURDATE()';
     
-    // CAMBIO: Consulta multi-línea convertida a una sola línea
     const detalleQuery = 'SELECT MetodoPago, SUM(Subtotal) as totalMetodo, COUNT(*) as numTicketsMetodo FROM ticket WHERE DATE(FechaHora) = CURDATE() GROUP BY MetodoPago';
 
     try {
