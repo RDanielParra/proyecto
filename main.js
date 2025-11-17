@@ -550,8 +550,8 @@ ipcMain.handle('obtenerTicketsPorFecha', async (event, fecha) => {
 
 ipcMain.on('abrir-ventana-reporte', () => {
     let agregarWindow = new BrowserWindow({
-        width: 500,
-        height: 600,
+        width: 800,
+        height: 800,
         parent: mainWindow, 
         modal: true, 
         show: false,
