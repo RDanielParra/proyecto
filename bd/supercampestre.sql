@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `empleado` (
 
 -- Dumping data for table supercampestre.empleado: ~3 rows (approximately)
 REPLACE INTO `empleado` (`IdEmpleado`, `Puesto`, `Sueldo`, `RFC`, `Nombre`, `Telefono`, `Usuario`, `Contrasena`) VALUES
-	(0, 'gerente', 15500.00, 'REPR950101XYZ', 'Reynaldo Daniel Reyes Parra', '8112345678', 'Daniel', '$2b$10$mC34hlvl8L0EDhsqEJU3lup1guyxX7Twg90e0oxIBZ7O2/8soWZKi'),
+	(4, 'gerente', 15500.00, 'REPR950101XYZ', 'Reynaldo Daniel Reyes Parra', '8112345678', 'Daniel', '$2b$10$mC34hlvl8L0EDhsqEJU3lup1guyxX7Twg90e0oxIBZ7O2/8soWZKi'),
 	(1, 'admin', 15500.00, 'RAZL950101XYZ', 'Raul Adriell Zavala Liras', '8112345678', 'Raul', '$2b$10$j3HrSTmP7.HdO3RlZjoqkenZL7PNrY.HWaQY/3z.5k4ptueAep3aO'),
 	(2, 'almacenista', 15500.00, 'GAOG950101XYZ', 'Gael Onofre Garcia', '8112345678', 'Gael', '$2b$10$yJKnqxTxNKZACNj1Y7keIehlMBSc.cu1e8G7uOkQjjelx/s4v1.fy');
 
