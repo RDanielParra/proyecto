@@ -172,8 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (pagoMxnInput) {
-        pagoMxnInput.addEventListener('input', calcularCambio);
+        pagoMxnInput.addEventListener('input', calcularCambioDesdeMxn);
     }
+    if (pagoUsdInput) {
+        // NUEVO: Listener para cuando se ingresa el pago en USD (actualiza MXN y Cambio)
+        pagoUsdInput.addEventListener('input', calcularCambioDesdeUsd);
+        // Quitar el símbolo de $ del campo USD para que el usuario pueda escribir el número
+        pagoUsdInput.value = '0.00'; 
+    }
 
     const inputCodigo = document.getElementById('insert-code-input');
     if (inputCodigo) {
@@ -593,7 +599,8 @@ function actualizarTotales(cantidadUltimoItem = 0) {
 
    
 
-    calcularCambio();
+    calcularCambioDesdeMxn();
+    calcularCambioDesdeUsd();
 
 }
 
@@ -818,7 +825,7 @@ function handleCancelarCuenta() {
 
 ======================================== */
 
-function calcularCambio() {
+function calcularCambioDesdeMxn() {
 
     const total = parseFloat(totalMxnInput.value.replace('$', '')) || 0;
 
@@ -843,6 +850,22 @@ function calcularCambio() {
 
 }
 
+function calcularCambioDesdeUsd() {
+    const total = parseFloat(totalMxnInput.value.replace('$', '')) || 0;
+    // Quitamos el '$' si fue ingresado por error
+    const pagoUsd = parseFloat(pagoUsdInput.value.replace('$', '')) || 0; 
+
+    // Calcula la equivalencia en MXN (el pago real)
+    const pagoMxnEquivalente = pagoUsd * TIPO_CAMBIO;
+    pagoMxnInput.value = pagoMxnEquivalente.toFixed(2);
+    
+    let cambio = pagoMxnEquivalente - total;
+    if (cambio < 0) {
+        cambio = 0;
+    }
+    cambioMxnInput.value = `$${cambio.toFixed(2)}`;
+}
+
 
 async function handleRealizarPago(metodoDePago) {
     if (ticketActual.length === 0) {
@@ -860,8 +883,9 @@ async function handleRealizarPago(metodoDePago) {
     
     let pago = 0;
     let cambio = 0;
+    let pagoUsdRecibido = 0;
 
-    if (metodoDePago === 'Efectivo' || metodoDePago === 'Dolar') {
+    if (metodoDePago === 'Efectivo') {
         pago = parseFloat(pagoMxnInput.value) || 0;
         if (pago < totalVenta) {
             window.api.sendNotification("El pago es insuficiente.");
@@ -869,7 +893,34 @@ async function handleRealizarPago(metodoDePago) {
         }
         cambio = pago - totalVenta;
     
-    } else if (metodoDePago === 'Tarjeta' || metodoDePago === 'Cheque') {
+    } else if (metodoDePago === 'Dolar') {
+        // **********************************************
+        // LÓGICA DE PAGO CON DÓLAR: LEE DESDE pagoUsdInput
+        // **********************************************
+        
+        // 1. Leer la cantidad de USD ingresada en el campo pagoUsdInput
+        pagoUsdRecibido = parseFloat(pagoUsdInput.value.replace('$', '')) || 0;
+        
+        if (pagoUsdRecibido <= 0) {
+            window.api.sendNotification("Ingrese la cantidad de Dólares recibida en el campo de Pago USD.");
+            return;
+        }
+        
+        // 2. Multiplicar por el TIPO_CAMBIO para obtener el pago en MXN
+        pago = pagoUsdRecibido * TIPO_CAMBIO; // Pago en MXN equivalente
+        
+        // 3. Comprobar si es suficiente
+        if (pago < totalVenta) {
+            window.api.sendNotification(`El pago en Dólares ($${pagoUsdRecibido.toFixed(2)} USD = $${pago.toFixed(2)} MXN) es insuficiente. Total: $${totalVenta.toFixed(2)} MXN.`);
+            return;
+        }
+
+        // 4. Calcular el cambio (en MXN)
+        cambio = pago - totalVenta;
+        
+        // Opcional: Asegurar que el campo MXN refleje el valor equivalente en MXN
+        pagoMxnInput.value = pago.toFixed(2);
+    }  else if (metodoDePago === 'Tarjeta' || metodoDePago === 'Cheque') {
         pago = totalVenta;
         cambio = 0;
     }
