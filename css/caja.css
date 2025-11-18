@@ -1109,3 +1109,68 @@ body {
 .tabla-fila > div:nth-child(5) {
     display: none;
 }
+
+.tipo-cambio-input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0 20px 0;
+    
+    border: 2px solid #555; 
+    border-radius: 8px; 
+    font-size: 1.2em; 
+    font-weight: bold;
+    text-align: right;
+    color: #333; 
+    background-color: #fff; 
+    
+    box-sizing: border-box; 
+    transition: border-color 0.3s;
+}
+
+.tipo-cambio-input:focus {
+    border-color: #007bff; 
+    outline: none;
+}
+
+.btn-accion-confirmar {
+
+    background-color: #004d99; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px; 
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 5px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn-accion-confirmar:hover {
+    background-color: #007bff; 
+}
+
+.btn-accion-confirmar:active {
+    transform: scale(0.98);
+}
+
+.btn-accion-cancelar.btn-abortar {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-accion-cancelar.btn-abortar:hover {
+    background-color: #495057; 
+}
+
+.btn-accion-confirmar:hover {
+    background-color: #0056b3;
+}

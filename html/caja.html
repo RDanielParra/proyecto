@@ -73,9 +73,9 @@
             <div class="actions">
                 <div class="actions-left">
                     <div class="actions-group-top">
-                       <!--  <button class="btn-action-square btn-blue-custom" id="btn-consultar-precio">CONSULTAR PRECIO (F4)</button> -->
                         <button class="btn-action-square btn-orange-custom" id="btn-cancelar-producto">CANCELAR PRODUCTO </button>
                         <button class="btn-action-square btn-green" id="btn-lista-productos">LISTA DE PRODUCTOS</button>
+                        <button class="btn-action-square btn-blue-custom" id="btn-consultar-precio">TIPOS DE CAMBIO</button>
                     </div>
                     <div class="actions-group-middle">
                         <button class="btn-action-rect btn-green-gradient" id="btn-corte-parcial">CORTE<br>PARCIAL</button>
@@ -136,7 +136,7 @@
             </div>
             <div class="modal-content payment-content">
                 <div class="payment-info">
-                    <span>Tipo de cambio $20.00</span>
+                    <span >Tipo de cambio : $<span id="valor-cambio"></span></span>
                     <span class="dolar-label">Dólar</span>
                 </div>
                 <div class="payment-grid">
@@ -281,6 +281,22 @@
             </div>
         </div>
     </div>
+
+     <div class="modal-backdrop" id="tipo-cambio-modal-backdrop">
+    <div class="cancel-confirm-modal">
+        <h3 id="tipo-confirm-title">Actualizar Tipo de Cambio</h3>
+        <p>Precio actual del dólar (USD a MXN): <span id="current-tipo-cambio">$20.00 MXN</span></p>
+        
+        <label for="new-tipo-cambio-input">Ingresa el nuevo precio (MXN):</label>
+        <input type="number" step="0.01" min="0.01" value="20.00" id="new-tipo-cambio-input" class="tipo-cambio-input">
+        
+        <div class="cancel-confirm-actions">
+            <button id="btn-confirmar-cambio" class="btn-accion-confirmar">Guardar Nuevo Precio</button>
+            <button id="btn-cancelar-cambio" class="btn-accion-cancelar btn-abortar">Cancelar</button>
+        </div>
+    </div>
+</div>
+
 
     <script defer type="module" src="../js/caja.js"></script>
 

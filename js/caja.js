@@ -5,7 +5,7 @@
 ======================================== */
 import { verificarToken, cargarProductos, getDatosSesion } from './renderer.js';
 let ordenModal = 'CodigoProducto';
-const TIPO_CAMBIO = 20.00;
+let TIPO_CAMBIO = parseFloat(localStorage.getItem('TIPO_CAMBIO_USD')) || 20.00;
 const TASA_IVA = 0.08;
 let ticketActual = [];
 let totalIVA = 0;
@@ -16,6 +16,17 @@ let esCorteFinal = false;
 let cajaIniciadaDesde = null;
 
 let sesionEmpleado = null; 
+
+function actualizarTipoCambioGlobal(nuevoValor) {
+    if (typeof nuevoValor === 'number' && nuevoValor > 0) {
+        TIPO_CAMBIO = nuevoValor;
+        // Opcional: Guardar en localStorage para persistencia
+        localStorage.setItem('TIPO_CAMBIO_USD', nuevoValor.toFixed(2)); 
+        window.api.sendNotification(`Tipo de cambio actualizado a $${TIPO_CAMBIO.toFixed(2)} MXN.`);
+    } else {
+        window.api.sendNotification("Valor de tipo de cambio inválido.");
+    }
+}
 
 /* ========================================
 
@@ -63,6 +74,14 @@ const btnCorteFinal = document.getElementById('btn-corte-final');
 const btnCerrarSesion = document.getElementById('btn-cerrar-sesion');
 const btnCancelarCuenta = document.getElementById('btn-cancelar-cuenta');
 
+const tipoCambioModal = document.getElementById('tipo-cambio-modal-backdrop');
+const btnConfirmarCambio = document.getElementById('btn-confirmar-cambio');
+const btnCancelarCambio = document.getElementById('btn-cancelar-cambio');
+const newTipoCambioInput = document.getElementById('new-tipo-cambio-input');
+const currentTipoCambioSpan = document.getElementById('current-tipo-cambio');
+const btnAbrirTipoCambio = document.getElementById('btn-consultar-precio');
+
+const valorcambio = document.getElementById('valor-cambio')
 
 /* ========================================
 
@@ -151,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openPaymentBtn) {
         openPaymentBtn.addEventListener('click', () => {
             paymentModal.style.display = 'flex';
+            valorcambio.textContent = TIPO_CAMBIO;
             pagoMxnInput.value = '0.00';
             pagoUsdInput.value = '$0.00';
             cambioMxnInput.value = '$0.00';
@@ -272,6 +292,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnCancelarCuenta) {
         btnCancelarCuenta.addEventListener('click', handleCancelarCuenta);
+    }
+
+    if (btnAbrirTipoCambio) {
+    btnAbrirTipoCambio.addEventListener('click', () => {
+        // Muestra el valor actual antes de abrir
+        currentTipoCambioSpan.textContent = `$${TIPO_CAMBIO.toFixed(2)} MXN`;
+        newTipoCambioInput.value = TIPO_CAMBIO.toFixed(2);
+        tipoCambioModal.style.display = 'flex';
+    });
+}
+
+    if (btnCancelarCambio) {
+        btnCancelarCambio.addEventListener('click', () => {
+            tipoCambioModal.style.display = 'none';
+        });
+    }
+
+    if (btnConfirmarCambio) {
+        btnConfirmarCambio.addEventListener('click', () => {
+            const nuevoPrecioStr = newTipoCambioInput.value;
+            const nuevoPrecioNum = parseFloat(nuevoPrecioStr);
+
+            if (isNaN(nuevoPrecioNum) || nuevoPrecioNum <= 0) {
+                window.api.sendNotification("Por favor, ingrese un precio válido (mayor a cero).");
+                return;
+            }
+
+            actualizarTipoCambioGlobal(nuevoPrecioNum);
+            tipoCambioModal.style.display = 'none';
+            actualizarTotales(0); 
+        });
     }
 
     window.addEventListener('storage', (ev) => {
@@ -947,6 +998,7 @@ async function handleRealizarPago(metodoDePago) {
                 cajaNum: 1
             };
                 paymentModal.style.display = 'none';
+                
                 await mostrarTicketFinal(datosVenta, datosPago);
                 setTimeout(limpiarVentaCompleta, 3000)  
 
