@@ -67,3 +67,21 @@ export const cargarTickets = async (orden) => {
   const tickets = await window.api.getTickets(orden)
   return tickets
 }
+
+export function getDatosSesion() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        console.error("No se encontró token de sesión en localStorage ('authToken').");
+        return null;
+    }
+
+    try {
+        const payloadBase64 = token.split('.')[1];
+        const payloadJson = atob(payloadBase64);
+        const payload = JSON.parse(payloadJson);
+        return payload;
+    } catch (error) {
+        console.error('Error al decodificar el token:', error);
+        return null;
+    }
+}
