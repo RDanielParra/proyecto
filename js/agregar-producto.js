@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btnSeleccionarFoto = document.getElementById('btnSeleccionarFoto');
     const rutaFotoInput = document.getElementById('rutaFoto');
     const previewFoto = document.getElementById('previewFoto');
+    const llevaIVAInput = document.getElementById('llevaIVA');
 
     // --- 1. Cargar Departamentos al iniciar ---
     try {
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ClaveUnidadMedida: document.getElementById('claveUnidadMedida').value || null,
             Stock: parseInt(document.getElementById('unidadesExistencia').value),
             RutaFoto: rutaFotoInput.value || null,
+            IVA: llevaIVAInput.checked ? 1 : 0
         };
 
         // Validación simple
