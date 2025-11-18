@@ -62,9 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnModificar) {
         btnModificar.addEventListener('click', () => {
             const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
-
+            
             if (filaSeleccionada) {
                 const IdEmpleado = filaSeleccionada.dataset.IdEmpleado;
+                const puestoEmpleado = filaSeleccionada.dataset.Puesto?.toLowerCase();
+
+                    if (puestoEmpleado === 'gerente') {
+                        window.api.sendNotification('Error: No se puede modificar un empleado con puesto de gerente.');
+                        return;
+                    }
                 window.api.abrirVentanaModificarEmpleado(IdEmpleado);
             } else {
                 window.api.sendNotification('Error: Debes seleccionar un empleado para modificar');
@@ -153,7 +159,6 @@ function renderizarTabla(empleados) {
         fila.appendChild(crearCelda(empleado.Nombre))
         fila.appendChild(crearCelda(empleado.Telefono))
         fila.appendChild(crearCelda(empleado.Usuario))
-        fila.appendChild(crearCelda(empleado.Contrasena))
 
         fila.addEventListener('click', seleccionarFila)
 

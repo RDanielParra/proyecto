@@ -166,7 +166,7 @@ body {
 
 .tabla-header {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 2fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 2fr 2fr 1fr 1fr;
     background-color: #388e3c;
     color: white;
     font-weight: bold;
@@ -187,7 +187,7 @@ body {
 
 .tabla-fila {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 2fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 2fr 2fr 1fr 1fr ;
     border-bottom: 1px solid #c8e6c9;
     background-color: #fff;
     align-items: center;

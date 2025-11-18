@@ -1095,3 +1095,10 @@ body {
         display: none !important;
     }
 }
+.tabla-productos .tabla-header > div:nth-child(5) {
+    display: none;
+}
+
+.tabla-fila > div:nth-child(5) {
+    display: none;
+}

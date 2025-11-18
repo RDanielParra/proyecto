@@ -159,7 +159,7 @@ ipcMain.on('show-notification-request', (event, message) => {
 });
 
 ipcMain.handle('get-productos', async (event, orden) => {
-  const query = `SELECT * FROM Producto ORDER BY ${orden}`
+  const query = `SELECT * FROM Producto WHERE Activo = 1 ORDER BY ${orden}`
   try {
     const [rows] = await pool.query(query)
     return rows
@@ -179,7 +179,7 @@ ipcMain.handle('get-empleados-tabla', async (event, orden) => {
 })
 
 ipcMain.handle('eliminar-producto', async (event, idProducto) => {
-    const query = 'DELETE FROM Producto WHERE CodigoProducto = ?';
+    const query = 'UPDATE Producto SET Activo = 0 WHERE CodigoProducto = ?';
     try {
         const [result] = await pool.query(query, [idProducto]);
         
@@ -252,7 +252,7 @@ ipcMain.handle('guardar-producto', async (event, producto) => {
         console.error('Error de validación: El código de producto no es un número:', producto.CodigoProducto);
         return { error: 'El código del producto debe ser solo números.' };
     }
-    const query = 'INSERT INTO Producto (CodigoProducto, Precio, IdDepartamento, Descripcion, ClaveSAT, ClaveUnidadMedida, Stock, RutaFoto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Producto (CodigoProducto, Precio, IdDepartamento, Descripcion, ClaveSAT, ClaveUnidadMedida, Stock, RutaFoto, IVA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
     
     const valores = [
         producto.CodigoProducto,
@@ -262,7 +262,8 @@ ipcMain.handle('guardar-producto', async (event, producto) => {
         producto.ClaveSAT,
         producto.ClaveUnidadMedida,
         producto.Stock,
-        producto.RutaFoto
+        producto.RutaFoto,
+        producto.IVA
     ];
 
     try {
@@ -357,7 +358,7 @@ ipcMain.handle('get-datos-producto-modificar', async () => {
 });
 
 ipcMain.handle('actualizar-producto', async (event, producto) => {
-    const query = `UPDATE Producto SET Precio = ?, IdDepartamento = ?, Descripcion = ?, ClaveSAT = ?, ClaveUnidadMedida = ?, Stock = ?, RutaFoto = ? WHERE CodigoProducto = ? `;
+    const query = `UPDATE Producto SET Precio = ?, IdDepartamento = ?, Descripcion = ?, ClaveSAT = ?, ClaveUnidadMedida = ?, Stock = ?, RutaFoto = ?, IVA = ? WHERE CodigoProducto = ? `;
     
     const valores = [
         producto.Precio,
@@ -367,7 +368,9 @@ ipcMain.handle('actualizar-producto', async (event, producto) => {
         producto.ClaveUnidadMedida,
         producto.Stock,
         producto.RutaFoto,
+        producto.IVA,
         producto.CodigoProducto
+        
     ];
 
     try {

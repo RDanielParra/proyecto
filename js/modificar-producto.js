@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const claveSatInput = document.getElementById('claveSat');
     const claveUnidadInput = document.getElementById('claveUnidadMedida');
     const stockInput = document.getElementById('unidadesExistencia');
+    const llevaIVAInput = document.getElementById('llevaIVA');
 
 
     try {
@@ -40,8 +41,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             claveUnidadInput.value = producto.ClaveUnidadMedida;
             stockInput.value = producto.Stock;
             rutaFotoInput.value = producto.RutaFoto;
-
             departamentoSelect.value = producto.IdDepartamento;
+            llevaIVAInput.checked = producto.IVA === 1 ? true : false;
 
             if (producto.RutaFoto) {
                 const rutaNormalizada = producto.RutaFoto.replace(/\\/g, '/');
@@ -85,6 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ClaveUnidadMedida: claveUnidadInput.value || null,
             Stock: parseInt(stockInput.value),
             RutaFoto: rutaFotoInput.value || null,
+            IVA: llevaIVAInput.checked ? 1 : 0
         };
 
         if (!datosProducto.CodigoProducto || !datosProducto.Precio || isNaN(datosProducto.Stock)) {

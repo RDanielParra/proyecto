@@ -6,7 +6,9 @@
 import { verificarToken, cargarProductos, getDatosSesion } from './renderer.js';
 let ordenModal = 'CodigoProducto';
 const TIPO_CAMBIO = 20.00;
+const TASA_IVA = 0.08;
 let ticketActual = [];
+let totalIVA = 0;
 let ticketItemCounter = 0;
 let originalFooterHTML = '';
 let currentItemCodigoToCancel = null;
@@ -338,12 +340,16 @@ function renderizarTablaModal(productos) {
         fila.dataset.nombre = producto.Nombre || '';
         fila.dataset.precio = producto.Precio;
         fila.dataset.stock = producto.Stock;
+        fila.dataset.llevaIVA = producto.IVA;
+
         fila.dataset.rutaFoto = producto.RutaFoto || '';
 
         fila.appendChild(crearCelda(producto.CodigoProducto));
         fila.appendChild(crearCelda(producto.Descripcion));
         fila.appendChild(crearCelda(`$${producto.Precio}`));
         fila.appendChild(crearCelda(producto.Stock));
+        fila.appendChild(crearCelda(producto.IVA === 1 ? 'Sí' : 'No'));
+
 
         fila.addEventListener('click', seleccionarFilaModal);
         tablaCuerpoModal.appendChild(fila);
@@ -360,12 +366,15 @@ function seleccionarFilaModal(event) {
     });
 
     filaSeleccionada.classList.add('fila-seleccionada');
-
+    const llevaIVA = filaSeleccionada.dataset.llevaIVA === '1';
+    
     const productoData = {
         codigo: filaSeleccionada.dataset.codigoProducto,
         descripcion: filaSeleccionada.dataset.nombre || filaSeleccionada.dataset.descripcion || "Producto",
         precio: parseFloat(filaSeleccionada.dataset.precio),
         cantidad: 1,
+
+        llevaIva: llevaIVA,
         rutaFoto: filaSeleccionada.dataset.rutaFoto
     };
 
@@ -518,6 +527,9 @@ function agregarProductoAlTicket(producto) {
         itemsList.appendChild(itemDiv);
         manejarSeleccionTicket({ currentTarget: itemDiv });
     }
+
+   
+    
     actualizarTotales(cantidadAgregada);
 
 }
@@ -525,22 +537,27 @@ function agregarProductoAlTicket(producto) {
 
 function actualizarTotales(cantidadUltimoItem = 0) {
 
-    let totalMxn = 0;
+    let subtotalMxn = 0;
 
     let totalCantidad = 0;
 
     let totalLineas = ticketActual.length;
 
+    totalIVA = 0;
 
     ticketActual.forEach(producto => {
-
-        totalMxn += producto.precio * producto.cantidad;
+        const importeProducto = producto.precio * producto.cantidad;
+        subtotalMxn += importeProducto;
 
         totalCantidad += producto.cantidad;
 
+        if (producto.llevaIva === true) {
+            const ivaCalculado = importeProducto * TASA_IVA;
+            totalIVA += ivaCalculado;
+        }
     });
 
-
+    const totalMxn = subtotalMxn + totalIVA;
     const totalUsd = totalMxn / TIPO_CAMBIO;
 
 
@@ -594,6 +611,8 @@ async function buscarYAgregarProductoPorCodigo(codigo) {
                 descripcion: productoEncontrado.Nombre || productoEncontrado.Descripcion || "Producto",
                 precio: parseFloat(productoEncontrado.Precio),
                 cantidad: 1,
+
+                llevaIva: productoEncontrado.IVA === 1 ,
                 rutaFoto: productoEncontrado.RutaFoto
             };
             agregarProductoAlTicket(productoData);
@@ -903,6 +922,7 @@ async function mostrarTicketFinal(datosVenta, datosPago) {
 
     itemsList.appendChild(lineaDiv);
 
+    const ivaFinalFormateado = `$${totalIVA.toFixed(2)}`;
 
     const totalArticulos = datosVenta.items.reduce((total, p) => total + p.cantidad, 0);
 
@@ -923,7 +943,7 @@ async function mostrarTicketFinal(datosVenta, datosPago) {
 
             <p>Ticket: ${String(datosPago.ticketNum).padStart(6, '0')}</p>
 
-            <p>Vta IVA: $0.00</p>
+            <p>Vta IVA: $${ivaFinalFormateado}</p>
 
            
 
