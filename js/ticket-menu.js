@@ -6,42 +6,59 @@ const barraBusquedaInput = document.getElementById('barraBusqueda')
 
 document.addEventListener('DOMContentLoaded', verificarToken)
 
-btnEliminar.addEventListener('click', async () => { 
-    console.log('Botón Eliminar presionado');
+if (btnEliminar) {
+    btnEliminar.addEventListener('click', async () => { 
+        
+        const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
+        const inputParaEnfocar = barraBusquedaInput; 
+        
+        let tituloDialogo = '';
+        let mensajeDialogo = '';
 
-    const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
+        if (!filaSeleccionada) {
+            await window.api.mostrarDialogoContextual({
+                titulo: 'Acción Requerida',
+                mensaje: 'Debes seleccionar una venta para cancelar.'
+            });
+            if (inputParaEnfocar) inputParaEnfocar.focus();
+            return; 
+        }
 
-    if (filaSeleccionada) {
         const NumeroTicket = filaSeleccionada.dataset.NumeroTicket;
         
         const confirmado = confirm(`¿Estás seguro de que quieres cancelar la venta ${NumeroTicket}?`);
-
         if (confirmado) {
             try {
                 const resultado = await window.api.eliminarTicket(NumeroTicket);
                 
                 if (resultado === true) {
-                    console.log(`ticket ${NumeroTicket} eliminado.`);
-                    window.api.sendNotification(`ticket ${NumeroTicket} cancelado con éxito`);
-                    renderizarProductos(orden);
+                    tituloDialogo = 'Venta Cancelada';
+                    mensajeDialogo = `La venta ${NumeroTicket} ha sido cancelada con éxito.`;
+                    renderizarProductos(orden); 
                 } else if (resultado.error) {
-                    console.error('Error de BD:', resultado.error);
-                    window.api.sendNotification(`Error: No se pudo cancelar. ${resultado.error}`);
+                    tituloDialogo = 'Error al Cancelar';
+                    mensajeDialogo = `No se pudo cancelar: ${resultado.error}`;
                 } else {
-                    window.api.sendNotification('Error: La venta no fue encontrado.');
+                    tituloDialogo = 'Error';
+                    mensajeDialogo = 'La venta no fue encontrada.';
                 }
             } catch (error) {
-                console.error('Error fatal al llamar a eliminarProducto:', error);
-                window.api.sendNotification('Error: No se pudo cancelar la venta');
+                tituloDialogo = 'Error de Conexión';
+                mensajeDialogo = `Error: ${error.message || 'No se pudo cancelar la venta'}`;
             }
         } else {
-            console.log('Eliminación cancelada por el usuario.');
+            tituloDialogo = 'Aviso';
+            mensajeDialogo = 'Se canceló la acción.';
         }
-    } else {
-        console.warn('No se ha seleccionado ningúna venta para cancelar.');
-        window.api.sendNotification('Error: Debes seleccionar una venta para cancelarla.');
-    }
-})
+        
+        await window.api.mostrarDialogoContextual({
+            titulo: tituloDialogo,
+            mensaje: mensajeDialogo
+        });
+
+        if (inputParaEnfocar) inputParaEnfocar.focus();
+    });
+}
 
 btnReporte.addEventListener('click', () => {
     console.log('Botón reporte presionado');

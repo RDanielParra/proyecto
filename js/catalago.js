@@ -12,39 +12,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnEliminar) {
         btnEliminar.addEventListener('click', async () => { 
-            try {
-                const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
+            
+            const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
+            const inputParaEnfocar = document.getElementById('insert-code-input') || barraBusquedaInput; // (Asegúrate de tener el input correcto aquí)
+            
+            let tituloDialogo = '';
+            let mensajeDialogo = '';
 
-                if (filaSeleccionada) {
-                    const idProducto = filaSeleccionada.dataset.codigoProducto;
-                    
-                    const confirmado = confirm(`¿Estás seguro de que quieres eliminar el producto ${idProducto}?`);
-
-                    if (confirmado) {
-                        try {
-                            const resultado = await window.api.eliminarProducto(idProducto);
-                            
-                            if (resultado === true) {
-                                window.api.sendNotification(`Producto ${idProducto} eliminado con éxito`);
-                                renderizarProductos(orden);
-                            } else if (resultado.error) {
-                                window.api.sendNotification(`Error: No se pudo eliminar. ${resultado.error}`);
-                            } else {
-                                window.api.sendNotification('Error: El producto no fue encontrado.');
-                            }
-                        } catch (error) {
-                            window.api.sendNotification('Error: No se pudo eliminar el producto');
-                        }
-                    }
-                } else {
-                    window.api.sendNotification('Error: Debes seleccionar un producto para eliminar');
-                }
-            } finally {
-                if (barraBusquedaInput) {
-                    barraBusquedaInput.focus();
-                }
+            if (!filaSeleccionada) {
+                await window.api.mostrarDialogoContextual({
+                    titulo: 'Acción Requerida',
+                    mensaje: 'Debes seleccionar un producto para eliminar.'
+                });
+                if (inputParaEnfocar) inputParaEnfocar.focus();
+                return; 
             }
-        })
+
+            const idProducto = filaSeleccionada.dataset.codigoProducto;
+            
+            const confirmado = confirm(`¿Estás seguro de que quieres eliminar el producto ${idProducto}?`);
+
+            if (!confirmado) {
+                tituloDialogo = 'Aviso';
+                mensajeDialogo = 'Acción cancelada';
+                await window.api.mostrarDialogoContextual({
+                    titulo: tituloDialogo,
+                    mensaje: mensajeDialogo
+                });
+                return; 
+            }
+
+            
+
+            try {
+                const resultado = await window.api.eliminarProducto(idProducto);
+                
+                if (resultado === true) {
+                    tituloDialogo = 'Producto Eliminado';
+                    mensajeDialogo = `El producto ${idProducto} ha sido eliminado con éxito.`;
+                    renderizarProductos(orden); 
+                } else if (resultado.error) {
+                    tituloDialogo = 'Error al Eliminar';
+                    mensajeDialogo = `No se pudo eliminar: ${resultado.error}`;
+                } else {
+                    tituloDialogo = 'Error';
+                    mensajeDialogo = 'El producto no fue encontrado.';
+                }
+            } catch (error) {
+                tituloDialogo = 'Error de Conexión';
+                mensajeDialogo = `Error: ${error.message || 'No se pudo eliminar el producto'}`;
+            }
+            
+            await window.api.mostrarDialogoContextual({
+                titulo: tituloDialogo,
+                mensaje: mensajeDialogo
+            });
+            if (inputParaEnfocar) inputParaEnfocar.focus();
+        });
     }
 
     if (btnAgregar) {

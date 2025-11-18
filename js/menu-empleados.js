@@ -11,47 +11,68 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnModificar = document.getElementById('btnModificar')
 
     if (btnEliminar) {
-        btnEliminar.addEventListener('click', async () => { 
+    btnEliminar.addEventListener('click', async () => { 
+        
+        const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
+        const inputParaEnfocar = barraBusquedaInput; 
+        
+        let tituloDialogo = '';
+        let mensajeDialogo = '';
+
+        if (!filaSeleccionada) {
+            await window.api.mostrarDialogoContextual({
+                titulo: 'Acción Requerida',
+                mensaje: 'Debes seleccionar un empleado para eliminar.'
+            });
+            if (inputParaEnfocar) inputParaEnfocar.focus();
+            return; 
+        }
+
+        const IdEmpleado = filaSeleccionada.dataset.IdEmpleado;
+        const puestoEmpleado = filaSeleccionada.dataset.Puesto?.toLowerCase();
+
+        if (puestoEmpleado === 'gerente') {
+            await window.api.mostrarDialogoContextual({
+                titulo: 'Acción No Permitida',
+                mensaje: 'No se puede eliminar un empleado con puesto de Gerente.'
+            });
+            if (inputParaEnfocar) inputParaEnfocar.focus();
+            return;
+        }
+        
+        const confirmado = confirm(`¿Estás seguro de que quieres eliminar el empleado ${IdEmpleado}?`);
+
+        if (confirmado) {
             try {
-                const filaSeleccionada = document.querySelector('.tabla-fila.fila-seleccionada');
-
-                if (filaSeleccionada) {
-                    const IdEmpleado = filaSeleccionada.dataset.IdEmpleado;
-                    const puestoEmpleado = filaSeleccionada.dataset.Puesto?.toLowerCase();
-
-                    if (puestoEmpleado === 'gerente') {
-                        window.api.sendNotification('Error: No se puede eliminar un empleado con puesto de gerente.');
-                        return;
-                    }
-                    
-                    const confirmado = confirm(`¿Estás seguro de que quieres eliminar el empleado ${IdEmpleado}?`);
-
-                    if (confirmado) {
-                        try {
-                            const resultado = await window.api.eliminarEmpleado(IdEmpleado);
-                            
-                            if (resultado === true) {
-                                window.api.sendNotification(`Empleado ${IdEmpleado} eliminado con éxito`);
-                                renderizarEmpleados(orden);
-                            } else if (resultado.error) {
-                                window.api.sendNotification(`Error: No se pudo eliminar. ${resultado.error}`);
-                            } else {
-                                window.api.sendNotification('Error: El producto no fue encontrado.');
-                            }
-                        } catch (error) {
-                            window.api.sendNotification('Error: No se pudo eliminar el producto');
-                        }
-                    }
+                const resultado = await window.api.eliminarEmpleado(IdEmpleado);
+                
+                if (resultado === true) {
+                    tituloDialogo = 'Empleado Eliminado';
+                    mensajeDialogo = `El empleado ${IdEmpleado} ha sido eliminado con éxito.`;
+                    renderizarEmpleados(orden); 
+                } else if (resultado.error) {
+                    tituloDialogo = 'Error al Eliminar';
+                    mensajeDialogo = `No se pudo eliminar: ${resultado.error}`;
                 } else {
-                    window.api.sendNotification('Error: Debes seleccionar un empleado para eliminar');
+                    tituloDialogo = 'Error';
+                    mensajeDialogo = 'El empleado no fue encontrado.';
                 }
-            } finally {
-                if (barraBusquedaInput) {
-                    barraBusquedaInput.focus();
-                }
+            } catch (error) {
+                tituloDialogo = 'Error de Conexión';
+                mensajeDialogo = `Error: ${error.message || 'No se pudo eliminar el empleado'}`;
             }
-        })
-    }
+        } else {
+            tituloDialogo = 'Aviso';
+            mensajeDialogo = 'Se canceló la acción.';
+       }
+        
+        await window.api.mostrarDialogoContextual({
+            titulo: tituloDialogo,
+            mensaje: mensajeDialogo
+        });
+        if (inputParaEnfocar) inputParaEnfocar.focus();
+    });
+}
 
     if (btnAgregar) {
         btnAgregar.addEventListener('click', () => {

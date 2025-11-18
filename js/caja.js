@@ -796,11 +796,14 @@ function handleCancelarCuenta() {
         if (confirm("¿Estás seguro de que deseas cancelar toda la cuenta? Se borrarán todos los productos.")) {
 
             limpiarVentaCompleta();
-
+            window.api.mostrarDialogoContextual({
+            titulo: 'Venta Cancelada',
+            mensaje: 'La cuenta ha sido limpiada.'
+            });
         }
         window.api.mostrarDialogoContextual({
-        titulo: 'Venta Cancelada',
-        mensaje: 'La cuenta ha sido limpiada.'
+        titulo: 'Aviso',
+        mensaje: 'Acción cancelada.'
         }).then(() => {
             inputCodigo.focus();
         });
