@@ -1,85 +1,168 @@
+/* ========================================
+   VARIABLES GLOBALES Y BASE
+   ======================================== */
 :root {
-  --scheme: light dark;
-  color-scheme: var(--scheme);
-}
-* { 
-  box-sizing: content-box;
-}
-body {
-  background-color: rgb(63, 163, 63);
-  margin: 0;
-  padding: 0;
-  min-height: 90dvh;
-  display: grid;
-  place-content: center;
-  font-family: system-ui;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+    /* Paleta de colores */
+    --color-fondo-oscuro: #216140; /* Verde Oscuro/Bosque */
+    --color-principal: #4CAF50;    /* Verde Brillante (Base del botón) */
+    --color-secundario: #388E3C;   /* Verde Oscuro (Hover del botón) */
+    --color-cerrar-sesion: #C0392B; /* Rojo */
+    --color-texto-claro: #FFFFFF;
+    --color-sombra: rgba(0, 0, 0, 0.3);
+    
+    --scheme: light dark;
+    color-scheme: var(--scheme);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Mantenemos tu preferencia, pero es importante tenerla en cuenta */
+* { 
+    box-sizing: content-box; 
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================================
+   BODY: Contenedor principal de la página
+   ======================================== */
+body {
+    background-color: var(--color-fondo-oscuro);
+    /* CLAVE: Asegura 100% de la altura */
+    min-height: 100vh; 
+    
+    /* El centrado principal se maneja aquí */
+    display: flex;
+    justify-content: center; /* Centra el contenido (título + botones) horizontalmente */
+    align-items: center; /* Centra el contenido (título + botones) verticalmente */
+    flex-direction: column; 
+    
+    color: var(--color-texto-claro);
+    /* Usamos box-sizing: border-box en el body para que el padding 
+       no exceda el ancho de la ventana */
+    box-sizing: border-box; 
+}
+
+/* ========================================
+   CONTENEDOR GLOBAL
+   ======================================== */
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
 }
 
 .titulo {
-  font-size: 60px;
-  height: 30vh;
-  pointer-events: none;
-  user-select: none;
+    font-size: clamp(40px, 8vw, 60px); 
+    font-weight: 700;
+    text-shadow: 2px 2px 5px var(--color-sombra);
+    /* Reducimos la altura del título para que el menú tenga más espacio */
+    height: 20vh; 
+    pointer-events: none;
+    user-select: none;
+    display: flex; 
+    justify-content: center;
+    align-items: center; /* Centra el texto del título */
 }
 
+/* ========================================
+   BOTONES GRID (MENÚ)
+   ======================================== */
 .botones {
-  width: 50%;
-  user-select: none;
-  height: 50vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  align-content: center;
+    width: 90%; 
+    max-width: 700px; /* Reducimos un poco el ancho máximo para centrar mejor */
+    min-height: 70vh; 
+    user-select: none;
+    
+    /* ******** CAMBIO CLAVE: USAMOS FLEXBOX EN LUGAR DE GRID ******** */
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos salten a la siguiente fila */
+    
+    /* CLAVE DE CENTRADO HORIZONTAL Y VERTICAL */
+    justify-content: center; /* Centra los botones horizontalmente */
+    align-content: center;   /* Centra las filas de botones verticalmente */
+    align-items: center;     /* Centra los botones individualmente */
+    
+    gap: 25px;
+    padding: 20px;
 }
 
+/* ========================================
+   ESTILOS DE ENLACE Y BOTÓN
+   ======================================== */
 .botones > a {
-  justify-self: center;
-  width: max-content;
-  height: max-content;
+    /* El enlace ahora necesita un ancho fijo si queremos que parezca un grid */
+    width: 45%; /* Permite dos botones por fila con espacio entre ellos */
+    max-width: 280px; /* Límite de ancho del botón */
+    height: auto; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-texto-claro);
 }
 
+/* ========================================
+   BOTÓN INDIVIDUAL (btn)
+   ======================================== */
 .btn {
-  justify-self: center;
-  width: 130px;
-  height: 70px;
-  font-size: 20px;
-  background-color: rgb(12, 94, 12);
-  outline: none;
-  border: none;
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
+    width: 100%;
+    max-width: 280px;
+    min-height: 80px;
+    padding: 15px 20px;
+    
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    
+    background-color: var(--color-principal);
+    color: var(--color-texto-claro);
+    
+    outline: none;
+    border: 3px solid transparent; 
+    border-radius: 12px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 8px var(--color-sombra); 
+    
+    /* Mantenemos display: block para que el JS funcione */
+    display: inline-block; 
 }
 
 .btn:hover {
-  background-color: rgb(0, 121, 0);
+    background-color: var(--color-secundario);
+    border-color: var(--color-texto-claro);
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 15px var(--color-sombra);
 }
 
 .btn:active {
-  background-color: rgb(1, 63, 1);
+    background-color: var(--color-principal);
+    transform: translateY(0);
+    box-shadow: 0 2px 4px var(--color-sombra);
 }
 
-a {
-  text-decoration: none;
-  color: white;
-}
-
+/* ========================================
+   MANEJO DE PERMISOS Y BOTÓN DE SALIDA
+   ======================================== */
 .role-button {
-  display: none;
+    /* Tu JS anula esto con display: block */
+    display: none; 
+}
+
+#cerrarSesionBtn {
+    background-color: var(--color-cerrar-sesion);
+    border-color: var(--color-cerrar-sesion);
+    max-width: 250px;
+    
+    /* Para que el botón de cerrar sesión ocupe todo el ancho 
+       y no se posicione como un botón más pequeño */
+    grid-column: 1 / -1; 
+}
+
+#cerrarSesionBtn:hover {
+    background-color: #E74C3C;
+    border-color: var(--color-texto-claro);
 }
