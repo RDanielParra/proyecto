@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Construcción del reporte
       let totalDia = 0;
       let html = `
         <h2 class="titulo-reporte">Tickets del ${fechaFormateada}</h2>
@@ -63,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     contenedorReporte.innerHTML = html;
 
-// Pregunta si imprimir
 const deseaImprimir = await window.api.solicitarImpresion();
 
 if (deseaImprimir) {

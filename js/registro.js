@@ -2,7 +2,6 @@ import { encriptarContra, verificarToken } from "./renderer.js";
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // --- Obtener elementos del DOM ---
     verificarToken()
     const btnCancelar = document.getElementById('btnCancelar');
 
@@ -14,8 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 const formRegister = document.getElementById('formRegister');
 
 formRegister.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Evita que el formulario se recargue
-    // Recopila todos los datos del formulario
+    event.preventDefault(); 
     const datosResgister = {
         Nombre: document.getElementById('inputNombre').value,
         RFC: document.getElementById('inputRFC').value,
@@ -25,7 +23,6 @@ formRegister.addEventListener('submit', async (event) => {
         Contrasena: await encriptarContra(document.getElementById('inputContra').value) ,
         Puesto: document.getElementById('inputPuesto').value,
     };
-        // Validación simple
     if (!datosResgister.Nombre || !datosResgister.RFC  || !datosResgister.Sueldo || !datosResgister.Usuario
         || !datosResgister.Contrasena || !datosResgister.Puesto) 
     {
@@ -46,7 +43,6 @@ formRegister.addEventListener('submit', async (event) => {
             document.getElementById("formRegister").reset();
             window.api.cerrarVentanaModal();
         } else {
-            // Muestra el error específico de la base de datos (ej. Llave duplicada)
             window.api.sendNotification(`Error: ${resultado.error || 'Desconocido'}`);
         }
     } catch (error) {

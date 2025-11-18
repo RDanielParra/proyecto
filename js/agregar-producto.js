@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // --- Obtener elementos del DOM ---
     const formProducto = document.getElementById('formProducto');
     const btnCancelar = document.getElementById('btnCancelar');
     const departamentoSelect = document.getElementById('departamento');
@@ -8,17 +7,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const previewFoto = document.getElementById('previewFoto');
     const llevaIVAInput = document.getElementById('llevaIVA');
 
-    // --- 1. Cargar Departamentos al iniciar ---
     try {
         const departamentos = await window.api.getDepartamentos();
         if (departamentos && !departamentos.error) {
-            // Limpiar opciones de ejemplo
             departamentoSelect.innerHTML = ''; 
             
             departamentos.forEach(dep => {
                 const option = document.createElement('option');
                 option.value = dep.IdDepartamento;
-                // Asumiendo que la columna se llama 'Nombre'
                 option.textContent = `${dep.IdDepartamento} - ${dep.Descripcion}`; 
                 departamentoSelect.appendChild(option);
             });
@@ -30,33 +26,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.api.sendNotification('Error al cargar departamentos.');
     }
 
-    // --- 2. Lógica para el botón Cancelar ---
     btnCancelar.addEventListener('click', () => {
         window.api.cerrarVentanaModal();
     });
 
-    // --- 3. Lógica para seleccionar la foto ---
     btnSeleccionarFoto.addEventListener('click', async () => {
         const rutaSeleccionada = await window.api.seleccionarRutaArchivo();
         
         if (rutaSeleccionada) {
-            // Reemplaza \ con / para que funcione en HTML/CSS
             const rutaNormalizada = rutaSeleccionada.replace(/\\/g, '/');
             
             rutaFotoInput.value = rutaNormalizada;
             
-            // Mostrar la previsualización
-            // 'file://' es importante para que Electron muestre archivos locales
             previewFoto.innerHTML = `<img src="file://${rutaNormalizada}" alt="Foto del producto">`;
-            previewFoto.style.padding = '0'; // Quitar padding si hay imagen
+            previewFoto.style.padding = '0'; 
         }
     });
 
-    // --- 4. Lógica para enviar el formulario ---
     formProducto.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evita que el formulario se recargue
+        event.preventDefault(); 
 
-        // Recopila todos los datos del formulario
         const datosProducto = {
             CodigoProducto: document.getElementById('codigoProducto').value,
             Precio: parseFloat(document.getElementById('precioProducto').value),
@@ -69,7 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             IVA: llevaIVAInput.checked ? 1 : 0
         };
 
-        // Validación simple
         if (!datosProducto.CodigoProducto || !datosProducto.Precio || !datosProducto.Stock) {
             window.api.sendNotification('Error: Código, Nombre, Precio y Stock son obligatorios.');
             return;
@@ -82,7 +70,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 window.api.sendNotification('Producto registrado con éxito.');
                 window.api.cerrarVentanaModal(); // Cierra el modal automáticamente
             } else {
-                // Muestra el error específico de la base de datos (ej. Llave duplicada)
                 window.api.sendNotification(`Error: ${resultado.error || 'Desconocido'}`);
             }
         } catch (error) {

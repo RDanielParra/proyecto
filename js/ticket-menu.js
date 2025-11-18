@@ -105,7 +105,6 @@ async function obtenerProductos(orden) {
     }
     
     function renderizarTabla(productos) {
-        // Limpiar filas anteriores
         tablaCuerpo.innerHTML = ''; 
 
         productos.forEach(producto => {
