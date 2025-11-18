@@ -338,6 +338,7 @@ function renderizarTablaModal(productos) {
         fila.dataset.nombre = producto.Nombre || '';
         fila.dataset.precio = producto.Precio;
         fila.dataset.stock = producto.Stock;
+        fila.dataset.rutaFoto = producto.RutaFoto || '';
 
         fila.appendChild(crearCelda(producto.CodigoProducto));
         fila.appendChild(crearCelda(producto.Descripcion));
@@ -364,10 +365,20 @@ function seleccionarFilaModal(event) {
         codigo: filaSeleccionada.dataset.codigoProducto,
         descripcion: filaSeleccionada.dataset.nombre || filaSeleccionada.dataset.descripcion || "Producto",
         precio: parseFloat(filaSeleccionada.dataset.precio),
-        cantidad: 1
+        cantidad: 1,
+        rutaFoto: filaSeleccionada.dataset.rutaFoto
     };
 
-    agregarProductoAlTicket(productoData);
+    try {
+        agregarProductoAlTicket(productoData); 
+    
+    } catch (error) {
+        console.error('¡ERROR ATRAPADO!', error); // Lo mandamos a la consola
+                window.api.mostrarDialogoContextual({
+            titulo: '¡ERROR ATRAPADO!',
+            mensaje: `El error es:\n\n${error.message}`
+        });
+    }
 
     modal.style.display = 'none';
 
@@ -452,79 +463,61 @@ function filtrarTablaModal() {
 
 ======================================== */
 
+
+function actualizarFotoProducto(rutaFoto) {
+    const imgElement = document.getElementById('product-image');
+    if (!imgElement) return;
+
+    if (rutaFoto && rutaFoto.trim() !== '') {
+        imgElement.src = 'file://' + rutaFoto;
+        imgElement.alt = "Foto del producto";
+    } else {
+        imgElement.src = ''; 
+        imgElement.alt = "Foto del producto";
+    }
+}
+
 function agregarProductoAlTicket(producto) {
 
     const itemsList = document.querySelector('.items-list');
-
     const productoExistente = ticketActual.find(p => p.codigo == producto.codigo);
-
 
     let cantidadAgregada = producto.cantidad || 1;
 
-
     if (productoExistente) {
-
         productoExistente.cantidad += cantidadAgregada;
 
-       
+        productoExistente.rutaFoto = producto.rutaFoto || productoExistente.rutaFoto;
 
         const itemDiv = itemsList.querySelector(`.ticket-item[data-codigo="${producto.codigo}"]`);
-
         if (itemDiv) {
-
             const importe = (productoExistente.cantidad * productoExistente.precio).toFixed(2);
-
             itemDiv.querySelector('.item-cant').textContent = productoExistente.cantidad;
-
             itemDiv.querySelector('.item-importe').textContent = `$${importe}`;
-
             manejarSeleccionTicket({ currentTarget: itemDiv });
-
         }
 
     } else {
-
         producto.cantidad = cantidadAgregada;
-
         ticketActual.push(producto);
 
-
         const importe = (producto.cantidad * producto.precio).toFixed(2);
-
         const descripcionMostrada = producto.descripcion || "Producto no encontrado";
 
-       
-
         const itemDiv = document.createElement('div');
-
         itemDiv.classList.add('ticket-item');
-
         itemDiv.dataset.codigo = producto.codigo;
 
-       
-
         itemDiv.innerHTML = `
-
             <span class="item-desc">${descripcionMostrada}</span>
-
             <span class="item-cant">${producto.cantidad}</span>
-
             <span class="item-importe">$${importe}</span>
-
         `;
 
-       
-
         itemDiv.addEventListener('click', manejarSeleccionTicket);
-
         itemsList.appendChild(itemDiv);
-
         manejarSeleccionTicket({ currentTarget: itemDiv });
-
     }
-
-   
-
     actualizarTotales(cantidadAgregada);
 
 }
@@ -593,45 +586,26 @@ async function buscarYAgregarProductoPorCodigo(codigo) {
     try {
 
         const todosLosProductos = await window.api.cargarProductos('CodigoProducto');
-
-       
-
         const productoEncontrado = todosLosProductos.find(p => p.CodigoProducto == codigo);
 
-       
-
         if (productoEncontrado) {
-
             const productoData = {
-
                 codigo: productoEncontrado.CodigoProducto,
-
                 descripcion: productoEncontrado.Nombre || productoEncontrado.Descripcion || "Producto",
-
                 precio: parseFloat(productoEncontrado.Precio),
-
-                cantidad: 1
-
+                cantidad: 1,
+                rutaFoto: productoEncontrado.RutaFoto
             };
-
             agregarProductoAlTicket(productoData);
-
         } else {
-
             console.warn(`Producto con código ${codigo} no encontrado.`);
-
             if (window.api && window.api.sendNotification) {
-
                  window.api.sendNotification('Producto no encontrado');
-
              }
-
         }
 
     } catch (error) {
-
         console.error('Error al buscar producto por código:', error);
-
     }
 
 }
@@ -639,15 +613,24 @@ async function buscarYAgregarProductoPorCodigo(codigo) {
 
 function manejarSeleccionTicket(event) {
 
+    const itemSeleccionado = event.currentTarget;
+
     document.querySelectorAll('.ticket-item').forEach(item => {
-
         item.classList.remove('ticket-item-selected');
-
     });
-
     event.currentTarget.classList.add('ticket-item-selected');
 
+    const codigo = itemSeleccionado.dataset.codigo;
+    const productoEnTicket = ticketActual.find(p => p.codigo == codigo);
+
+    if (productoEnTicket) {
+        actualizarFotoProducto(productoEnTicket.rutaFoto);
+    } else {
+        actualizarFotoProducto(null); 
+    }
 }
+
+
 
 
 /* ========================================
@@ -987,45 +970,26 @@ async function mostrarTicketFinal(datosVenta, datosPago) {
 function limpiarVentaCompleta() {
 
     ticketActual = [];
-
     ticketItemCounter = 0;
-
-
     const itemsList = document.querySelector('.items-list');
-
     itemsList.innerHTML = '';
-
-
     actualizarTotales(0);
-
+    actualizarFotoProducto(null); 
 
     paymentModal.style.display = 'none';
-
     cancelConfirmModal.style.display = 'none';
-
     facturarModal.style.display = 'none';
 
-   
-
     if (facturarCheck) {
-
         facturarCheck.checked = false;
-
     }
-
 
     const ticketFooter = document.getElementById('ticket-footer');
-
     if (ticketFooter) {
-
         ticketFooter.innerHTML = originalFooterHTML;
-
         ticketFooter.className = 'footer-info';
-
         actualizarFechaHora();
-
     }
-
 }
 
 
