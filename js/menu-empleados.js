@@ -217,20 +217,14 @@ function filtrarTabla() {
         let valorFila = '';
         
         switch (campoFiltro) {
-            case 'id':
-                valorFila = fila.dataset.IdEmpleado?.toLowerCase() || '';
+            case 'id empleado':
+                valorFila = String(fila.dataset.IdEmpleado?.toLowerCase()) || '';
                 break;
             case 'usuario':
                 valorFila = fila.dataset.Usuario?.toLowerCase() || '';
                 break;
-            case 'puesto':
-                valorFila = fila.dataset.Puesto?.toLowerCase() || '';
-                break;
-            case 'nombre':
-                valorFila = fila.dataset.Nombre?.toLowerCase() || '';
-                break;
             default:
-                valorFila = fila.dataset.Nombre?.toLowerCase() || '';
+                valorFila = fila.dataset.IdEmpleado?.toLowerCase() || '';
         }
 
         fila.style.display = valorFila.includes(searchTerm) || searchTerm === '' 
