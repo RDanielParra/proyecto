@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
       window.api.sendNotification('Selecciona una fecha para generar el reporte');
       return;
     }
+    const fechaObjetoRaw = new Date(fechaSeleccionada);
+    const fechaObjeto = new Date(fechaObjetoRaw.getTime() + fechaObjetoRaw.getTimezoneOffset() * 60000);
+
+    const opcionesFormato = { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit' 
+    };
+    const fechaParaTitulo = fechaObjeto.toLocaleDateString('es-MX', opcionesFormato);
 
     try {
       const tickets = await window.api.obtenerTicketsPorFecha(fechaFormateada);
@@ -25,14 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let totalDia = 0;
       let html = `
-        <h2 class="titulo-reporte">Tickets del ${fechaFormateada}</h2>
+        <h2 class="titulo-reporte">Tickets del ${fechaParaTitulo}</h2>
         <table class="reporte-tabla">
           <thead>
             <tr>
               <th>Número de Ticket</th>
               <th>Subtotal</th>
               <th>Empleado</th>
-              <th>Fecha</th>
+              <th>Hora</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${ticket.NumeroTicket}</td>
             <td>$${ticket.Subtotal}</td>
             <td>${empleadosInfo[ticket.IdEmpleado - 1].Nombre}</td>
-            <td>${new Date(ticket.FechaHora).toLocaleDateString('es-MX')}</td>
+            <td>${new Date(ticket.FechaHora).toLocaleTimeString('es-MX')}</td>
           </tr>
         `
       })
