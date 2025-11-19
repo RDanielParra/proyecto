@@ -927,7 +927,7 @@ async function handleRealizarPago(metodoDePago) {
     const totalVenta = parseFloat(totalMxnInput.value.replace('$', '')) || 0;
     const idEmpleadoLogueado = sesionEmpleado ? sesionEmpleado.id : null;
     
-    if (!idEmpleadoLogueado === null ||idEmpleadoLogueado === undefined) {
+    if (!(idEmpleadoLogueado === null ||idEmpleadoLogueado === undefined)) {
         window.api.sendNotification("Error fatal: No se pudo identificar al empleado.");
         return;
     }
@@ -1208,7 +1208,7 @@ async function handleCorteParcial() {
     esCorteFinal = false;
     const idEmpleadoLogueado = sesionEmpleado ? sesionEmpleado.id : null; 
     
-    if (!idEmpleadoLogueado === null ||idEmpleadoLogueado === undefined) {
+    if (!(idEmpleadoLogueado === null ||idEmpleadoLogueado === undefined)) {
          window.api.sendNotification("Error fatal: No se pudo identificar al empleado.");
         return;
     }
